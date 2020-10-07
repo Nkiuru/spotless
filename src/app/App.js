@@ -1,6 +1,7 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import logo from '../logo.svg';
+import './App.scss';
+import Button from "../components/Button";
 
 function App() {
   return (
@@ -18,6 +19,8 @@ function App() {
         >
           Learn React
         </a>
+        <p className="text">testing</p>
+        <Button label={'test'} />
       </header>
     </div>
   );

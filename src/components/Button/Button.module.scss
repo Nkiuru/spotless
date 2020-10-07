@@ -1,0 +1,53 @@
+@import '../../vars';
+
+.button {
+  font-weight: $bold;
+  font-family: $font;
+  font-size: $font-medium;
+  text-align: center;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  border-radius: 10px;
+  //border: 1px solid $text-dark;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  line-height: 75%;
+
+  &:focus {
+    outline-style: none !important;
+  }
+
+  &:active {
+    opacity: 0.5;
+    transition: all 200ms;
+  }
+
+  &.primary {
+    color: $accent;
+    border-color: $accent;
+    &.filled {
+      color: $accent;
+      //background-color: $filled-btn-bg;
+    }
+  }
+
+  &.secondary {
+    //color: $text-dark;
+    font-weight: $semi-bold;
+
+    &.filled {
+      //color: $white;
+      //border-color: $white;
+      //background-color: $filled-btn-bg;
+    }
+  }
+
+  &.disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+}
