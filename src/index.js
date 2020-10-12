@@ -3,10 +3,17 @@ import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './app/App';
 import * as serviceWorker from './serviceWorker';
+import {BrowserRouter} from "react-router-dom";
+import {StylesProvider} from '@material-ui/core/styles';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+
+      <StylesProvider injectFirst>
+        <App/>
+      </StylesProvider>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );

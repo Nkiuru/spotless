@@ -1,0 +1,25 @@
+@import '../../vars.scss';
+
+.pageContainer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: $color-bg;
+  overflow-y: scroll;
+
+  .pageContent {
+    width: 70%;
+    background-color: #fafafa;
+    @media (max-width: 600px) {
+      width: 100%;
+    }
+    margin: 0 auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+}
