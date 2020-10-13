@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {AppBar, Typography, Tabs, Toolbar as MaterialToolbar, Tab} from "@material-ui/core";
 import {Link, useLocation} from 'react-router-dom';
 import {withStyles} from "@material-ui/core/styles";
@@ -28,10 +28,10 @@ const Toolbar = () => {
       <MaterialToolbar variant={"dense"}>
         <Typography variant={"h6"} className={styles.toolbar}>Spotless</Typography>
         <NavTabs variant={"fullWidth"} value={location.pathname}>
-          <Tab label={"Dashboard"} value={"/dashboard"} component={Link} to={"/dashboard"} disableRipple={true}/>
-          <Tab label={"Assignments"} value={"/assignments"} component={Link} to={"/assignments"} disableRipple={true}/>
-          <Tab label={"Cleaners"} value={"/cleaners"} component={Link} to={"/cleaners"} disableRipple={true}/>
-          <Tab label={"Analysis"} value={"/analysis"} component={Link} to={"/analysis"} disableRipple={true}/>
+          <Tab label={"Dashboard"} value={"/dashboard"} component={Link} to={"/dashboard"} disableRipple={true}  className={styles.tab}/>
+          <Tab label={"Assignments"} value={"/assignments"} component={Link} to={"/assignments"} disableRipple={true}  className={styles.tab}/>
+          <Tab label={"Cleaners"} value={"/cleaners"} component={Link} to={"/cleaners"} disableRipple={true}  className={styles.tab} />
+          <Tab label={"Analysis"} value={"/analysis"} component={Link} to={"/analysis"} disableRipple={true} className={styles.tab} />
           <Tab label={"Rooms"} value={"/rooms"} component={Link} to={"/rooms"} disableRipple={true}/>
         </NavTabs>
       </MaterialToolbar>

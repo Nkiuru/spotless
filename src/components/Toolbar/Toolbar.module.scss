@@ -1,6 +1,11 @@
 @import "../../vars";
+
 .toolbar {
-    font-family: $font;
-    font-weight: $bold;
-    width: 128px;
+  font-family: $font;
+  font-weight: $bold;
+  width: 128px;
+}
+
+.tab {
+  font-weight: $semi-bold;
 }

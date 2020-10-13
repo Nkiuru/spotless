@@ -4,15 +4,29 @@ import './index.scss';
 import App from './app/App';
 import * as serviceWorker from './serviceWorker';
 import {BrowserRouter} from "react-router-dom";
-import {StylesProvider} from '@material-ui/core/styles';
+import {createMuiTheme, StylesProvider, ThemeProvider} from '@material-ui/core/styles';
+import {blueGrey, lightBlue} from "@material-ui/core/colors";
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: blueGrey[900],
+    },
+    secondary: lightBlue
+  },
+  typography: {
+    fontFamily: ['Raleway', 'sans-serif']
+  }
+});
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-
-      <StylesProvider injectFirst>
-        <App/>
-      </StylesProvider>
+      <ThemeProvider theme={theme}>
+        <StylesProvider injectFirst>
+          <App/>
+        </StylesProvider>
+      </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
