@@ -4,7 +4,7 @@ import './index.scss';
 import App from './app/App';
 import * as serviceWorker from './serviceWorker';
 import {BrowserRouter} from "react-router-dom";
-import {createMuiTheme, StylesProvider, ThemeProvider} from '@material-ui/core/styles';
+import {unstable_createMuiStrictModeTheme as createMuiTheme, StylesProvider, ThemeProvider} from '@material-ui/core/styles';
 import {blueGrey, lightBlue} from "@material-ui/core/colors";
 
 const theme = createMuiTheme({
