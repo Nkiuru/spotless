@@ -43,9 +43,9 @@ const Toolbar = () => {
                disableRipple={true} className={styles.tab}/>
           <Tab label={"Cleaners"} value={getTabValue("/cleaners")} component={Link} to={"/cleaners"}
                disableRipple={true} className={styles.tab}/>
+          <Tab label={"Rooms"} value={getTabValue("/rooms")} component={Link} to={"/rooms"} disableRipple={true}/>
           <Tab label={"Analysis"} value={getTabValue("/analysis")} component={Link} to={"/analysis"}
                disableRipple={true} className={styles.tab}/>
-          <Tab label={"Rooms"} value={getTabValue("/rooms")} component={Link} to={"/rooms"} disableRipple={true}/>
         </NavTabs>
       </MaterialToolbar>
     </AppBar>
