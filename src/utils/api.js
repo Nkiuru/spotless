@@ -44,6 +44,10 @@ export const getCleaners = async () => {
   return doGetRequest('cleaners/');
 }
 
+export const getCleaner = async (cleanerId) => {
+  return doGetRequest(`cleaner?_id=${cleanerId}`);
+}
+
 const doGetRequest = async (url, params) => {
   const requestURL = BASE_URL + url + (params || '');
   console.log(requestURL);

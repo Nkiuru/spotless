@@ -11,7 +11,6 @@ const RoomDetailsPage = () => {
   const [room, setRoom] = useState({});
 
   useEffect(() => {
-    console.log(params)
     getRoom(params.id)
       .then((room) => {
           console.log(room);
@@ -21,7 +20,7 @@ const RoomDetailsPage = () => {
         (error) => {
           console.log(error);
         })
-  }, []);
+  }, [params.id]);
 
   return (
     <div>

@@ -12,11 +12,13 @@ import AnalysisPage from "../pages/AnalysisPage";
 import RoomsPage from "../pages/RoomsPage";
 import AssignmentsPage from "../pages/AssignmentsPage";
 import RoomDetailsPage from "../pages/RoomDetailsPage";
+import CleanerDetailsPage from "../pages/CleanerDetailsPage";
 
 function App() {
   const location = useLocation();
   const login = () => (auth() ? <Redirect to="/dashboard"/> : <LoginPage/>);
   const dash = () => (!auth() ? <Redirect to="/"/> : <DashboardPage/>);
+  const cleaner = () => (!auth() ? <Redirect to="/"/> : <CleanerDetailsPage/>);
   const cleaners = () => (!auth() ? <Redirect to="/"/> : <CleanersPage/>);
   const assignments = () => (!auth() ? <Redirect to="/"/> : <AssignmentsPage/>);
   const rooms = () => (!auth() ? <Redirect to="/"/> : <RoomsPage/>);
@@ -26,8 +28,9 @@ function App() {
   return (
     <div className="App">
       <Toolbar/>
-      <Switch>
+      <Switch location={location}>
         <Route path={"/dashboard"} render={dash}/>
+        <Route path={"/cleaners/:id"} render={cleaner}/>
         <Route path={"/cleaners"} render={cleaners}/>
         <Route path={"/assignments"} render={assignments}/>
         <Route path={"/rooms/:id"} render={room}/>
