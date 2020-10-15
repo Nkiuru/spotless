@@ -25,8 +25,8 @@ export const stopCleaning = async (roomId) => {
   return doGetRequest(`room/stopcleaning?id=${roomId}`);
 }
 
-export const getAssignedRooms = async (cleaner) => {
-  return doGetRequest(`cleaners/rooms?${cleaner}`);
+export const getAssignedRooms = async (cleanerId) => {
+  return doGetRequest(`cleaners/rooms?cleaner_id=${cleanerId}`);
 }
 
 export const assignRoom = async (room, cleaner) => {
