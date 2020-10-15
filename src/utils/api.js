@@ -40,6 +40,10 @@ export const getRoom = async (roomId) => {
   return doGetRequest(`room?_id=${roomId}`);
 }
 
+export const getCleaners = async () => {
+  return doGetRequest('cleaners/');
+}
+
 const doGetRequest = async (url, params) => {
   const requestURL = BASE_URL + url + (params || '');
   console.log(requestURL);
