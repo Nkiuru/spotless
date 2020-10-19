@@ -54,6 +54,14 @@ export const getCleaner = async (cleanerId) => {
   return doGetRequest(`cleaner?_id=${cleanerId}`);
 }
 
+export const createCleaner = async (name, shiftStart, shiftEnd) => {
+  return doPostRequest('cleaner/', JSON.stringify({
+    name,
+    'shift_start': shiftStart,
+    'shift_end': shiftEnd
+  }));
+}
+
 const doGetRequest = async (url, params) => {
   const requestURL = BASE_URL + url + (params || '');
   console.log(requestURL);
