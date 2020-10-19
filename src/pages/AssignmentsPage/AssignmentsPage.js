@@ -26,6 +26,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 
 function descendingComparator(a, b, orderBy) {
+  if(a[orderBy] === undefined) return 1;
   if (b[orderBy] < a[orderBy]) {
     return -1;
   }
@@ -55,10 +56,10 @@ const headCells = [
   {id: 'name', numeric: false, disablePadding: true, label: 'Name'},
   {id: 'building', numeric: true, disablePadding: false, label: 'Building'},
   {id: 'floor', numeric: true, disablePadding: false, label: 'Floor'},
-  {id: 'contamination index', numeric: true, disablePadding: false, label: 'Contamination index'},
-  {id: 'has patient', numeric: true, disablePadding: false, label: 'Has patient'},
-  {id: 'room type', numeric: true, disablePadding: false, label: 'Room type'},
-  {id: 'last cleaned', numeric: true, disablePadding: false, label: 'Last cleaned'},
+  {id: 'contamination_index', numeric: true, disablePadding: false, label: 'Contamination index'},
+  {id: 'has_patient', numeric: false, disablePadding: false, label: 'Has patient'},
+  {id: 'room_type', numeric: false, disablePadding: false, label: 'Room type'},
+  {id: 'last_cleaned', numeric: true, disablePadding: false, label: 'Last cleaned'},
   {id: 'action', numeric: true, disablePadding: false, label: 'Action'},
 ];
 
@@ -162,7 +163,7 @@ const EnhancedTableToolbar = (props) => {
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <Button variant={'contained'} color={'secondary'} style={{flexBasis: '164px'}} onClick={event => {
+          <Button variant={'contained'} color={'secondary'} style={{flexBasis: '164px'}} onClick={() => {
             assignRooms();
           }}>Assign rooms</Button>
         </Tooltip>
@@ -211,7 +212,7 @@ const useStyles = makeStyles((theme) => ({
 export default function AssignmentsPage() {
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
+  const [orderBy, setOrderBy] = React.useState('name');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [roomsPerPage, setRoomsPerPage] = React.useState(5);
@@ -344,8 +345,8 @@ export default function AssignmentsPage() {
                         <TableCell align="right">{row.building}</TableCell>
                         <TableCell align="right">{row.floor}</TableCell>
                         <TableCell align="right">{row['contamination_index']}</TableCell>
-                        <TableCell align="right">{getPatient(row.patient)}</TableCell>
-                        <TableCell align="right">{row['room_type']}</TableCell>
+                        <TableCell>{getPatient(row.patient)}</TableCell>
+                        <TableCell>{row['room_type']}</TableCell>
                         <TableCell align="right">{getDate(row['last_cleaned'])}</TableCell>
                         <TableCell align="right">
                           <IconButton color={"secondary"} onClick={() => {
