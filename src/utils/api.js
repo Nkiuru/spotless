@@ -29,6 +29,12 @@ export const getAssignedRooms = async (cleanerId) => {
   return doGetRequest(`cleaners/rooms?cleaner_id=${cleanerId}`);
 }
 
+export const assignRoomsToCleaner = async (rooms, cleaner) => {
+  return Promise.all(rooms.map((room) => {
+    return assignRoom(room['_id'], cleaner);
+  }));
+}
+
 export const assignRoom = async (room, cleaner) => {
   return doPostRequest('cleaners/rooms', JSON.stringify({
     'cleaner_id': cleaner,

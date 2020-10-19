@@ -18,7 +18,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import {Button} from "@material-ui/core";
-import {getRooms} from "../../utils/api";
+import {assignRoomsToCleaner, getRooms} from "../../utils/api";
 import {VisibilityOutlined} from "@material-ui/icons";
 import moment from "moment";
 import {useHistory} from 'react-router-dom';
@@ -141,8 +141,9 @@ const EnhancedTableToolbar = (props) => {
   const {numSelected, selected} = props;
 
 
-  const assignRooms = () => {
-    console.log(selected);
+  const assignRooms = async () => {
+    const response = await assignRoomsToCleaner(selected, '5f6466236654687b489334d3');
+    console.log(response);
   }
 
   return (
