@@ -109,7 +109,7 @@ const RoomTable = ({rooms}) => {
             <TableCell align="right">Last cleaned</TableCell>
             <TableCell>Action</TableCell>
           </TableRow>
-        </TableHead>
+ floor       </TableHead>
         <TableBody>
           {rooms.map((row) => (
             <TableRow key={row['_id']}>

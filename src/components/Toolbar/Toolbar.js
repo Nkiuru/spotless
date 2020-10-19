@@ -8,6 +8,7 @@ const NavTabs = withStyles({
   root: {
     width: '100%',
     flexGrow: 1,
+    marginBottom: '4px'
   },
   indicator: {
     display: 'flex',
