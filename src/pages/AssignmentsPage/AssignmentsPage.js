@@ -27,6 +27,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 function descendingComparator(a, b, orderBy) {
   if (a[orderBy] === undefined) return 1;
+
   if (b[orderBy] < a[orderBy]) {
     return -1;
   }
@@ -163,9 +164,10 @@ const EnhancedTableToolbar = (props) => {
       )}
 
       {numSelected > 0 ? (
-        <Tooltip title="Assign cleaner">
-          <Button variant={'contained'} color={'secondary'} style={{flexBasis: '164px'}} onClick={assignRooms}>Assign
-            rooms</Button>
+        <Tooltip title="Delete">
+          <Button variant={'contained'} color={'secondary'} style={{flexBasis: '164px'}} onClick={() => {
+            assignRooms();
+          }}>Assign rooms</Button>
         </Tooltip>
       ) : (
         <Tooltip title="Filter list">
