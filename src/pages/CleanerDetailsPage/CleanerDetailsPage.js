@@ -6,6 +6,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import {DeleteForever} from "@material-ui/icons";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import PageContainer from "../../containers/PageContainer";
 
 
 const CleanerDetailsPage = () => {
@@ -28,7 +29,7 @@ const CleanerDetailsPage = () => {
   }, [params.id]);
 
   return (
-    <div>
+    <PageContainer>
       <Typography variant={"h5"}>Cleaner details</Typography>
       {cleanerLoaded && (
         <>
@@ -36,7 +37,7 @@ const CleanerDetailsPage = () => {
           <AssignmentsTable cleaner={cleaner}/>
         </>
       )}
-    </div>
+    </PageContainer>
   );
 }
 
@@ -56,7 +57,7 @@ const AssignmentsTable = ({cleaner}) => {
   return (
     loading ? <CircularProgress color="secondary"/> :
       <TableContainer component={Paper}>
-        <Table>
+        <Table size={"small"}>
           <TableHead>
             <TableRow>
               <TableCell>Room</TableCell>

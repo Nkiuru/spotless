@@ -26,6 +26,7 @@ import styles from './CleanersPage.module.scss';
 import * as Yup from "yup";
 import {Formik, Form, Field} from "formik";
 import {Select, TextField} from "formik-material-ui";
+import PageContainer from "../../containers/PageContainer";
 
 const CleanersPage = () => {
   const [cleaners, setCleaners] = useState([]);
@@ -43,18 +44,18 @@ const CleanersPage = () => {
       })
   }, [setOpen, isLoaded])
   return (
-    <div>
+    <PageContainer>
       <div className={styles.headerRow}>
-        <Typography variant={"h5"} style={{marginLeft: 'auto', paddingLeft: '84px'}}>Cleaners</Typography>
+        <Typography variant={"h5"} className={styles.bold}>Cleaners</Typography>
         <Tooltip title="Add cleaner">
-          <IconButton onClick={() => setOpen(true)} style={{marginLeft: 'auto', marginRight: '32px'}}>
+          <IconButton onClick={() => setOpen(true)}>
             <AddCircleOutline/>
           </IconButton>
         </Tooltip>
       </div>
       {isLoaded && <CleanersTable cleaners={cleaners}/>}
       <AddCleanerDialog open={open} setOpen={setOpen} setIsLoaded={setIsLoaded}/>
-    </div>
+    </PageContainer>
   )
 }
 
@@ -189,7 +190,7 @@ const CleanersTable = ({cleaners}) => {
 
   return (
     <TableContainer component={Paper}>
-      <Table>
+      <Table size={'small'}>
         <TableHead>
           <TableRow>
             <TableCell>Name</TableCell>

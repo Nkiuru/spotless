@@ -24,35 +24,8 @@ import {VisibilityOutlined, FilterList} from "@material-ui/icons";
 import moment from "moment";
 import {useHistory} from 'react-router-dom';
 import CircularProgress from "@material-ui/core/CircularProgress";
-
-
-function descendingComparator(a, b, orderBy) {
-  if (a[orderBy] === undefined) return 1;
-
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
+import PageContainer from "../../containers/PageContainer";
+import {getComparator, handleClick, stableSort} from "../../utils/tableUtils";
 
 const headCells = [
   {id: 'name', numeric: false, disablePadding: true, label: 'Name'},
@@ -122,6 +95,7 @@ const useToolbarStyles = makeStyles((theme) => ({
   root: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1),
+    textAlign: 'left'
   },
   highlight:
     theme.palette.type === 'light'
@@ -159,7 +133,7 @@ const EnhancedTableToolbar = (props) => {
           {numSelected} selected
         </Typography>
       ) : (
-        <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
+        <Typography className={classes.title} variant="h6" id="tableTitle" component="div" style={{fontWeight: '600'}}>
           Assign rooms to cleaner
         </Typography>
       )}
@@ -218,7 +192,7 @@ export default function AssignmentsPage() {
   const [orderBy, setOrderBy] = React.useState('name');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [roomsPerPage, setRoomsPerPage] = React.useState(5);
+  const [roomsPerPage, setRoomsPerPage] = React.useState(25);
   const [isLoaded, setIsLoaded] = useState(false);
   const [rooms, setRooms] = useState([]);
   const history = useHistory();
@@ -250,26 +224,6 @@ export default function AssignmentsPage() {
         });
   }, []);
 
-  const handleClick = (event, room) => {
-    const selectedIndex = selected.indexOf(room);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, room);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-
-    setSelected(newSelected);
-  };
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -298,7 +252,7 @@ export default function AssignmentsPage() {
   }
 
   return (
-    <div className={classes.root}>
+    <PageContainer className={classes.root}>
       {isLoaded ?
         <Paper className={classes.paper}>
           <EnhancedTableToolbar numSelected={selected.length} selected={selected}/>
@@ -328,7 +282,7 @@ export default function AssignmentsPage() {
                     return (
                       <TableRow
                         hover
-                        onClick={(event) => handleClick(event, row)}
+                        onClick={(event) => handleClick(event, row, selected, setSelected)}
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
@@ -373,6 +327,6 @@ export default function AssignmentsPage() {
         </Paper>
         : <CircularProgress color="secondary"/>
       }
-    </div>
+    </PageContainer>
   );
 }

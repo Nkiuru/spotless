@@ -5,12 +5,14 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import {IconButton, Paper, Table, TableContainer, TableHead, TableRow} from "@material-ui/core";
+import {IconButton, Paper, Table, TableContainer, TableHead, TableRow, Typography} from "@material-ui/core";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import moment from "moment";
 import {VisibilityOutlined} from "@material-ui/icons";
 import {useHistory} from 'react-router-dom';
+import styles from "../CleanersPage/CleanersPage.module.scss";
+import PageContainer from "../../containers/PageContainer";
 
 const RoomsPage = () => {
   const [error, setError] = useState(null);
@@ -48,32 +50,32 @@ const RoomsPage = () => {
   }
 
   return (
-    <div style={{paddingTop: '16px'}}>
-      <p>Rooms</p>
-      {!isLoaded ? <CircularProgress color="secondary"/> :
-        (
-          <FormControl variant={'outlined'} style={{minWidth: '160px', margin: '8px'}}>
-            <InputLabel id="demo-simple-select-outlined-label">Select hospital</InputLabel>
-            <Select label="Select Hospital" onChange={hospitalSelected} value={hospital}>
-              <MenuItem value={{}}>
-                <em>None</em>
-              </MenuItem>
-              {
-                hospitals.map(hosp => (
-                  <MenuItem value={hosp} key={hosp['_id']}>{hosp.name}</MenuItem>
-                ))
-              }
-            </Select>
-          </FormControl>
-        )
-      }
+    <PageContainer>
+      <div className={styles.headerRow}>
+        <Typography variant={"h5"} className={styles.bold}>Rooms</Typography>
+        {!isLoaded ? <CircularProgress color="secondary"/> :
+          (
+            <FormControl variant={'outlined'} style={{minWidth: '160px', margin: '8px'}}>
+              <InputLabel id="demo-simple-select-outlined-label">Select hospital</InputLabel>
+              <Select label="Select Hospital" onChange={hospitalSelected} value={hospital}>
+                <MenuItem value={{}}>
+                  <em>None</em>
+                </MenuItem>
+                {
+                  hospitals.map(hosp => (
+                    <MenuItem value={hosp} key={hosp['_id']}>{hosp.name}</MenuItem>
+                  ))
+                }
+              </Select>
+            </FormControl>
+          )
+        }
+      </div>
       {rooms.length > 0 && (
         <RoomTable rooms={rooms}/>
       )}
-
-
       {error && <p>ERROR</p>}
-    </div>
+    </PageContainer>
   )
 }
 
@@ -97,7 +99,7 @@ const RoomTable = ({rooms}) => {
 
   return (
     <TableContainer component={Paper}>
-      <Table>
+      <Table size={"small"}>
         <TableHead>
           <TableRow>
             <TableCell>Name</TableCell>
@@ -109,7 +111,7 @@ const RoomTable = ({rooms}) => {
             <TableCell align="right">Last cleaned</TableCell>
             <TableCell>Action</TableCell>
           </TableRow>
- floor       </TableHead>
+         </TableHead>
         <TableBody>
           {rooms.map((row) => (
             <TableRow key={row['_id']}>
