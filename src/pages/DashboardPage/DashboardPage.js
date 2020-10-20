@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 const DashboardPage = () => {
   return (
     <div style={{paddingTop: '16px'}}>
-      <p>Dashboard</p>
+      <Typography>Dashboard</Typography>
       <Button color="secondary" variant="contained">Test button</Button>
     </div>
   )

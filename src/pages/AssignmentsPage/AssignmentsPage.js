@@ -17,15 +17,17 @@ import {
   Checkbox,
   IconButton,
   Tooltip,
-  Button
+  Button, Dialog, DialogTitle, DialogContent, DialogActions
 } from '@material-ui/core';
-import {assignRoomsToCleaner, getRooms} from "../../utils/api";
+import {assignRoomsToCleaner, getCleaners, getRooms} from "../../utils/api";
 import {VisibilityOutlined, FilterList} from "@material-ui/icons";
 import moment from "moment";
 import {useHistory} from 'react-router-dom';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import PageContainer from "../../containers/PageContainer";
 import {getComparator, handleClick, stableSort} from "../../utils/tableUtils";
+import {Autocomplete} from "@material-ui/lab";
+import TextField from "@material-ui/core/TextField";
 
 const headCells = [
   {id: 'name', numeric: false, disablePadding: true, label: 'Name'},
@@ -115,12 +117,7 @@ const useToolbarStyles = makeStyles((theme) => ({
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
   const {numSelected, selected} = props;
-
-
-  const assignRooms = async () => {
-    const response = await assignRoomsToCleaner(selected, '5f6466236654687b489334d3');
-    console.log(response);
-  }
+  const [open, setOpen] = React.useState(false);
 
   return (
     <Toolbar
@@ -141,7 +138,7 @@ const EnhancedTableToolbar = (props) => {
       {numSelected > 0 ? (
         <Tooltip title="Delete">
           <Button variant={'contained'} color={'secondary'} style={{flexBasis: '164px'}} onClick={() => {
-            assignRooms();
+            setOpen(true);
           }}>Assign rooms</Button>
         </Tooltip>
       ) : (
@@ -153,6 +150,7 @@ const EnhancedTableToolbar = (props) => {
           </IconButton>
         </Tooltip>
       )}
+      <AssignCleanerDialog open={open} setOpen={setOpen} selected={selected}/>
     </Toolbar>
   );
 };
@@ -330,3 +328,92 @@ export default function AssignmentsPage() {
     </PageContainer>
   );
 }
+
+const AssignCleanerDialog = ({open, setOpen, selected}) => {
+  const [options, setOptions] = useState([]);
+  const [openSelect, setOpenSelect] = useState(false);
+  const [cleaner, setCleaner] = useState(null);
+  const loading = openSelect && options.length === 0;
+
+  useEffect(() => {
+    let active = true;
+
+    if (!loading) {
+      return undefined;
+    }
+
+    (async () => {
+      const clnrs = await getCleaners();
+
+      if (active) {
+        setOptions(clnrs);
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [loading]);
+
+  const handleClose = () => {
+    setOpen(false);
+  }
+
+  const handleSubmit = async () => {
+    await assignRoomsToCleaner(selected, cleaner['_id'])
+    console.log(cleaner);
+    setOpen(false);
+  }
+
+  return (
+    <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <DialogTitle id="form-dialog-title">Select a cleaner</DialogTitle>
+      <DialogContent>
+        <Autocomplete
+          open={openSelect}
+          onOpen={() => {
+            setOpenSelect(true);
+          }}
+          onClose={() => {
+            setOpenSelect(false);
+          }}
+          style={{ width: 300 }}
+          getOptionLabel={(option) => option.name || ''}
+          options={options}
+          loading={loading}
+          value={cleaner}
+          onChange={(event, newValue) => {
+            console.log(newValue)
+            setCleaner(newValue)
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Cleaner"
+              variant="outlined"
+              InputProps={{
+                ...params.InputProps,
+                endAdornment: (
+                  <>
+                    {loading ? <CircularProgress color="inherit" size={20}/> : null}
+                    {params.InputProps.endAdornment}
+                  </>
+                ),
+              }}
+            />
+          )}
+        />
+
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} color="primary">
+          Cancel
+        </Button>
+        <Button color="primary" onClick={handleSubmit} disabled={cleaner === ''}>
+          Assign
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
