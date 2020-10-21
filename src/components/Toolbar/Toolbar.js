@@ -7,13 +7,13 @@ import styles from './Toolbar.module.scss';
 const NavTabs = withStyles({
   root: {
     width: '100%',
-    flexGrow: 1,
-    marginBottom: '4px'
+    flexGrow: 1
   },
   indicator: {
     display: 'flex',
     justifyContent: 'center',
     backgroundColor: 'transparent',
+    marginBottom: '4px',
     '& > span': {
       maxWidth: 40,
       width: '100%',

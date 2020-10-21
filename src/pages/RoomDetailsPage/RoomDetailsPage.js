@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from "react";
-import {useLocation} from 'react-router-dom';
-import {Typography} from "@material-ui/core";
+import {useLocation, useHistory} from 'react-router-dom';
+import {Button, Typography} from "@material-ui/core";
 import {getRoom} from "../../utils/api";
-
+import PageContainer from "../../containers/PageContainer";
+import styles from "./RoomDetailsPage.module.scss";
 
 const RoomDetailsPage = () => {
   const location = useLocation();
+  const history = useHistory();
   const params = location.state;
   const [roomLoaded, setRoomLoaded] = useState(false);
   const [room, setRoom] = useState({});
@@ -22,13 +24,22 @@ const RoomDetailsPage = () => {
         })
   }, [params.id]);
 
+  const navigateToMap = () => {
+    history.push({
+      pathname: `/rooms`,
+      state: {id: params.id, action: 'show'}
+    })
+  }
+
   return (
-    <div>
-      <Typography variant={"h5"}>Room details</Typography>
+    <PageContainer>
       {roomLoaded && (
-        <Typography>Room name: {room.name}</Typography>
+        <div className={styles.titleRow}>
+          <Typography variant={"h5"}>Room name: {room.name}</Typography>
+          <Button variant={"text"} onClick={navigateToMap} size={"small"}>Show on map</Button>
+        </div>
       )}
-    </div>
+    </PageContainer>
   );
 }
 
