@@ -1,12 +1,15 @@
 import React, {useEffect, useState} from "react";
 import {useLocation} from 'react-router-dom';
 import {IconButton, Paper, Table, TableContainer, TableHead, TableRow, Typography} from "@material-ui/core";
-import {getAssignedRooms, getCleaner} from "../../utils/api";
+import {getAssignedRooms, getCleaner, unAssignRoom} from "../../utils/api";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
-import {DeleteForever} from "@material-ui/icons";
+import {Clear} from "@material-ui/icons";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import PageContainer from "../../containers/PageContainer";
+import Tooltip from "@material-ui/core/Tooltip";
+import Alert from "@material-ui/lab/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
 
 
 const CleanerDetailsPage = () => {
@@ -44,6 +47,8 @@ const CleanerDetailsPage = () => {
 const AssignmentsTable = ({cleaner}) => {
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
+
   useEffect(() => {
     getAssignedRooms(cleaner['_id'])
       .then((assignments) => {
@@ -54,6 +59,24 @@ const AssignmentsTable = ({cleaner}) => {
         console.log(error);
       })
   }, [cleaner]);
+
+  const removeAssignment = async (room) => {
+    const response = await unAssignRoom(room['_id'], cleaner['_id']);
+    console.log(response);
+    const newAssignments = [...assignments];
+    newAssignments.splice(assignments.indexOf(room), 1);
+    setAssignments(newAssignments);
+    setOpen(true);
+  }
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   return (
     loading ? <CircularProgress color="secondary"/> :
       <TableContainer component={Paper}>
@@ -77,12 +100,23 @@ const AssignmentsTable = ({cleaner}) => {
                 <TableCell align="right">{row['room_type']}</TableCell>
                 <TableCell align="right">{row['is_cleaning'] ? 'Cleaning in progress' : 'Needs cleaning'}</TableCell>
                 <TableCell>
-                  <IconButton><DeleteForever/></IconButton>
+                  <Tooltip title={"Remove assignment"}>
+                    <IconButton onClick={() => {
+                      removeAssignment(row);
+                    }}>
+                      <Clear color={"error"}/>
+                    </IconButton>
+                  </Tooltip>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
+          <Alert variant={"filled"} severity="success" onClose={handleClose}>
+            Assignment removed
+          </Alert>
+        </Snackbar>
       </TableContainer>
   );
 }

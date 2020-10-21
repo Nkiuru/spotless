@@ -42,6 +42,13 @@ export const assignRoom = async (room, cleaner) => {
   }));
 }
 
+export const unAssignRoom = async (room, cleaner) => {
+  return doDeleteRequest('cleaners/rooms', JSON.stringify({
+    'cleaner_id': cleaner,
+    'room_id': room
+  }));
+}
+
 export const getRoom = async (roomId) => {
   return doGetRequest(`room?_id=${roomId}`);
 }
@@ -81,6 +88,20 @@ const doPostRequest = async (url, params) => {
   console.log(requestURL);
   const response = await fetch(requestURL, {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': API_KEY,
+      'charset': 'utf-8'
+    },
+    body: params
+  });
+  return response.json();
+}
+
+const doDeleteRequest = async (url, params) => {
+  const requestURL = BASE_URL + url;
+  const response = await fetch(requestURL, {
+    method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': API_KEY,
