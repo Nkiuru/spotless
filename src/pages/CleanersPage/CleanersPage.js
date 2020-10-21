@@ -27,11 +27,14 @@ import * as Yup from "yup";
 import {Formik, Form, Field} from "formik";
 import {Select, TextField} from "formik-material-ui";
 import PageContainer from "../../containers/PageContainer";
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
 
 const CleanersPage = () => {
   const [cleaners, setCleaners] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [open, setOpen] = React.useState(false);
+  const [snackOpen, setSnackOpen] = useState(false);
 
   useEffect(() => {
     getCleaners()
@@ -43,6 +46,14 @@ const CleanersPage = () => {
         console.log(err);
       })
   }, [setOpen, isLoaded])
+
+  const handleSnackClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackOpen(false);
+  };
+
   return (
     <PageContainer>
       <div className={styles.headerRow}>
@@ -54,7 +65,12 @@ const CleanersPage = () => {
         </Tooltip>
       </div>
       {isLoaded && <CleanersTable cleaners={cleaners}/>}
-      <AddCleanerDialog open={open} setOpen={setOpen} setIsLoaded={setIsLoaded}/>
+      <AddCleanerDialog open={open} setOpen={setOpen} setIsLoaded={setIsLoaded} setSnackOpen={setSnackOpen}/>
+      <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
+        <Alert variant={"filled"} severity="success" onClose={handleSnackClose}>
+          Cleaner created
+        </Alert>
+      </Snackbar>
     </PageContainer>
   )
 }
@@ -64,7 +80,7 @@ const validationSchema = Yup.object({
   lastName: Yup.string().required()
 });
 
-const AddCleanerDialog = ({open, setOpen, setIsLoaded}) => {
+const AddCleanerDialog = ({open, setOpen, setIsLoaded, setSnackOpen}) => {
   const handleClose = () => {
     setOpen(false);
   }
@@ -85,6 +101,7 @@ const AddCleanerDialog = ({open, setOpen, setIsLoaded}) => {
     console.log(cleaner);
     setIsLoaded(false);
     setSubmitting(false);
+    setSnackOpen(true);
     setOpen(false);
   }
 

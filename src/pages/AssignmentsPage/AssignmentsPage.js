@@ -29,6 +29,8 @@ import {getComparator, handleClick, stableSort} from "../../utils/tableUtils";
 import {Autocomplete} from "@material-ui/lab";
 import TextField from "@material-ui/core/TextField";
 import styles from "./AssignmentsPage.module.scss"
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
 
 const headCells = [
   {id: 'name', numeric: false, disablePadding: true, label: 'Name'},
@@ -114,7 +116,7 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
-  const {numSelected, selected} = props;
+  const {numSelected, selected, setSelected, setSnackOpen} = props;
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -149,14 +151,16 @@ const EnhancedTableToolbar = (props) => {
           </IconButton>
         </Tooltip>
       )}
-      <AssignCleanerDialog open={open} setOpen={setOpen} selected={selected}/>
+      <AssignCleanerDialog open={open} setOpen={setOpen} selected={selected} onClose={() => setSelected([])} setSnackOpen={setSnackOpen}/>
     </Toolbar>
   );
 };
 
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
-  selected: PropTypes.array.isRequired
+  selected: PropTypes.array.isRequired,
+  setSelected: PropTypes.func.isRequired,
+  setSnackOpen: PropTypes.func.isRequired
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -192,6 +196,7 @@ export default function AssignmentsPage() {
   const [roomsPerPage, setRoomsPerPage] = React.useState(25);
   const [isLoaded, setIsLoaded] = useState(false);
   const [rooms, setRooms] = useState([]);
+  const [snackOpen, setSnackOpen] = useState(false);
   const history = useHistory();
 
   const handleRequestSort = (event, property) => {
@@ -248,11 +253,18 @@ export default function AssignmentsPage() {
     })
   }
 
+  const handleSnackClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackOpen(false);
+  };
+
   return (
     <PageContainer className={classes.root}>
       {isLoaded ?
         <Paper className={classes.paper}>
-          <EnhancedTableToolbar numSelected={selected.length} selected={selected}/>
+          <EnhancedTableToolbar numSelected={selected.length} selected={selected} setSnackOpen={setSnackOpen} setSelected={setSelected}/>
           <TableContainer>
             <Table
               className={classes.table}
@@ -326,13 +338,18 @@ export default function AssignmentsPage() {
             onChangeRowsPerPage={handleChangeRowsPerPage}
           />
         </Paper>
-        : <CircularProgress color="secondary"/>
+        : <CircularProgress color="secondary" style={{margin: '16px auto'}}/>
       }
+      <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
+        <Alert variant={"filled"} severity="success" onClose={handleSnackClose}>
+          Cleaner assigned
+        </Alert>
+      </Snackbar>
     </PageContainer>
   );
 }
 
-const AssignCleanerDialog = ({open, setOpen, selected}) => {
+const AssignCleanerDialog = ({open, setOpen, selected, setSnackOpen, onClose}) => {
   const [options, setOptions] = useState([]);
   const [openSelect, setOpenSelect] = useState(false);
   const [cleaner, setCleaner] = useState(null);
@@ -359,13 +376,15 @@ const AssignCleanerDialog = ({open, setOpen, selected}) => {
   }, [loading]);
 
   const handleClose = () => {
+    onClose();
     setOpen(false);
   }
 
   const handleSubmit = async () => {
     await assignRoomsToCleaner(selected, cleaner['_id'])
     console.log(cleaner);
-    setOpen(false);
+    setSnackOpen(true);
+    handleClose();
   }
 
   return (

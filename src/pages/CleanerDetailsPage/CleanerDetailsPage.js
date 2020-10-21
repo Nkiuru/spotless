@@ -73,7 +73,6 @@ const AssignmentsTable = ({cleaner}) => {
     if (reason === 'clickaway') {
       return;
     }
-
     setOpen(false);
   };
 
