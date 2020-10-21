@@ -28,6 +28,7 @@ import PageContainer from "../../containers/PageContainer";
 import {getComparator, handleClick, stableSort} from "../../utils/tableUtils";
 import {Autocomplete} from "@material-ui/lab";
 import TextField from "@material-ui/core/TextField";
+import styles from "./AssignmentsPage.module.scss"
 
 const headCells = [
   {id: 'name', numeric: false, disablePadding: true, label: 'Name'},
@@ -109,9 +110,6 @@ const useToolbarStyles = makeStyles((theme) => ({
         color: theme.palette.text.primary,
         backgroundColor: theme.palette.secondary.dark,
       },
-  title: {
-    flex: '1 1 100%',
-  },
 }));
 
 const EnhancedTableToolbar = (props) => {
@@ -126,11 +124,12 @@ const EnhancedTableToolbar = (props) => {
       })}
     >
       {numSelected > 0 ? (
-        <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
+        <Typography className={styles.title} color="inherit" variant="subtitle1" component="div"
+                    style={{fontWeight: 600}}>
           {numSelected} selected
         </Typography>
       ) : (
-        <Typography className={classes.title} variant="h6" id="tableTitle" component="div" style={{fontWeight: '600'}}>
+        <Typography className={styles.title} variant="h6" id="tableTitle" component="div" style={{fontWeight: '600'}}>
           Assign rooms to cleaner
         </Typography>
       )}
@@ -286,6 +285,7 @@ export default function AssignmentsPage() {
                         tabIndex={-1}
                         key={row.name}
                         selected={isItemSelected}
+                        style={{height: '33px'}}
                       >
                         <TableCell padding="checkbox">
                           <Checkbox
@@ -303,9 +303,12 @@ export default function AssignmentsPage() {
                         <TableCell>{row['room_type']}</TableCell>
                         <TableCell align="right">{getDate(row['last_cleaned'])}</TableCell>
                         <TableCell align="right">
-                          <IconButton color={"secondary"} onClick={() => {
-                            openRoom(row)
-                          }}><VisibilityOutlined/></IconButton>
+                          <IconButton color={"secondary"} size={"small"}
+                                      onClick={() => {
+                                        openRoom(row)
+                                      }}>
+                            <VisibilityOutlined/>
+                          </IconButton>
                         </TableCell>
                       </TableRow>
                     );
@@ -377,7 +380,7 @@ const AssignCleanerDialog = ({open, setOpen, selected}) => {
           onClose={() => {
             setOpenSelect(false);
           }}
-          style={{ width: 300 }}
+          style={{width: 300}}
           getOptionLabel={(option) => option.name || ''}
           options={options}
           loading={loading}
