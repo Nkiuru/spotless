@@ -1,6 +1,46 @@
+@import "../../vars";
+
 .titleRow {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+}
+
+.content {
+  display: flex;
+  margin-top: 32px;
+  text-align: start;
+
+  .card {
+    width: 30%;
+    border-radius: 20px;
+
+    .cardContent {
+      margin: 32px;
+    }
+  }
+
+  .row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .divider {
+    margin: 32px 0;
+  }
+
+  .semiBold {
+    font-weight: $semi-bold;
+  }
+
+  .medium {
+    font-weight: $medium;
+  }
+}
+
+.critical {
+  color: $color-critical;
 }

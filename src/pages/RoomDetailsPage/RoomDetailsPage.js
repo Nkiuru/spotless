@@ -4,6 +4,7 @@ import {Button, Typography} from "@material-ui/core";
 import {getRoom} from "../../utils/api";
 import PageContainer from "../../containers/PageContainer";
 import styles from "./RoomDetailsPage.module.scss";
+import {RoomDetailsCard} from "./RoomDetailsCard";
 
 const RoomDetailsPage = () => {
   const location = useLocation();
@@ -34,10 +35,15 @@ const RoomDetailsPage = () => {
   return (
     <PageContainer>
       {roomLoaded && (
-        <div className={styles.titleRow}>
-          <Typography variant={"h5"}>Room name: {room.name}</Typography>
-          <Button variant={"text"} onClick={navigateToMap} size={"small"}>Show on map</Button>
-        </div>
+        <>
+          <div className={styles.titleRow}>
+            <Typography variant={"h4"}>Room: {room.name}</Typography>
+            <Button variant={"text"} onClick={navigateToMap} size={"small"}>Show on map</Button>
+          </div>
+          <div className={styles.content}>
+            <RoomDetailsCard room={room}/>
+          </div>
+        </>
       )}
     </PageContainer>
   );
