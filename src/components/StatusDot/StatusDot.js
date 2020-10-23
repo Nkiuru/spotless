@@ -16,8 +16,8 @@ const StatusDot = ({variant, size, tooltip}) => {
 }
 
 StatusDot.propTypes = {
-  variant: PropTypes.oneOf(['good', 'critical', 'medium']).isRequired,
-  size: PropTypes.oneOf(['small', 'medium']).isRequired,
+  variant: PropTypes.oneOf(['good', 'critical', 'medium', 'neutral']).isRequired,
+  size: PropTypes.oneOf(['tiny', 'small', 'medium']).isRequired,
   tooltip: PropTypes.string
 }
 

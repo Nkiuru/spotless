@@ -30,6 +30,10 @@ export const getAssignedRooms = async (cleanerId) => {
   return doGetRequest(`cleaners/rooms?cleaner_id=${cleanerId}`);
 }
 
+export const getAssignedCleaners = async (roomId) => {
+  return doGetRequest(`cleaners/rooms?room_id=${roomId}`);
+}
+
 export const assignRoomsToCleaner = async (rooms, cleaner) => {
   return Promise.all(rooms.map((room) => {
     return assignRoom(room['_id'], cleaner);

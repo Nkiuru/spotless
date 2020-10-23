@@ -6,7 +6,7 @@ import {Divider, Typography} from "@material-ui/core";
 import PropTypes from 'prop-types';
 
 
-export const RoomDetailsCard = ({room}) => {
+const RoomDetailsCard = ({room}) => {
   const getFrequency = () => {
     return room['room_type'] !== '<empty>' ? ROOM_TYPES[room['room_type']].frequency : '';
   }
@@ -17,7 +17,7 @@ export const RoomDetailsCard = ({room}) => {
   return (
     <Card className={styles.card}>
       <div className={styles.cardContent}>
-        <Typography variant={"h6"}>Room details</Typography>
+        <Typography variant={"h6"} className={styles.semiBold}>Room details</Typography>
         <Divider light={true} className={styles.divider}/>
         <Typography variant={"body1"} className={styles.semiBold}>Building {room.building}</Typography>
         <Typography variant={"body2"} className={styles.medium} color="textSecondary">Floor {room.floor}</Typography>
@@ -44,3 +44,5 @@ export const RoomDetailsCard = ({room}) => {
 RoomDetailsCard.propTypes = {
   room: PropTypes.object.isRequired
 }
+
+export default RoomDetailsCard;

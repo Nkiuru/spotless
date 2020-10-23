@@ -2,9 +2,9 @@ import React from 'react';
 import styles from './PageContainer.module.scss';
 import PropTypes from 'prop-types';
 
-const PageContainer = ({ children }) => (
+const PageContainer = ({ children, style }) => (
   <div className={styles.pageContainer}>
-    <div className={styles.pageContent}>{children}</div>
+    <div className={styles.pageContent} style={style}>{children}</div>
   </div>
 );
 PageContainer.propTypes = {

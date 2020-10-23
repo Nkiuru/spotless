@@ -11,9 +11,11 @@
   display: flex;
   margin-top: 32px;
   text-align: start;
+  flex-direction: row;
+  justify-content: space-between;
 
   .card {
-    width: 30%;
+    width: 40%;
     border-radius: 20px;
 
     .cardContent {
@@ -43,4 +45,9 @@
 
 .critical {
   color: $color-critical;
+}
+
+.btn {
+  border-radius: 12px;
+  flex: 1;
 }

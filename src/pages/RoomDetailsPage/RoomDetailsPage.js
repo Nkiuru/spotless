@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from "react";
 import {useLocation, useHistory} from 'react-router-dom';
 import {Button, Typography} from "@material-ui/core";
-import {getRoom} from "../../utils/api";
+import {getAssignedCleaners, getRoom} from "../../utils/api";
 import PageContainer from "../../containers/PageContainer";
 import styles from "./RoomDetailsPage.module.scss";
-import {RoomDetailsCard} from "./RoomDetailsCard";
+import RoomDetailsCard from "./RoomDetailsCard";
+import RoomCleanerCard from "./RoomCleanerCard";
 
 const RoomDetailsPage = () => {
   const location = useLocation();
@@ -12,6 +13,7 @@ const RoomDetailsPage = () => {
   const params = location.state;
   const [roomLoaded, setRoomLoaded] = useState(false);
   const [room, setRoom] = useState({});
+  const [cleaner, setCleaner] = useState({});
 
   useEffect(() => {
     getRoom(params.id)
@@ -20,9 +22,13 @@ const RoomDetailsPage = () => {
           setRoom(room);
           setRoomLoaded(true);
         },
-        (error) => {
-          console.log(error);
-        })
+        (error) => console.log(error));
+    getAssignedCleaners(params.id)
+      .then((cleaners) => {
+        if (cleaners.length >= 1) {
+          setCleaner(cleaners[0]);
+        }
+      }, (error) => console.log(error));
   }, [params.id]);
 
   const navigateToMap = () => {
@@ -33,7 +39,7 @@ const RoomDetailsPage = () => {
   }
 
   return (
-    <PageContainer>
+    <PageContainer style={{width: '65%'}}>
       {roomLoaded && (
         <>
           <div className={styles.titleRow}>
@@ -42,6 +48,7 @@ const RoomDetailsPage = () => {
           </div>
           <div className={styles.content}>
             <RoomDetailsCard room={room}/>
+            <RoomCleanerCard room={room} cleaner={cleaner} setCleaner={setCleaner}/>
           </div>
         </>
       )}

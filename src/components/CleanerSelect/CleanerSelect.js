@@ -32,6 +32,11 @@ const CleanerSelect = ({onChange}) => {
     };
   }, [loading]);
 
+  const onSelectChange = (event, newValue) => {
+    setCleaner(newValue);
+    onChange(event, newValue);
+  }
+
   return (
     <Autocomplete
       open={openSelect}
@@ -46,7 +51,7 @@ const CleanerSelect = ({onChange}) => {
       options={options}
       loading={loading}
       value={cleaner}
-      onChange={onChange}
+      onChange={onSelectChange}
       renderInput={(params) => (
         <TextField
           {...params}
