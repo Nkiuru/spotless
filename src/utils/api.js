@@ -6,10 +6,11 @@ export const authenticated = () => {
 const API_KEY = 'zL43mXgXk5xa7YFRBVZscbLnGFaqVh24q5G6fhGjmAv532FAVBRtnuCJpwXWXnhw';
 const BASE_URL = 'https://cleaner-app-api.azurewebsites.net/api/';
 
-export const getRooms = async (hospital, floor) => {
+export const getRooms = async (hospital, floor, showAssigned) => {
   const url = 'rooms';
   let params = hospital ? `?hospital_id=${hospital}` : '';
   params += floor ? `?floor_id=${floor}` : '';
+  params += showAssigned ? `?assigned_cleaners=1`: '';
   return doGetRequest(url, params);
 }
 

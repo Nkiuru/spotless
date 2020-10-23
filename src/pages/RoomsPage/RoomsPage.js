@@ -55,7 +55,7 @@ const RoomsPage = () => {
         <Typography variant={"h5"} className={styles.bold}>Rooms</Typography>
         {!isLoaded ? <CircularProgress color="secondary"/> :
           (
-            <FormControl variant={'outlined'} style={{minWidth: '160px', margin: '8px'}}>
+            <FormControl variant={'outlined'} style={{minWidth: '320px', margin: '8px'}}>
               <InputLabel id="demo-simple-select-outlined-label">Select hospital</InputLabel>
               <Select label="Select Hospital" onChange={hospitalSelected} value={hospital}>
                 <MenuItem value={{}}>
