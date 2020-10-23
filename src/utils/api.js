@@ -1,10 +1,10 @@
+import {API_KEY, BASE_URL} from "./constants";
+
 export const authenticated = () => {
   return true;
   //return localStorage.getItem('token') !== null;
 };
 
-const API_KEY = 'zL43mXgXk5xa7YFRBVZscbLnGFaqVh24q5G6fhGjmAv532FAVBRtnuCJpwXWXnhw';
-const BASE_URL = 'https://cleaner-app-api.azurewebsites.net/api/';
 
 export const getRooms = async (hospital, floor, showAssigned) => {
   const url = 'rooms';
@@ -68,6 +68,12 @@ export const createCleaner = async (name, shiftStart, shiftEnd) => {
     'shift_start': shiftStart,
     'shift_end': shiftEnd
   }));
+}
+
+export const getReports = async (roomId, cleanerId) => {
+  let params = roomId ? `?room_id=${roomId}` : '';
+  params += `?cleaner_id=${cleanerId}`;
+  return doGetRequest('reports', params)
 }
 
 const doGetRequest = async (url, params) => {
