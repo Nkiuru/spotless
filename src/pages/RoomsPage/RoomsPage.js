@@ -13,6 +13,7 @@ import {VisibilityOutlined} from "@material-ui/icons";
 import {useHistory} from 'react-router-dom';
 import styles from "../CleanersPage/CleanersPage.module.scss";
 import PageContainer from "../../containers/PageContainer";
+import {getRoomTypeProp} from "../../utils/utils";
 
 const RoomsPage = () => {
   const [error, setError] = useState(null);
@@ -122,10 +123,10 @@ const RoomTable = ({rooms}) => {
               <TableCell align="right">{row.floor}</TableCell>
               <TableCell align="right">{row['contamination_index']}</TableCell>
               <TableCell align="right">{getPatient(row.patient)}</TableCell>
-              <TableCell align="right">{row['room_type']}</TableCell>
+              <TableCell align="right">{getRoomTypeProp(row, 'displayName')}</TableCell>
               <TableCell align="right">{getDate(row['last_cleaned'])}</TableCell>
               <TableCell>
-                <IconButton color={"secondary"} onClick={() => {
+                <IconButton size={"small"} color={"secondary"} onClick={() => {
                   openRoom(row)
                 }}><VisibilityOutlined/></IconButton>
               </TableCell>

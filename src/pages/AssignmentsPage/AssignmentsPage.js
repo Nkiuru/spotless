@@ -32,6 +32,7 @@ import Alert from "@material-ui/lab/Alert";
 import {AssignCleanerDialog} from "./AssignCleanerDialog";
 import Link from "@material-ui/core/Link";
 import {Link as RouterLink} from 'react-router-dom';
+import {getRoomTypeProp} from "../../utils/utils";
 
 const headCells = [
   {id: 'name', numeric: false, disablePadding: true, label: 'Name'},
@@ -331,7 +332,7 @@ export default function AssignmentsPage() {
                         <TableCell>{getCleaner(row)}</TableCell>
                         <TableCell align="right">{row['contamination_index']}</TableCell>
                         <TableCell>{getPatient(row.patient)}</TableCell>
-                        <TableCell>{row['room_type']}</TableCell>
+                        <TableCell>{getRoomTypeProp(row, 'displayName')}</TableCell>
                         <TableCell align="right">{getDate(row['last_cleaned'])}</TableCell>
                         <TableCell align="right">
                           <IconButton color={"secondary"} size={"small"}

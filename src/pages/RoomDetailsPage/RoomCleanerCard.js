@@ -20,7 +20,6 @@ const RoomCleanerCard = ({room, cleaner, setCleaner}) => {
   const [snackText, setSnackText] = useState('');
 
   const hasCleaner = Object.keys(cleaner).length !== 0;
-  console.log(cleaner);
   const getColor = () => {
     if (!hasCleaner) return 'neutral';
     const shiftStart = moment(cleaner['shift_start'], 'HH:mm');
@@ -68,7 +67,7 @@ const RoomCleanerCard = ({room, cleaner, setCleaner}) => {
               </>
             )
             :
-            <CleanerSelect onChange={(event, newValue) => setNewCleaner(newValue)}/>
+            <CleanerSelect onChange={(event, newValue) => setNewCleaner(newValue)} style={{marginLeft: 16}}/>
           }
         </div>
         {newCleaner && Object.keys(newCleaner).length !== 0 && (

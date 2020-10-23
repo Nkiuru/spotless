@@ -229,7 +229,7 @@ const CleanersTable = ({cleaners}) => {
               <TableCell align="right">{}</TableCell>
               <TableCell align="right">{}</TableCell>
               <TableCell>
-                <IconButton color={"secondary"} onClick={() => {
+                <IconButton size={"small"} color={"secondary"} onClick={() => {
                   viewCleaner(row)
                 }}><VisibilityOutlined/></IconButton>
               </TableCell>

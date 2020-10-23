@@ -4,9 +4,9 @@ import {Autocomplete} from "@material-ui/lab";
 import TextField from "@material-ui/core/TextField";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {getCleaners} from "../../utils/api";
+import styles from "./CleanerSelect.module.scss";
 
-
-const CleanerSelect = ({onChange}) => {
+const CleanerSelect = ({onChange, style}) => {
   const [options, setOptions] = useState([]);
   const [openSelect, setOpenSelect] = useState(false);
   const [cleaner, setCleaner] = useState(null);
@@ -46,7 +46,8 @@ const CleanerSelect = ({onChange}) => {
       onClose={() => {
         setOpenSelect(false);
       }}
-      style={{width: 300}}
+      className={styles.autocomplete}
+      style={style}
       getOptionLabel={(option) => option.name || ''}
       options={options}
       loading={loading}
@@ -73,7 +74,8 @@ const CleanerSelect = ({onChange}) => {
 }
 
 CleanerSelect.propTypes = {
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
+  style: PropTypes.object
 }
 
 export default CleanerSelect;
