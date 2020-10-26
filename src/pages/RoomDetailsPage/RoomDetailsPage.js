@@ -7,7 +7,8 @@ import styles from "./RoomDetailsPage.module.scss";
 import RoomDetailsCard from "./RoomDetailsCard";
 import RoomCleanerCard from "./RoomCleanerCard";
 import CommentsList from "./RoomReportComments";
-import RoomReportsTable from "./RoomReportsTable";
+import CleaningReportsTable from "../../components/CleaningReportsTable/CleaningReportsTable";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const RoomDetailsPage = () => {
   const location = useLocation();
@@ -46,7 +47,7 @@ const RoomDetailsPage = () => {
 
   return (
     <PageContainer style={{width: '65%'}}>
-      {roomLoaded && (
+      {roomLoaded ? (
         <>
           <div className={styles.titleRow}>
             <Typography variant={"h4"}>Room: {room.name}</Typography>
@@ -60,10 +61,10 @@ const RoomDetailsPage = () => {
             <CommentsList reports={reports}/>
             <Typography variant={"h5"}>Room map</Typography>
             <div style={{width: 600, height: 400}}/>
-            <RoomReportsTable reports={reports}/>
+            <CleaningReportsTable reports={reports} type={'room'}/>
           </div>
         </>
-      )}
+      ) : <CircularProgress color="secondary" style={{margin: '16px auto'}}/>}
     </PageContainer>
   );
 }

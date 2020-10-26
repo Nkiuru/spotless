@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useLocation} from 'react-router-dom';
 import {IconButton, Paper, Table, TableContainer, TableHead, TableRow, Typography} from "@material-ui/core";
-import {getAssignedRooms, getCleaner, unAssignRoom} from "../../utils/api";
+import {getAssignedRooms, getCleaner, getReports, unAssignRoom} from "../../utils/api";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import {Clear} from "@material-ui/icons";
@@ -10,13 +10,16 @@ import PageContainer from "../../containers/PageContainer";
 import Tooltip from "@material-ui/core/Tooltip";
 import Alert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
-
+import {getRoomTypeProp} from "../../utils/utils";
+import CleaningReportsTable from "../../components/CleaningReportsTable";
+import styles from './CleanerDetailsPage.module.scss';
 
 const CleanerDetailsPage = () => {
   const location = useLocation();
   const params = location.state;
   const [cleanerLoaded, setCleanerLoaded] = useState(false);
   const [cleaner, setCleaner] = useState({});
+  const [reports, setReports] = useState([]);
 
   useEffect(() => {
     getCleaner(params.id)
@@ -28,18 +31,22 @@ const CleanerDetailsPage = () => {
         (error) => {
           console.log(error);
         });
-
+    getReports(null, params.id)
+      .then((reports) => {
+        setReports(reports.sort((a, b) => new Date(b['cleaning_time']) - new Date(a['cleaning_time'])));
+      })
   }, [params.id]);
 
   return (
-    <PageContainer>
+    <PageContainer style={{textAlign: 'start'}}>
       <Typography variant={"h5"}>Cleaner details</Typography>
-      {cleanerLoaded && (
+      {cleanerLoaded ? (
         <>
           <Typography>Cleaner name: {cleaner.name}</Typography>
           <AssignmentsTable cleaner={cleaner}/>
+          <CleaningReportsTable reports={reports} type={"cleaner"}/>
         </>
-      )}
+      ) : <CircularProgress color="secondary" style={{margin: '16px auto'}}/>}
     </PageContainer>
   );
 }
@@ -96,11 +103,11 @@ const AssignmentsTable = ({cleaner}) => {
                 <TableCell component="th" scope="row">{row.name}</TableCell>
                 <TableCell align="right">{}</TableCell>
                 <TableCell align="right">{row['contamination_index']}</TableCell>
-                <TableCell align="right">{row['room_type']}</TableCell>
+                <TableCell align="right">{getRoomTypeProp(row, 'displayName')}</TableCell>
                 <TableCell align="right">{row['is_cleaning'] ? 'Cleaning in progress' : 'Needs cleaning'}</TableCell>
                 <TableCell>
                   <Tooltip title={"Remove assignment"}>
-                    <IconButton onClick={() => {
+                    <IconButton size={"small"} onClick={() => {
                       removeAssignment(row);
                     }}>
                       <Clear color={"error"}/>
@@ -111,7 +118,8 @@ const AssignmentsTable = ({cleaner}) => {
             ))}
           </TableBody>
         </Table>
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}
+                  anchorOrigin={{vertical: "top", horizontal: "center"}}>
           <Alert variant={"filled"} severity="success" onClose={handleClose}>
             Assignment removed
           </Alert>

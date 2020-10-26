@@ -29,6 +29,7 @@ import {Select, TextField} from "formik-material-ui";
 import PageContainer from "../../containers/PageContainer";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const CleanersPage = () => {
   const [cleaners, setCleaners] = useState([]);
@@ -64,7 +65,7 @@ const CleanersPage = () => {
           </IconButton>
         </Tooltip>
       </div>
-      {isLoaded && <CleanersTable cleaners={cleaners}/>}
+      {isLoaded ? <CleanersTable cleaners={cleaners}/> : <CircularProgress color="secondary" style={{margin: '16px auto'}}/>}
       <AddCleanerDialog open={open} setOpen={setOpen} setIsLoaded={setIsLoaded} setSnackOpen={setSnackOpen}/>
       <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
         <Alert variant={"filled"} severity="success" onClose={handleSnackClose}>

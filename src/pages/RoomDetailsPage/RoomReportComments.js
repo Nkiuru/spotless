@@ -17,7 +17,7 @@ const CommentsList = ({reports}) => {
   return (
     <Card className={styles.comments}>
       <div className={styles.cardContent}>
-        <Typography variant={"h6"} className={styles.semiBold} style={{marginBottom: 16}}>Cleaner comments</Typography>
+        <Typography variant={"h6"} className={styles.semiBold} style={{marginBottom: 16}}>Cleaner comments:</Typography>
         {reports.length > 0 ? (
           reports.reduce((result, report) => {
             const showReport = report.comments !== '';
