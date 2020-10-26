@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {assignRoomsToCleaner, getCleaners} from "../../utils/api";
+import React, {useState} from "react";
+import {assignRoomsToCleaner} from "../../utils/api";
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@material-ui/core";
 import CleanerSelect from "../../components/CleanerSelect";
 

@@ -202,7 +202,6 @@ export default function AssignmentsPage() {
   const [rooms, setRooms] = useState([]);
   const [snackOpen, setSnackOpen] = useState(false);
   const history = useHistory();
-  const preventDefault = (event) => event.preventDefault();
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
