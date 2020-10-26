@@ -7,6 +7,7 @@ import styles from "./RoomDetailsPage.module.scss";
 import RoomDetailsCard from "./RoomDetailsCard";
 import RoomCleanerCard from "./RoomCleanerCard";
 import CommentsList from "./RoomReportComments";
+import RoomReportsTable from "./RoomReportsTable";
 
 const RoomDetailsPage = () => {
   const location = useLocation();
@@ -32,8 +33,7 @@ const RoomDetailsPage = () => {
       }, (error) => console.log(error));
     getReports(params.id)
       .then((reports) => {
-        console.log(reports)
-        setReports(reports);
+        setReports(reports.sort((a, b) => new Date(b['cleaning_time']) - new Date(a['cleaning_time'])));
       })
   }, [params.id]);
 
@@ -57,7 +57,10 @@ const RoomDetailsPage = () => {
               <RoomDetailsCard room={room}/>
               <RoomCleanerCard room={room} cleaner={cleaner} setCleaner={setCleaner}/>
             </div>
-            <CommentsList reports={reports} />
+            <CommentsList reports={reports}/>
+            <Typography variant={"h5"}>Room map</Typography>
+            <div style={{width: 600, height: 400}}/>
+            <RoomReportsTable reports={reports}/>
           </div>
         </>
       )}

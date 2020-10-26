@@ -13,6 +13,7 @@ import RoomsPage from "../pages/RoomsPage";
 import AssignmentsPage from "../pages/AssignmentsPage";
 import RoomDetailsPage from "../pages/RoomDetailsPage";
 import CleanerDetailsPage from "../pages/CleanerDetailsPage";
+import ReportPage from "../pages/ReportPage";
 
 function App() {
   const location = useLocation();
@@ -24,6 +25,7 @@ function App() {
   const rooms = () => (!auth() ? <Redirect to="/"/> : <RoomsPage/>);
   const room = () => (!auth() ? <Redirect to="/"/> : <RoomDetailsPage/>);
   const analysis = () => (!auth() ? <Redirect to="/"/> : <AnalysisPage/>);
+  const report = () => (!auth() ? <Redirect to="/"/> : <ReportPage/>);
 
   return (
     <div className="App">
@@ -36,6 +38,7 @@ function App() {
         <Route path={"/rooms/:id"} render={room}/>
         <Route path={"/rooms"} render={rooms}/>
         <Route path={"/analysis"} render={analysis}/>
+        <Route path={"/reports/:id"} render={report}/>
         <Route path={"/"} render={login}/>
       </Switch>
     </div>
