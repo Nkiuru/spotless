@@ -11,16 +11,21 @@
   display: flex;
   margin-top: 32px;
   text-align: start;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
 
   .card {
     width: 40%;
     border-radius: 20px;
+  }
 
-    .cardContent {
-      margin: 32px;
-    }
+  .cardContent {
+    margin: 32px;
+  }
+
+  .detailsRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
   }
 
   .row {
@@ -50,4 +55,18 @@
 .btn {
   border-radius: 12px;
   flex: 1;
+}
+
+.comments {
+  max-height: 50%;
+  margin-top: 32px;
+  border-radius: 8px;
+  overflow-y: auto;
+
+  .comment {
+    .author {
+      color: $color-commenter;
+      line-height: 200%;
+    }
+  }
 }

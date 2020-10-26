@@ -76,7 +76,7 @@ export const createCleaner = async (name, shiftStart, shiftEnd) => {
 
 export const getReports = async (roomId, cleanerId) => {
   let params = roomId ? `?room_id=${roomId}` : '';
-  params += `?cleaner_id=${cleanerId}`;
+  params += cleanerId ? `?cleaner_id=${cleanerId}` : '';
   return doGetRequest('reports', params)
 }
 
