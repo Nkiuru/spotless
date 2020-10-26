@@ -1,8 +1,10 @@
 import React from 'react';
-import {AppBar, Typography, Tabs, Toolbar as MaterialToolbar, Tab} from "@material-ui/core";
-import {Link, useLocation, matchPath} from 'react-router-dom';
+import {AppBar, Typography, Tabs, Toolbar as MaterialToolbar, Tab, IconButton} from "@material-ui/core";
+import {Link, useLocation, matchPath, useHistory} from 'react-router-dom';
 import {withStyles} from "@material-ui/core/styles";
 import styles from './Toolbar.module.scss';
+import {ArrowBackRounded} from "@material-ui/icons";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const NavTabs = withStyles({
   root: {
@@ -30,13 +32,25 @@ const mountTabValueFactory = (location, tabId) => (route) => !!matchPath(locatio
 
 const Toolbar = () => {
   const location = useLocation();
+  const history = useHistory();
   const tabId = 'myTabId';
   const getTabValue = mountTabValueFactory(location, tabId);
 
   return (
     <AppBar position={"static"}>
       <MaterialToolbar variant={"dense"}>
-        <Typography variant={"h6"} className={styles.toolbar}>Spotless</Typography>
+        <div className={styles.toolbar}>
+          {location.pathname.split('/').length > 2 ? (
+            <Tooltip title={'Go Back'}>
+              <IconButton onClick={() => {
+                history.goBack()
+              }}>
+                <ArrowBackRounded className={styles.svg}/>
+              </IconButton>
+            </Tooltip>
+          ) : <div style={{width: 60}}/>}
+          <Typography variant={"h6"} className={styles.name}>Spotless</Typography>
+        </div>
         <NavTabs variant={"fullWidth"} value={tabId}>
           <Tab label={"Dashboard"} value={getTabValue("/dashboard")} component={Link} to={"/dashboard"}
                disableRipple={true} className={styles.tab}/>

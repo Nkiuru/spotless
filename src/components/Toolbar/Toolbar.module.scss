@@ -1,9 +1,27 @@
 @import "../../vars";
 
 .toolbar {
-  font-family: $font;
-  font-weight: $bold;
-  width: 128px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .name {
+    font-family: $font;
+    font-weight: $bold;
+    width: 90px;
+  }
+
+  button {
+    width: 60px;
+    padding: 0;
+  }
+
+  .svg {
+    font-size: 1.8rem;
+    color: #ffffff;
+    stroke: white;
+    stroke-width: 0.2px;
+  }
 }
 
 .tab {
