@@ -10,7 +10,7 @@ export const getRooms = async (hospital, floor, showAssigned) => {
   const url = 'rooms';
   let params = hospital ? `?hospital_id=${hospital}` : '';
   params += floor ? `?floor_id=${floor}` : '';
-  params += showAssigned ? `?assigned_cleaners=1`: '';
+  params += showAssigned ? `?assigned_cleaners=1` : '';
   return doGetRequest(url, params);
 }
 
@@ -86,6 +86,27 @@ export const deleteCleaner = async (cleanerId) => {
   }));
 }
 
+export const getReport = async (reportId) => {
+  return doGetRequest(`report?_id=${reportId}`);
+}
+
+export const getHeatmap = async (reportId, type) => {
+  const requestURL = BASE_URL + `report/heatmap?_id=${reportId}&type=${type}`
+  const response = await fetch(requestURL, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/octet-stream',
+      'Authorization': API_KEY,
+      'charset': 'utf-8'
+    }
+  });
+  if (response.ok) {
+    return response;
+  } else {
+    throw new Error(await response.json().message);
+  }
+}
+
 const doGetRequest = async (url, params) => {
   const requestURL = BASE_URL + url + (params || '');
   console.log(requestURL);
@@ -97,7 +118,11 @@ const doGetRequest = async (url, params) => {
       'charset': 'utf-8'
     }
   });
-  return response.json();
+  if (response.ok) {
+    return response.json();
+  } else {
+    throw new Error(await response.json().message);
+  }
 }
 
 const doPostRequest = async (url, params) => {
@@ -112,7 +137,11 @@ const doPostRequest = async (url, params) => {
     },
     body: params
   });
-  return response.json();
+  if (response.ok) {
+    return response.json();
+  } else {
+    throw new Error(await response.json().message);
+  }
 }
 
 const doDeleteRequest = async (url, params) => {
@@ -126,5 +155,9 @@ const doDeleteRequest = async (url, params) => {
     },
     body: params
   });
-  return response.json();
+  if (response.ok) {
+    return response.json();
+  } else {
+    throw new Error(await response.json().message);
+  }
 }
