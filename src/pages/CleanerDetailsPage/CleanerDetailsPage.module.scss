@@ -1,5 +1,26 @@
 @import '../../vars';
 
 .content{
+  margin: 16px 0;
+}
 
+.avatar {
+  color: #808080;
+  font-size: 5rem;
+  margin-right: 28px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.semiBold {
+  font-weight: $semi-bold;
 }

@@ -140,7 +140,7 @@ const EnhancedTableToolbar = (props) => {
       )}
 
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
+        <Tooltip title="Assign to cleaner">
           <Button variant={'contained'} color={'secondary'} style={{flexBasis: '164px'}} onClick={() => {
             setOpen(true);
           }}>Assign rooms</Button>

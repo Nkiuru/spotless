@@ -4,7 +4,7 @@ import {IconButton, Paper, Table, TableContainer, TableHead, TableRow, Typograph
 import {getAssignedRooms, getCleaner, getReports, unAssignRoom} from "../../utils/api";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
-import {Clear} from "@material-ui/icons";
+import {AccountCircleRounded, Clear, Edit} from "@material-ui/icons";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import PageContainer from "../../containers/PageContainer";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -18,6 +18,7 @@ const CleanerDetailsPage = () => {
   const location = useLocation();
   const params = location.state;
   const [cleanerLoaded, setCleanerLoaded] = useState(false);
+  const [editing, setEditing] = useState(false);
   const [cleaner, setCleaner] = useState({});
   const [reports, setReports] = useState([]);
 
@@ -39,10 +40,28 @@ const CleanerDetailsPage = () => {
 
   return (
     <PageContainer style={{textAlign: 'start'}}>
-      <Typography variant={"h5"}>Cleaner details</Typography>
+      <div className={styles.row} style={{justifyContent: 'space-between'}}>
+        <Typography variant={"h5"} className={styles.semiBold}>Cleaner details</Typography>
+        <Tooltip title={'Edit cleaner'}>
+          <IconButton fontSize="large" onClick={() => {
+            setEditing(true)
+          }}><Edit/>
+          </IconButton>
+        </Tooltip>
+      </div>
       {cleanerLoaded ? (
         <>
-          <Typography>Cleaner name: {cleaner.name}</Typography>
+          {editing ? <div>TODO</div> :
+            <div className={[styles.row, styles.content].join(' ')}>
+              <AccountCircleRounded className={styles.avatar}/>
+              <div>
+                <Typography variant={"h6"} className={styles.semiBold}>Cleaner name: {cleaner.name}</Typography>
+                <Typography variant={"body1"} color={"textSecondary"}>
+                  Shift: {cleaner['shift_start']} - {cleaner['shift_end']}
+                </Typography>
+              </div>
+            </div>
+          }
           <AssignmentsTable cleaner={cleaner}/>
           <CleaningReportsTable reports={reports} type={"cleaner"}/>
         </>

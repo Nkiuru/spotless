@@ -2,10 +2,10 @@ import React from "react";
 import {IconButton, Paper, Table, TableContainer, TableHead, TableRow, Typography} from "@material-ui/core";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
-import {Check, Clear, VisibilityOutlined} from "@material-ui/icons";
+import {Check, CloseRounded, VisibilityOutlined} from "@material-ui/icons";
 import {Link as RouterLink, useHistory} from 'react-router-dom';
 import moment from "moment";
-import styles from '../../pages/RoomDetailsPage/RoomDetailsPage.module.scss';
+import styles from './CleaningReportTable.module.scss';
 import Link from "@material-ui/core/Link";
 import PropTypes from 'prop-types';
 
@@ -19,7 +19,7 @@ const CleaningReportsTable = ({reports, type}) => {
     })
   }
   const getIcon = (successful) => {
-    return successful ? (<Check className={styles.good}/>) : (<Clear color={"error"}/>);
+    return successful ? (<Check className={styles.good}/>) : (<CloseRounded color={"error"}/>);
   }
 
   const getCleaner = (report) => {
