@@ -1,0 +1,25 @@
+@import "../../vars";
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.semiBold {
+  font-weight: $semi-bold;
+}
+
+.reportInfo {
+  margin: 12px 2px 12px 0;
+  font-weight: $semi-bold;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.good {
+  color: $color-good;
+}
