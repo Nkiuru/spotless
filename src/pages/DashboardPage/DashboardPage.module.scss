@@ -1,0 +1,36 @@
+@import "../../vars";
+
+.semiBold {
+  font-weight: $semi-bold;
+}
+
+.stat {
+  height: 120px;
+  width: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .keyStat {
+    flex: 1;
+    min-height: 96px;
+    min-width: 96px;
+    max-height: 96px;
+    max-width: 96px;
+    border: 2px solid $color-neutral;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .subtitle {
+    color: rgba(0, 0, 0, 0.67);
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+    text-align: center;
+  }
+}
