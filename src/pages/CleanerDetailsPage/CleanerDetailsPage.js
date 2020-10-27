@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
-import {useLocation} from 'react-router-dom';
+import {useLocation, useHistory} from 'react-router-dom';
 import {IconButton, Paper, Table, TableContainer, TableHead, TableRow, Typography} from "@material-ui/core";
-import {getAssignedRooms, getCleaner, getReports, unAssignRoom} from "../../utils/api";
+import {getAssignedRooms, getCleaner, getReports, unAssignRoom, deleteCleaner as removeCleaner} from "../../utils/api";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
-import {AccountCircleRounded, Clear, Edit} from "@material-ui/icons";
+import {AccountCircleRounded, Clear, DeleteForever, Edit} from "@material-ui/icons";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import PageContainer from "../../containers/PageContainer";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -13,14 +13,45 @@ import Snackbar from "@material-ui/core/Snackbar";
 import {getRoomTypeProp} from "../../utils/utils";
 import CleaningReportsTable from "../../components/CleaningReportsTable";
 import styles from './CleanerDetailsPage.module.scss';
+import Button from "@material-ui/core/Button";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
 
 const CleanerDetailsPage = () => {
   const location = useLocation();
+  const history = useHistory();
   const params = location.state;
   const [cleanerLoaded, setCleanerLoaded] = useState(false);
   const [editing, setEditing] = useState(false);
   const [cleaner, setCleaner] = useState({});
   const [reports, setReports] = useState([]);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
+  const [snackOpen, setSnackOpen] = useState(false);
+
+  const handleConfirmClose = () => {
+    setOpen(false);
+  };
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const deleteCleaner = async () => {
+    await removeCleaner(cleaner['_id']);
+    setSnackOpen(true);
+  }
 
   useEffect(() => {
     getCleaner(params.id)
@@ -38,16 +69,43 @@ const CleanerDetailsPage = () => {
       })
   }, [params.id]);
 
+  const handleSnackClose = () => {
+    history.goBack();
+  }
+
   return (
     <PageContainer style={{textAlign: 'start'}}>
       <div className={styles.row} style={{justifyContent: 'space-between'}}>
         <Typography variant={"h5"} className={styles.semiBold}>Cleaner details</Typography>
-        <Tooltip title={'Edit cleaner'}>
-          <IconButton fontSize="large" onClick={() => {
-            setEditing(true)
-          }}><Edit/>
-          </IconButton>
-        </Tooltip>
+        <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+          Actions
+        </Button>
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          <MenuItem onClick={() => {
+            handleClose();
+            setEditing(true);
+          }}>
+            <ListItemIcon>
+              <Edit fontSize="small" style={{color: '#808080'}}/>
+            </ListItemIcon>
+            <ListItemText primary="Edit cleaner"/>
+          </MenuItem>
+          <MenuItem onClick={() => {
+            setOpen(true);
+            handleClose()
+          }}>
+            <ListItemIcon>
+              <DeleteForever color={"error"} fontSize="small"/>
+            </ListItemIcon>
+            <ListItemText primary="Delete cleaner"/>
+          </MenuItem>
+        </Menu>
       </div>
       {cleanerLoaded ? (
         <>
@@ -66,6 +124,36 @@ const CleanerDetailsPage = () => {
           <CleaningReportsTable reports={reports} type={"cleaner"}/>
         </>
       ) : <CircularProgress color="secondary" style={{margin: '16px auto'}}/>}
+      <Dialog
+        open={open}
+        onClose={handleConfirmClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Delete cleaner"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete the cleaner?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleConfirmClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={() => {
+            handleConfirmClose();
+            deleteCleaner();
+          }} color="primary" autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}
+                anchorOrigin={{vertical: "top", horizontal: "center"}}>
+        <Alert variant={"filled"} severity="success" onClose={handleSnackClose}>
+          Cleaner deleted
+        </Alert>
+      </Snackbar>
     </PageContainer>
   );
 }

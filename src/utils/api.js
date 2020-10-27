@@ -80,6 +80,12 @@ export const getReports = async (roomId, cleanerId) => {
   return doGetRequest('reports', params)
 }
 
+export const deleteCleaner = async (cleanerId) => {
+  return doDeleteRequest('cleaner', JSON.stringify({
+    '_id': cleanerId
+  }));
+}
+
 const doGetRequest = async (url, params) => {
   const requestURL = BASE_URL + url + (params || '');
   console.log(requestURL);
