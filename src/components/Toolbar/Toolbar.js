@@ -3,7 +3,13 @@ import {AppBar, Typography, Tabs, Toolbar as MaterialToolbar, Tab, IconButton} f
 import {Link, useLocation, matchPath, useHistory} from 'react-router-dom';
 import {withStyles} from "@material-ui/core/styles";
 import styles from './Toolbar.module.scss';
-import {ArrowBackRounded} from "@material-ui/icons";
+import {
+  ArrowBackRounded, AssessmentRounded,
+  BusinessRounded,
+  DashboardRounded,
+  FormatListBulletedRounded,
+  PeopleRounded
+} from "@material-ui/icons";
 import Tooltip from "@material-ui/core/Tooltip";
 
 const NavTabs = withStyles({
@@ -17,9 +23,9 @@ const NavTabs = withStyles({
     backgroundColor: 'transparent',
     marginBottom: '4px',
     '& > span': {
-      maxWidth: 40,
+      maxWidth: 60,
       width: '100%',
-      backgroundColor: 'orange',
+      backgroundColor: '#00b0ff',
     },
   }
 })((props) => <Tabs {...props} TabIndicatorProps={{children: <span/>}}/>);
@@ -48,18 +54,23 @@ const Toolbar = () => {
                 <ArrowBackRounded className={styles.svg}/>
               </IconButton>
             </Tooltip>
-          ) : <div style={{width: 60}}/>}
+          ) : <div style={{width: 40}}/>}
           <Typography variant={"h6"} className={styles.name}>Spotless</Typography>
         </div>
         <NavTabs variant={"fullWidth"} value={tabId}>
-          <Tab label={"Dashboard"} value={getTabValue("/dashboard")} component={Link} to={"/dashboard"}
+          <Tab label={<div className={styles.tab}><DashboardRounded fontSize={"small"}/> Dashboard</div>}
+               value={getTabValue("/dashboard")} component={Link} to={"/dashboard"}
+               disableRipple={true}/>
+          <Tab label={<div className={styles.tab}><FormatListBulletedRounded fontSize={"small"}/> Assignments</div>}
+               value={getTabValue("/assignments")} component={Link} to={"/assignments"}
                disableRipple={true} className={styles.tab}/>
-          <Tab label={"Assignments"} value={getTabValue("/assignments")} component={Link} to={"/assignments"}
+          <Tab label={<div className={styles.tab}><PeopleRounded fontSize={"small"}/> Cleaners</div>}
+               value={getTabValue("/cleaners")} component={Link} to={"/cleaners"}
                disableRipple={true} className={styles.tab}/>
-          <Tab label={"Cleaners"} value={getTabValue("/cleaners")} component={Link} to={"/cleaners"}
-               disableRipple={true} className={styles.tab}/>
-          <Tab label={"Rooms"} value={getTabValue("/rooms")} component={Link} to={"/rooms"} disableRipple={true}/>
-          <Tab label={"Analysis"} value={getTabValue("/analysis")} component={Link} to={"/analysis"}
+          <Tab label={<div className={styles.tab}><BusinessRounded fontSize={"small"}/> Rooms</div>}
+               value={getTabValue("/rooms")} component={Link} to={"/rooms"} disableRipple={true}/>
+          <Tab label={<div className={styles.tab}><AssessmentRounded fontSize={"small"}/> Analysis</div>}
+               value={getTabValue("/analysis")} component={Link} to={"/analysis"}
                disableRipple={true} className={styles.tab}/>
         </NavTabs>
       </MaterialToolbar>

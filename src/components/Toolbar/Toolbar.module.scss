@@ -8,11 +8,11 @@
   .name {
     font-family: $font;
     font-weight: $bold;
-    width: 90px;
+    width: 82px;
   }
 
   button {
-    width: 60px;
+    width: 40px;
     padding: 0;
   }
 
@@ -26,4 +26,11 @@
 
 .tab {
   font-weight: $semi-bold;
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  svg {
+    margin-right: 8px;
+  }
 }
