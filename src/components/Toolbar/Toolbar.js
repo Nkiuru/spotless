@@ -23,9 +23,10 @@ const NavTabs = withStyles({
     backgroundColor: 'transparent',
     marginBottom: '4px',
     '& > span': {
-      maxWidth: 60,
-      width: '100%',
+      width: '40%',
       backgroundColor: '#00b0ff',
+      borderTopLeftRadius: 4,
+      borderTopRightRadius: 4,
     },
   }
 })((props) => <Tabs {...props} TabIndicatorProps={{children: <span/>}}/>);

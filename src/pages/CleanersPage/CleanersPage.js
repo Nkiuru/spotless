@@ -56,7 +56,7 @@ const CleanersPage = () => {
   };
 
   return (
-    <PageContainer>
+    <PageContainer style={{textAlign: 'start'}}>
       <div className={styles.headerRow}>
         <Typography variant={"h5"} className={styles.bold}>Cleaners</Typography>
         <Tooltip title="Add cleaner">
@@ -65,9 +65,12 @@ const CleanersPage = () => {
           </IconButton>
         </Tooltip>
       </div>
-      {isLoaded ? <CleanersTable cleaners={cleaners}/> : <CircularProgress color="secondary" style={{margin: '16px auto'}}/>}
+      {isLoaded ? <CleanersTable cleaners={cleaners}/> :
+        <CircularProgress color="secondary" style={{margin: '16px auto'}}/>}
+      <Typography variant={"h5"} className={styles.bold} style={{marginTop: 24}}>Unassigned rooms</Typography>
       <AddCleanerDialog open={open} setOpen={setOpen} setIsLoaded={setIsLoaded} setSnackOpen={setSnackOpen}/>
-      <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
+      <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}
+                anchorOrigin={{vertical: "top", horizontal: "center"}}>
         <Alert variant={"filled"} severity="success" onClose={handleSnackClose}>
           Cleaner created
         </Alert>

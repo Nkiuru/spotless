@@ -9,7 +9,7 @@ const DashboardPage = () => {
   return (
     <PageContainer style={{textAlign: 'start'}}>
       <Grid container spacing={6}>
-        <Grid item xs={6}>
+        <Grid item xs={5}>
           <Typography variant={"h5"} className={styles.semiBold}>Alerts</Typography>
         </Grid>
         <Grid item xs={3}>
@@ -28,7 +28,7 @@ const DashboardPage = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={3}></Grid>
+        <Grid item xs={4}></Grid>
       </Grid>
     </PageContainer>
   )
