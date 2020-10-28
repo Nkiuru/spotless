@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useLocation} from "react-router-dom";
 import {getHeatmap, getReport} from "../../utils/api";
 import PageContainer from "../../containers/PageContainer";
-import {Typography, Select, Grid, DialogContent} from "@material-ui/core";
+import {Typography, Select, Grid} from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -42,7 +42,7 @@ const ReportPage = () => {
         <Grid item xs={6}>
           <div className={styles.row} style={{justifyContent: 'space-between'}}>
             <Typography variant={"h5"}>Room map</Typography>
-            <FormControl variant={'outlined'} style={{minWidth: '320px', margin: '8px'}}>
+            <FormControl variant={'outlined'} style={{minWidth: '320px', marginBottom: 8}}>
               <InputLabel id="demo-simple-select-outlined-label">Contamination map type</InputLabel>
               <Select label="Contamination map type" onChange={mapSelected} value={type}>
                 <MenuItem value="clean">After cleaning</MenuItem>
@@ -50,6 +50,11 @@ const ReportPage = () => {
                 <MenuItem value="Combined">After cleaning</MenuItem>
               </Select>
             </FormControl>
+          </div>
+          <div className={styles.map} />
+          <Typography variant={"h5"}>Cleaner comments:</Typography>
+          <div className={styles.comments}>
+            <Typography variant={"body"} className={styles.comment}>{report.comments}</Typography>
           </div>
         </Grid>
         <Grid item xs={6}>

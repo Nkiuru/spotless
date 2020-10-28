@@ -17,7 +17,7 @@
     min-width: 96px;
     max-height: 96px;
     max-width: 96px;
-    border: 2px solid $color-neutral;
+    border: 2px solid rgba(0, 0, 0, 0.6);
     border-radius: 16px;
     display: flex;
     flex-direction: row;
@@ -32,5 +32,6 @@
     -ms-hyphens: auto;
     hyphens: auto;
     text-align: center;
+    font-weight: $medium;
   }
 }
