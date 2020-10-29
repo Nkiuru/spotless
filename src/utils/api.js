@@ -107,6 +107,15 @@ export const getHeatmap = async (reportId, type) => {
   }
 }
 
+export const editCleaner = async (cleaner) => {
+  return doPutRequest('cleaner/', JSON.stringify({
+    '_id': cleaner['_id'],
+    'name': cleaner.name,
+    'shift_start': cleaner['shift_start'],
+    'shift_end': cleaner['shift_end']
+  }));
+}
+
 const doGetRequest = async (url, params) => {
   const requestURL = BASE_URL + url + (params || '');
   console.log(requestURL);
@@ -148,6 +157,25 @@ const doDeleteRequest = async (url, params) => {
   const requestURL = BASE_URL + url;
   const response = await fetch(requestURL, {
     method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': API_KEY,
+      'charset': 'utf-8'
+    },
+    body: params
+  });
+  if (response.ok) {
+    return response.json();
+  } else {
+    throw new Error(await response.json().message);
+  }
+}
+
+const doPutRequest = async (url, params) => {
+  const requestURL = BASE_URL + url;
+  console.log(requestURL);
+  const response = await fetch(requestURL, {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': API_KEY,

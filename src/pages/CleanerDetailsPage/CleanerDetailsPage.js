@@ -23,6 +23,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
+import EditCleanerDialog from "./EditCleanerDialog";
 
 const CleanerDetailsPage = () => {
   const location = useLocation();
@@ -34,7 +35,9 @@ const CleanerDetailsPage = () => {
   const [reports, setReports] = useState([]);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [open, setOpen] = React.useState(false);
+  const [data, getData] = React.useState(false);
   const [snackOpen, setSnackOpen] = useState(false);
+  const [snackText, setSnackText] = useState('Cleaned deleted');
 
   const handleConfirmClose = () => {
     setOpen(false);
@@ -50,8 +53,22 @@ const CleanerDetailsPage = () => {
 
   const deleteCleaner = async () => {
     await removeCleaner(cleaner['_id']);
+    setSnackText('Cleaner Deleted');
     setSnackOpen(true);
+    history.goBack();
   }
+
+  const saved = () => {
+    setSnackText('Saved');
+    setSnackOpen(true);
+    getData(true);
+  }
+  const handleSnackClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackOpen(false);
+  };
 
   useEffect(() => {
     getCleaner(params.id)
@@ -67,11 +84,7 @@ const CleanerDetailsPage = () => {
       .then((reports) => {
         setReports(reports.sort((a, b) => new Date(b['cleaning_time']) - new Date(a['cleaning_time'])));
       })
-  }, [params.id]);
-
-  const handleSnackClose = () => {
-    history.goBack();
-  }
+  }, [params.id, data]);
 
   return (
     <PageContainer style={{textAlign: 'start'}}>
@@ -109,17 +122,15 @@ const CleanerDetailsPage = () => {
       </div>
       {cleanerLoaded ? (
         <>
-          {editing ? <div>TODO</div> :
-            <div className={[styles.row, styles.content].join(' ')}>
-              <AccountCircleRounded className={styles.avatar}/>
-              <div>
-                <Typography variant={"h6"} className={styles.semiBold}>Cleaner name: {cleaner.name}</Typography>
-                <Typography variant={"body1"} color={"textSecondary"}>
-                  Shift: {cleaner['shift_start']} - {cleaner['shift_end']}
-                </Typography>
-              </div>
+          <div className={[styles.row, styles.content].join(' ')}>
+            <AccountCircleRounded className={styles.avatar}/>
+            <div>
+              <Typography variant={"h6"} className={styles.semiBold}>Cleaner name: {cleaner.name}</Typography>
+              <Typography variant={"body1"} color={"textSecondary"}>
+                Shift: {cleaner['shift_start']} - {cleaner['shift_end']}
+              </Typography>
             </div>
-          }
+          </div>
           <AssignmentsTable cleaner={cleaner}/>
           <CleaningReportsTable reports={reports} type={"cleaner"}/>
         </>
@@ -148,10 +159,12 @@ const CleanerDetailsPage = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      {cleanerLoaded &&
+      <EditCleanerDialog cleaner={cleaner} open={editing} setOpen={setEditing} onSave={saved}/>}
       <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}
                 anchorOrigin={{vertical: "top", horizontal: "center"}}>
         <Alert variant={"filled"} severity="success" onClose={handleSnackClose}>
-          Cleaner deleted
+          {snackText}
         </Alert>
       </Snackbar>
     </PageContainer>
