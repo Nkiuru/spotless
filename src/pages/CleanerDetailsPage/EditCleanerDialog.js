@@ -7,14 +7,11 @@ import {
   DialogContent,
   DialogTitle,
   Grid,
-  InputLabel,
-  MenuItem,
-  Typography
 } from "@material-ui/core";
 import {Field, Form, Formik} from "formik";
-import {Select, TextField} from "formik-material-ui";
-import styles from "./CleanerDetailsPage.module.scss";
+import {TextField} from "formik-material-ui";
 import React from "react";
+import ShiftPicker from "../../components/ShiftPicker/ShiftPicker";
 
 const validationSchema = Yup.object({
   name: Yup.string().required()
@@ -66,51 +63,7 @@ const EditCleanerDialog = ({cleaner, open, setOpen, onSave}) => {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs className={styles.row}>
-                  <div>
-                    <Typography variant={"body1"}>Shift start</Typography>
-                    <div className={styles.row}>
-                      <Field component={Select}
-                             inputProps={{menuprops: {classes: {paper: styles.menu}}}}
-                             name="startHour">
-                        {[...Array(24).keys()].map((number) => {
-                          const num = number.toString().padStart(2, '0')
-                          return <MenuItem key={number} value={num}>{num}</MenuItem>;
-                        })}
-                      </Field>
-                      <Typography variant={"h6"}>:</Typography>
-                      <Field component={Select}
-                             inputProps={{menuprops: {classes: {paper: styles.menu}}}}
-                             name="startMinutes">
-                        {['00', 15, 30, 45].map((number) => {
-                          return <MenuItem key={number} value={number.toString()}>{number}</MenuItem>;
-                        })}
-                      </Field>
-                    </div>
-                  </div>
-                  <Typography variant={"h4"} style={{margin: '0 16px'}}>-</Typography>
-                  <div>
-                    <Typography variant={"body1"}>Shift end</Typography>
-                    <div className={styles.row}>
-                      <Field component={Select}
-                             inputProps={{menuprops: {classes: {paper: styles.menu}}}}
-
-                             name="endHour">
-                        {[...Array(23).keys()].map((number) => {
-                          return <MenuItem key={number} value={number.toString()}>{number}</MenuItem>;
-                        })}
-                      </Field>
-                      <Typography variant={"body1"}>:</Typography>
-                      <Field component={Select}
-                             inputProps={{menuprops: {classes: {paper: styles.menu}}}}
-                             name="endMinutes">
-                        {['00', 15, 30, 45].map((number) => {
-                          return <MenuItem key={number} value={number.toString()}>{number}</MenuItem>;
-                        })}
-                      </Field>
-                    </div>
-                  </div>
-                </Grid>
+                <ShiftPicker/>
               </Grid>
             </DialogContent>
             <DialogActions>

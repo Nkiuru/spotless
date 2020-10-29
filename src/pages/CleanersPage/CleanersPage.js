@@ -15,8 +15,6 @@ import {
   DialogContent,
   Button,
   DialogActions,
-  InputLabel,
-  MenuItem
 } from "@material-ui/core";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
@@ -25,11 +23,12 @@ import {createCleaner, getCleaners} from "../../utils/api";
 import styles from './CleanersPage.module.scss';
 import * as Yup from "yup";
 import {Formik, Form, Field} from "formik";
-import {Select, TextField} from "formik-material-ui";
+import {TextField} from "formik-material-ui";
 import PageContainer from "../../containers/PageContainer";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import ShiftPicker from "../../components/ShiftPicker/ShiftPicker";
 
 const CleanersPage = () => {
   const [cleaners, setCleaners] = useState([]);
@@ -80,8 +79,8 @@ const CleanersPage = () => {
 }
 
 const validationSchema = Yup.object({
-  firstName: Yup.string().required(),
-  lastName: Yup.string().required()
+  firstName: Yup.string().required('First name is required'),
+  lastName: Yup.string().required('Last name is required')
 });
 
 const AddCleanerDialog = ({open, setOpen, setIsLoaded, setSnackOpen}) => {
@@ -92,7 +91,7 @@ const AddCleanerDialog = ({open, setOpen, setIsLoaded, setSnackOpen}) => {
   const initialValues = {
     firstName: '',
     lastName: '',
-    startHour: '8',
+    startHour: '08',
     endHour: '16',
     startMinutes: '00',
     endMinutes: '00'
@@ -140,47 +139,7 @@ const AddCleanerDialog = ({open, setOpen, setIsLoaded, setSnackOpen}) => {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs>
-                  <InputLabel id="startHour">HH</InputLabel>
-                  <Field component={Select}
-                         inputProps={{labelId: "startHour", menuProps: {classes: {paper: styles.menu}}}}
-                         name="startHour">
-                    {[...Array(24).keys()].map((number) => {
-                      return <MenuItem key={number} value={number.toString()}>{number}</MenuItem>;
-                    })}
-                  </Field>
-                </Grid>
-                <Grid item xs>
-                  <InputLabel id="startMinutes">MM</InputLabel>
-                  <Field component={Select}
-                         inputProps={{labelId: "startMinutes", menuProps: {classes: {paper: styles.menu}}}}
-                         name="startMinutes">
-                    {['00', 15, 30, 45].map((number) => {
-                      return <MenuItem key={number} value={number.toString()}>{number}</MenuItem>;
-                    })}
-                  </Field>
-                </Grid>
-                <Grid item xs>
-                  <InputLabel id="endHour">HH</InputLabel>
-                  <Field component={Select}
-                         inputProps={{labelId: "endHour", menuProps: {classes: {paper: styles.menu}}}}
-
-                         name="endHour">
-                    {[...Array(23).keys()].map((number) => {
-                      return <MenuItem key={number} value={number.toString()}>{number}</MenuItem>;
-                    })}
-                  </Field>
-                </Grid>
-                <Grid item xs>
-                  <InputLabel id="endMinutes">MM</InputLabel>
-                  <Field component={Select}
-                         inputProps={{labelId: "endMinutes", menuProps: {classes: {paper: styles.menu}}}}
-                         name="endMinutes">
-                    {['00', 15, 30, 45].map((number) => {
-                      return <MenuItem key={number} value={number.toString()}>{number}</MenuItem>;
-                    })}
-                  </Field>
-                </Grid>
+                <ShiftPicker/>
               </Grid>
             </DialogContent>
             <DialogActions>
