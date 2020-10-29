@@ -21,7 +21,7 @@ const theme = createMuiTheme({
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={'/spotless'}>
       <ThemeProvider theme={theme}>
         <StylesProvider injectFirst>
           <App/>
