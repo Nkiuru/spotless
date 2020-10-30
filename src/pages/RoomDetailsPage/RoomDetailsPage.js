@@ -19,6 +19,7 @@ const RoomDetailsPage = () => {
   const [room, setRoom] = useState({});
   const [reports, setReports] = useState([]);
   const [cleaner, setCleaner] = useState({});
+  const [showMap, setShowMap] = useState(false);
 
   useEffect(() => {
     getRoom(params.id)
@@ -37,16 +38,20 @@ const RoomDetailsPage = () => {
       .then((reports) => {
         setReports(reports.sort((a, b) => new Date(b['cleaning_time']) - new Date(a['cleaning_time'])));
       })
-    getRoomHeatmap(params.id, 'contamination')
-      .then((response) => {
-        const aux = document.getElementById('aux');
-        const canvas = document.getElementById('main');
-        // eslint-disable-next-line no-undef
-        const arr = new BigUint64Array(response);
-        update_img(arr, aux, canvas);
-      })
   }, [params.id]);
 
+  useEffect(() => {
+    if (showMap){
+      getRoomHeatmap(params.id, 'contamination')
+        .then((response) => {
+          const aux = document.getElementById('aux');
+          const canvas = document.getElementById('main');
+          // eslint-disable-next-line no-undef
+          const arr = new BigUint64Array(response);
+          update_img(arr, aux, canvas);
+        })
+    }
+  }, [params.id, showMap])
   const navigateToMap = () => {
     history.push({
       pathname: `/rooms`,
@@ -68,13 +73,22 @@ const RoomDetailsPage = () => {
               <RoomCleanerCard room={room} cleaner={cleaner} setCleaner={setCleaner}/>
             </div>
             <CommentsList reports={reports}/>
-            <Typography variant={"h5"}>Room map</Typography>
+            <div className={styles.row}>
+              <Typography variant={"h5"}>Room map</Typography>
+              <Button variant={"outlined"} color={"primary"} onClick={() => setShowMap(!showMap)}>
+                {showMap ? 'Hide map' : 'Show Map'}
+              </Button>
+            </div>
+            {showMap && (
+              <>
+                <canvas id="aux" style={{display: 'none'}}/>
+                <canvas id="main" width={72} height={56} className={styles.map}/>
+              </>
+            )}
             <CleaningReportsTable reports={reports} type={'room'}/>
           </div>
         </>
       ) : <CircularProgress color="secondary" style={{margin: '16px auto'}}/>}
-      <canvas id="aux" style={{display: 'none'}}/>
-      <canvas id="main" width={72} height={56} className={styles.map}/>
     </PageContainer>
   );
 }
