@@ -6,7 +6,7 @@ const KeyStat = ({value, subtitle, color}) => {
   return (
     <div className={styles.stat}>
       <div className={styles.keyStat}>
-        <Typography variant={"h4"} style={{color}}>{value}</Typography>
+        <Typography variant={"h3"} style={{color}}>{value}</Typography>
       </div>
       <Typography variant={"body2"} className={styles.subtitle}>{subtitle}</Typography>
     </div>
