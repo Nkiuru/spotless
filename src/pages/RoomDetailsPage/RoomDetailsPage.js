@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useLocation, useHistory} from 'react-router-dom';
-import {Button, Typography} from "@material-ui/core";
-import {getAssignedCleaners, getReports, getRoom} from "../../utils/api";
+import {Button, Grid, Typography} from "@material-ui/core";
+import {getAssignedCleaners, getReports, getRoom, getRoomHeatmap} from "../../utils/api";
 import PageContainer from "../../containers/PageContainer";
 import styles from "./RoomDetailsPage.module.scss";
 import RoomDetailsCard from "./RoomDetailsCard";
@@ -9,6 +9,7 @@ import RoomCleanerCard from "./RoomCleanerCard";
 import CommentsList from "./RoomReportComments";
 import CleaningReportsTable from "../../components/CleaningReportsTable/CleaningReportsTable";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import {update_img} from "../../utils/utils";
 
 const RoomDetailsPage = () => {
   const location = useLocation();
@@ -36,6 +37,14 @@ const RoomDetailsPage = () => {
       .then((reports) => {
         setReports(reports.sort((a, b) => new Date(b['cleaning_time']) - new Date(a['cleaning_time'])));
       })
+    getRoomHeatmap(params.id, 'contamination')
+      .then((response) => {
+        const aux = document.getElementById('aux');
+        const canvas = document.getElementById('main');
+        // eslint-disable-next-line no-undef
+        const arr = new BigUint64Array(response);
+        update_img(arr, aux, canvas);
+      })
   }, [params.id]);
 
   const navigateToMap = () => {
@@ -60,11 +69,12 @@ const RoomDetailsPage = () => {
             </div>
             <CommentsList reports={reports}/>
             <Typography variant={"h5"}>Room map</Typography>
-            <div style={{width: 600, height: 400}}/>
             <CleaningReportsTable reports={reports} type={'room'}/>
           </div>
         </>
       ) : <CircularProgress color="secondary" style={{margin: '16px auto'}}/>}
+      <canvas id="aux" style={{display: 'none'}}/>
+      <canvas id="main" width={72} height={56} className={styles.map}/>
     </PageContainer>
   );
 }

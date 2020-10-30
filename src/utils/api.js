@@ -124,7 +124,24 @@ export const getHeatmap = async (reportId, type) => {
     }
   });
   if (response.ok) {
-    return response;
+    return response.arrayBuffer();
+  } else {
+    throw new Error(await response.json().message);
+  }
+}
+
+export const getRoomHeatmap = async (roomId, type) => {
+  const requestURL = BASE_URL + `room/heatmap?_id=${roomId}&type=${type}`
+  const response = await fetch(requestURL, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/octet-stream',
+      'Authorization': API_KEY,
+      'charset': 'utf-8'
+    }
+  });
+  if (response.ok) {
+    return response.arrayBuffer();
   } else {
     throw new Error(await response.json().message);
   }
