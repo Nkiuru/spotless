@@ -29,7 +29,7 @@ function App() {
 
   return (
     <div className="App">
-      <Toolbar/>
+      {location.pathname !== '/' && <Toolbar/>}
       <Switch location={location}>
         <Route path={"/dashboard"} render={dash}/>
         <Route path={"/cleaners/:id"} render={cleaner}/>

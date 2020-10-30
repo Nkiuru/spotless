@@ -1,9 +1,32 @@
 import {API_KEY, BASE_URL} from "./constants";
 
 export const authenticated = () => {
-  return true;
-  //return localStorage.getItem('token') !== null;
+  return localStorage.getItem('user') !== null;
 };
+
+export const getUser = () => {
+  if (authenticated()) {
+    return JSON.parse(localStorage.getItem('user'));
+  } else {
+    return false;
+  }
+}
+
+export const authenticate = (username, password) => {
+  let isSuperAdmin = false;
+  if (username === 'superadmin' && password === 'admin') {
+    isSuperAdmin = true;
+  }
+  localStorage.setItem('user', JSON.stringify({
+    username,
+    superAdmin: isSuperAdmin
+  }));
+  return true;
+}
+
+export const logout = () => {
+  localStorage.removeItem('user');
+}
 
 
 export const getRooms = async (hospital, floor, showAssigned) => {
