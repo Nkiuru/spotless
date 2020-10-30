@@ -90,7 +90,7 @@ const CleanerDetailsPage = () => {
     <PageContainer style={{textAlign: 'start'}}>
       <div className={styles.row} style={{justifyContent: 'space-between'}}>
         <Typography variant={"h5"} className={styles.semiBold}>Cleaner details</Typography>
-        <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+        <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} variant={"outlined"} color={"primary"}>
           Actions
         </Button>
         <Menu
@@ -131,6 +131,7 @@ const CleanerDetailsPage = () => {
               </Typography>
             </div>
           </div>
+          <Typography variant={"h5"} className={styles.semiBold}>Assigned Rooms</Typography>
           <AssignmentsTable cleaner={cleaner}/>
           <CleaningReportsTable reports={reports} type={"cleaner"}/>
         </>
@@ -204,47 +205,53 @@ const AssignmentsTable = ({cleaner}) => {
   };
 
   return (
-    loading ? <CircularProgress color="secondary"/> :
-      <TableContainer component={Paper}>
-        <Table size={"small"}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Room</TableCell>
-              <TableCell align="right">Status</TableCell>
-              <TableCell align="right">Contamination Index</TableCell>
-              <TableCell align="right">Room type</TableCell>
-              <TableCell align="right">Cleaning Status</TableCell>
-              <TableCell>Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {assignments.map((row) => (
-              <TableRow key={row['_id']}>
-                <TableCell component="th" scope="row">{row.name}</TableCell>
-                <TableCell align="right">{}</TableCell>
-                <TableCell align="right">{row['contamination_index']}</TableCell>
-                <TableCell align="right">{getRoomTypeProp(row, 'displayName')}</TableCell>
-                <TableCell align="right">{row['is_cleaning'] ? 'Cleaning in progress' : 'Needs cleaning'}</TableCell>
-                <TableCell>
-                  <Tooltip title={"Remove assignment"}>
-                    <IconButton size={"small"} onClick={() => {
-                      removeAssignment(row);
-                    }}>
-                      <Clear color={"error"}/>
-                    </IconButton>
-                  </Tooltip>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}
-                  anchorOrigin={{vertical: "top", horizontal: "center"}}>
-          <Alert variant={"filled"} severity="success" onClose={handleClose}>
-            Assignment removed
-          </Alert>
-        </Snackbar>
-      </TableContainer>
+    <div style={{margin: '16px 0'}}>
+      {loading ? <CircularProgress color="secondary"/> :
+        (
+          assignments.length > 0 ?
+            <TableContainer component={Paper}>
+              <Table size={"small"}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Room</TableCell>
+                    <TableCell align="right">Status</TableCell>
+                    <TableCell align="right">Contamination Index</TableCell>
+                    <TableCell align="right">Room type</TableCell>
+                    <TableCell align="right">Cleaning Status</TableCell>
+                    <TableCell>Action</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {assignments.map((row) => (
+                    <TableRow key={row['_id']}>
+                      <TableCell component="th" scope="row">{row.name}</TableCell>
+                      <TableCell align="right">{}</TableCell>
+                      <TableCell align="right">{row['contamination_index']}</TableCell>
+                      <TableCell align="right">{getRoomTypeProp(row, 'displayName')}</TableCell>
+                      <TableCell
+                        align="right">{row['is_cleaning'] ? 'Cleaning in progress' : 'Needs cleaning'}</TableCell>
+                      <TableCell>
+                        <Tooltip title={"Remove assignment"}>
+                          <IconButton size={"small"} onClick={() => {
+                            removeAssignment(row);
+                          }}>
+                            <Clear color={"error"}/>
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+              <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}
+                        anchorOrigin={{vertical: "top", horizontal: "center"}}>
+                <Alert variant={"filled"} severity="success" onClose={handleClose}>
+                  Assignment removed
+                </Alert>
+              </Snackbar>
+            </TableContainer> : <Typography variant={"h6"}>No assigned rooms</Typography>
+        )}
+    </div>
   );
 }
 
