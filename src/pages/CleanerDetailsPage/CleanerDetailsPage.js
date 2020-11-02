@@ -10,7 +10,7 @@ import PageContainer from "../../containers/PageContainer";
 import Tooltip from "@material-ui/core/Tooltip";
 import Alert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
-import {getRoomTypeProp} from "../../utils/utils";
+import {getRoomTypeProp, getStatus} from "../../utils/utils";
 import CleaningReportsTable from "../../components/CleaningReportsTable";
 import styles from './CleanerDetailsPage.module.scss';
 import Button from "@material-ui/core/Button";
@@ -90,7 +90,8 @@ const CleanerDetailsPage = () => {
     <PageContainer style={{textAlign: 'start'}}>
       <div className={styles.row} style={{justifyContent: 'space-between'}}>
         <Typography variant={"h5"} className={styles.semiBold}>Cleaner details</Typography>
-        <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+        <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} variant={"outlined"}
+                color={"primary"}>
           Actions
         </Button>
         <Menu
@@ -131,7 +132,8 @@ const CleanerDetailsPage = () => {
               </Typography>
             </div>
           </div>
-          <AssignmentsTable cleaner={cleaner}/>
+          <Typography variant={"h5"} className={styles.semiBold}>Assigned Rooms</Typography>
+          <AssignmentsTable cleaner={cleaner} setSnackOpen={setSnackOpen} setSnackText={setSnackText}/>
           <CleaningReportsTable reports={reports} type={"cleaner"}/>
         </>
       ) : <CircularProgress color="secondary" style={{margin: '16px auto'}}/>}
@@ -171,10 +173,9 @@ const CleanerDetailsPage = () => {
   );
 }
 
-const AssignmentsTable = ({cleaner}) => {
+const AssignmentsTable = ({cleaner, setSnackOpen, setSnackText}) => {
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     getAssignedRooms(cleaner['_id'])
@@ -193,58 +194,52 @@ const AssignmentsTable = ({cleaner}) => {
     const newAssignments = [...assignments];
     newAssignments.splice(assignments.indexOf(room), 1);
     setAssignments(newAssignments);
-    setOpen(true);
+    setSnackText('Assignment removed');
+    setSnackOpen(true);
   }
 
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpen(false);
-  };
-
   return (
-    loading ? <CircularProgress color="secondary"/> :
-      <TableContainer component={Paper}>
-        <Table size={"small"}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Room</TableCell>
-              <TableCell align="right">Status</TableCell>
-              <TableCell align="right">Contamination Index</TableCell>
-              <TableCell align="right">Room type</TableCell>
-              <TableCell align="right">Cleaning Status</TableCell>
-              <TableCell>Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {assignments.map((row) => (
-              <TableRow key={row['_id']}>
-                <TableCell component="th" scope="row">{row.name}</TableCell>
-                <TableCell align="right">{}</TableCell>
-                <TableCell align="right">{row['contamination_index']}</TableCell>
-                <TableCell align="right">{getRoomTypeProp(row, 'displayName')}</TableCell>
-                <TableCell align="right">{row['is_cleaning'] ? 'Cleaning in progress' : 'Needs cleaning'}</TableCell>
-                <TableCell>
-                  <Tooltip title={"Remove assignment"}>
-                    <IconButton size={"small"} onClick={() => {
-                      removeAssignment(row);
-                    }}>
-                      <Clear color={"error"}/>
-                    </IconButton>
-                  </Tooltip>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}
-                  anchorOrigin={{vertical: "top", horizontal: "center"}}>
-          <Alert variant={"filled"} severity="success" onClose={handleClose}>
-            Assignment removed
-          </Alert>
-        </Snackbar>
-      </TableContainer>
+    <div style={{margin: '16px 0'}}>
+      {loading ? <CircularProgress color="secondary"/> :
+        (
+          assignments.length > 0 ?
+            <TableContainer component={Paper}>
+              <Table size={"small"}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Room</TableCell>
+                    <TableCell align="right">Status</TableCell>
+                    <TableCell align="right">Contamination Index</TableCell>
+                    <TableCell align="right">Room type</TableCell>
+                    <TableCell align="right">Cleaning Status</TableCell>
+                    <TableCell>Action</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {assignments.map((row) => (
+                    <TableRow key={row['_id']}>
+                      <TableCell component="th" scope="row">{row.name}</TableCell>
+                      <TableCell align="right">{getStatus(row['contamination_index'])}</TableCell>
+                      <TableCell align="right">{row['contamination_index']}</TableCell>
+                      <TableCell align="right">{getRoomTypeProp(row, 'displayName')}</TableCell>
+                      <TableCell
+                        align="right">{row['is_cleaning'] ? 'Cleaning in progress' : 'Needs cleaning'}</TableCell>
+                      <TableCell>
+                        <Tooltip title={"Remove assignment"}>
+                          <IconButton size={"small"} onClick={() => {
+                            removeAssignment(row);
+                          }}>
+                            <Clear color={"error"}/>
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer> : <Typography variant={"h6"}>No assigned rooms</Typography>
+        )}
+    </div>
   );
 }
 

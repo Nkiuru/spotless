@@ -1,9 +1,32 @@
 import {API_KEY, BASE_URL} from "./constants";
 
 export const authenticated = () => {
-  return true;
-  //return localStorage.getItem('token') !== null;
+  return localStorage.getItem('user') !== null;
 };
+
+export const getUser = () => {
+  if (authenticated()) {
+    return JSON.parse(localStorage.getItem('user'));
+  } else {
+    return false;
+  }
+}
+
+export const authenticate = (username, password) => {
+  let isSuperAdmin = false;
+  if (username === 'superadmin' && password === 'admin') {
+    isSuperAdmin = true;
+  }
+  localStorage.setItem('user', JSON.stringify({
+    username,
+    superAdmin: isSuperAdmin
+  }));
+  return true;
+}
+
+export const logout = () => {
+  localStorage.removeItem('user');
+}
 
 
 export const getRooms = async (hospital, floor, showAssigned) => {
@@ -37,6 +60,12 @@ export const getAssignedCleaners = async (roomId) => {
 export const assignRoomsToCleaner = async (rooms, cleaner) => {
   return Promise.all(rooms.map((room) => {
     return assignRoom(room['_id'], cleaner);
+  }));
+}
+
+export const unAssignRooms = async (rooms) => {
+  return Promise.all(rooms.map((room) => {
+    return unAssignRoom(room['_id'], room['assigned_cleaners'][0]['_id']);
   }));
 }
 
@@ -101,9 +130,29 @@ export const getHeatmap = async (reportId, type) => {
     }
   });
   if (response.ok) {
-    return response;
+    return response.arrayBuffer();
   } else {
-    throw new Error(await response.json().message);
+    const json = await response.json();
+    console.log(json)
+    throw new Error(json.error);
+  }
+}
+
+export const getRoomHeatmap = async (roomId, type) => {
+  const requestURL = BASE_URL + `room/heatmap?_id=${roomId}&type=${type}`
+  const response = await fetch(requestURL, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/octet-stream',
+      'Authorization': API_KEY,
+      'charset': 'utf-8'
+    }
+  });
+  if (response.ok) {
+    return response.arrayBuffer();
+  } else {
+    const json = await response.json();
+    throw new Error(json.error);
   }
 }
 

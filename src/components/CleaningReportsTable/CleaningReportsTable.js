@@ -14,7 +14,7 @@ const CleaningReportsTable = ({reports, type}) => {
   const viewReport = (report) => {
     const id = report['_id'];
     history.push({
-      pathname: `/reports/${id}`,
+      pathname: `/rooms/reports/${id}`,
       state: {id}
     })
   }
@@ -43,7 +43,7 @@ const CleaningReportsTable = ({reports, type}) => {
   }
   return (
     <div>
-      <Typography variant={"h5"} style={{margin: '16px 0'}}>Past cleaning reports</Typography>
+      <Typography variant={"h5"} style={{margin: '16px 0'}} className={styles.semiBold}>Past cleaning reports</Typography>
       {reports.length > 0 ?
         <TableContainer component={Paper}>
           <Table size={'small'}>

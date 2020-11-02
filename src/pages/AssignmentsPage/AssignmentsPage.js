@@ -19,8 +19,8 @@ import {
   Tooltip,
   Button
 } from '@material-ui/core';
-import {getRooms} from "../../utils/api";
-import {VisibilityOutlined, FilterList} from "@material-ui/icons";
+import {getRooms, unAssignRooms} from "../../utils/api";
+import {VisibilityOutlined, FilterList, Close} from "@material-ui/icons";
 import moment from "moment";
 import {useHistory} from 'react-router-dom';
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -32,15 +32,15 @@ import Alert from "@material-ui/lab/Alert";
 import {AssignCleanerDialog} from "./AssignCleanerDialog";
 import Link from "@material-ui/core/Link";
 import {Link as RouterLink} from 'react-router-dom';
-import {getRoomTypeProp} from "../../utils/utils";
+import {getRoomTypeProp, getStatus} from "../../utils/utils";
 
 const headCells = [
   {id: 'name', numeric: false, disablePadding: true, label: 'Name'},
   {id: 'building', numeric: true, disablePadding: false, label: 'Building'},
   {id: 'floor', numeric: true, disablePadding: false, label: 'Floor'},
   {id: 'cleaner', numeric: false, disablePadding: false, label: 'Assigned Cleaner'},
+  {id: 'status', numeric: false, disablePadding: false, label: 'Status'},
   {id: 'contamination_index', numeric: true, disablePadding: false, label: 'Contamination index'},
-  {id: 'has_patient', numeric: false, disablePadding: false, label: 'Has patient'},
   {id: 'room_type', numeric: false, disablePadding: false, label: 'Room type'},
   {id: 'last_cleaned', numeric: true, disablePadding: false, label: 'Last cleaned'},
   {id: 'action', numeric: true, disablePadding: false, label: 'Action'},
@@ -119,9 +119,19 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
-  const {numSelected, selected, setSelected, setSnackOpen} = props;
+  const {numSelected, selected, setSelected, setSnackOpen, setSnackText, getData} = props;
   const [open, setOpen] = React.useState(false);
+  const selectedWithCleaner = selected.filter((room) => {
+    return room['assigned_cleaners'].length > 0;
+  });
 
+  const removeAssignments = async () => {
+    await unAssignRooms(selectedWithCleaner);
+    setSnackText('Cleaner unassigned');
+    setSnackOpen(true);
+    setSelected([]);
+    getData(true);
+  }
   return (
     <Toolbar
       className={clsx(classes.root, {
@@ -134,17 +144,26 @@ const EnhancedTableToolbar = (props) => {
           {numSelected} selected
         </Typography>
       ) : (
-        <Typography className={styles.title} variant="h6" id="tableTitle" component="div" style={{fontWeight: '600'}}>
+        <Typography className={styles.title} variant="h5" id="tableTitle" component="div" style={{fontWeight: '600'}}>
           Assign rooms to cleaner
         </Typography>
       )}
 
       {numSelected > 0 ? (
-        <Tooltip title="Assign to cleaner">
-          <Button variant={'contained'} color={'secondary'} style={{flexBasis: '164px'}} onClick={() => {
-            setOpen(true);
-          }}>Assign rooms</Button>
-        </Tooltip>
+        <>
+          {selectedWithCleaner.length > 0 &&
+          <Tooltip title="Remove room assignments">
+            <Button variant={'contained'} startIcon={<Close/>} className={styles.critical}
+                    style={{flexBasis: '300px', marginRight: 32}} onClick={removeAssignments}>Remove assignments
+            </Button>
+          </Tooltip>
+          }
+          <Tooltip title="Assign to cleaner">
+            <Button variant={'contained'} color={'secondary'} style={{flexBasis: '180px'}} onClick={() => {
+              setOpen(true);
+            }}>Assign rooms</Button>
+          </Tooltip>
+        </>
       ) : (
         <Tooltip title="Filter list">
           <IconButton aria-label="filter list" onClick={() => {
@@ -154,8 +173,10 @@ const EnhancedTableToolbar = (props) => {
           </IconButton>
         </Tooltip>
       )}
-      <AssignCleanerDialog open={open} setOpen={setOpen} selected={selected} onClose={() => setSelected([])}
-                           setSnackOpen={setSnackOpen}/>
+      <AssignCleanerDialog open={open} setOpen={setOpen} selected={selected} onClose={() => {
+        setSelected([]);
+        getData(true);
+      }} setSnackOpen={setSnackOpen} setSnackText={setSnackText}/>
     </Toolbar>
   );
 };
@@ -201,6 +222,8 @@ export default function AssignmentsPage() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [rooms, setRooms] = useState([]);
   const [snackOpen, setSnackOpen] = useState(false);
+  const [snackText, setSnackText] = useState('');
+  const [data, getData] = React.useState(true);
   const history = useHistory();
 
   const handleRequestSort = (event, property) => {
@@ -219,17 +242,20 @@ export default function AssignmentsPage() {
   };
 
   useEffect(() => {
-    getRooms(null, null, true)
-      .then((rooms) => {
-          console.log(rooms);
-          setRooms(rooms);
-          setIsLoaded(true);
-        },
-        (error) => {
-          setIsLoaded(true);
-          console.log(error);
-        });
-  }, []);
+    if (data) {
+      getRooms(null, null, true)
+        .then((rooms) => {
+            console.log(rooms);
+            setRooms(rooms);
+            setIsLoaded(true);
+            getData(false);
+          },
+          (error) => {
+            setIsLoaded(true);
+            console.log(error);
+          });
+    }
+  }, [data]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -241,10 +267,6 @@ export default function AssignmentsPage() {
   };
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
-
-  const getPatient = (patient) => {
-    return patient === "<empty>" ? 'No' : 'Yes';
-  }
 
   const getDate = (date) => {
     return date ? moment(date).format('YYYY-MM-DD HH:mm:ss') : 'Never';
@@ -267,7 +289,10 @@ export default function AssignmentsPage() {
 
   const getCleaner = (room) => {
     const cleaners = room['assigned_cleaners'];
-    const cleaner = cleaners.length > 0 ? cleaners[0] : '-';
+    const cleaner = cleaners.length > 0 && cleaners[0];
+    if (!cleaner) {
+      return '-';
+    }
     return (<Link component={RouterLink} color="secondary"
                   to={{
                     pathname: `/cleaners/${cleaner['_id']}`,
@@ -282,7 +307,7 @@ export default function AssignmentsPage() {
       {isLoaded ?
         <Paper className={classes.paper}>
           <EnhancedTableToolbar numSelected={selected.length} selected={selected} setSnackOpen={setSnackOpen}
-                                setSelected={setSelected}/>
+                                setSelected={setSelected} setSnackText={setSnackText} getData={getData}/>
           <TableContainer>
             <Table
               className={classes.table}
@@ -329,8 +354,8 @@ export default function AssignmentsPage() {
                         <TableCell align="right">{row.building}</TableCell>
                         <TableCell align="right">{row.floor}</TableCell>
                         <TableCell>{getCleaner(row)}</TableCell>
+                        <TableCell>{getStatus(row['contamination_index'])}</TableCell>
                         <TableCell align="right">{row['contamination_index']}</TableCell>
-                        <TableCell>{getPatient(row.patient)}</TableCell>
                         <TableCell>{getRoomTypeProp(row, 'displayName')}</TableCell>
                         <TableCell align="right">{getDate(row['last_cleaned'])}</TableCell>
                         <TableCell align="right">
@@ -362,7 +387,7 @@ export default function AssignmentsPage() {
       <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}
                 anchorOrigin={{vertical: "top", horizontal: "center"}}>
         <Alert variant={"filled"} severity="success" onClose={handleSnackClose}>
-          Cleaner assigned
+          {snackText}
         </Alert>
       </Snackbar>
     </PageContainer>

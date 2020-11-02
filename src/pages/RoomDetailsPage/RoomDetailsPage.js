@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useLocation, useHistory} from 'react-router-dom';
 import {Button, Typography} from "@material-ui/core";
-import {getAssignedCleaners, getReports, getRoom} from "../../utils/api";
+import {getAssignedCleaners, getReports, getRoom, getRoomHeatmap} from "../../utils/api";
 import PageContainer from "../../containers/PageContainer";
 import styles from "./RoomDetailsPage.module.scss";
 import RoomDetailsCard from "./RoomDetailsCard";
@@ -9,6 +9,9 @@ import RoomCleanerCard from "./RoomCleanerCard";
 import CommentsList from "./RoomReportComments";
 import CleaningReportsTable from "../../components/CleaningReportsTable/CleaningReportsTable";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import {update_img} from "../../utils/utils";
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
 
 const RoomDetailsPage = () => {
   const location = useLocation();
@@ -18,6 +21,9 @@ const RoomDetailsPage = () => {
   const [room, setRoom] = useState({});
   const [reports, setReports] = useState([]);
   const [cleaner, setCleaner] = useState({});
+  const [showMap, setShowMap] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
     getRoom(params.id)
@@ -38,6 +44,23 @@ const RoomDetailsPage = () => {
       })
   }, [params.id]);
 
+  useEffect(() => {
+    if (showMap) {
+      getRoomHeatmap(params.id, 'contamination')
+        .then((response) => {
+          const aux = document.getElementById('aux');
+          const canvas = document.getElementById('main');
+          // eslint-disable-next-line no-undef
+          const arr = new BigUint64Array(response);
+          update_img(arr, aux, canvas);
+        })
+        .catch((err) => {
+          console.log(err.message)
+          setErrorMsg(err.message);
+          setError(true);
+        })
+    }
+  }, [params.id, showMap])
   const navigateToMap = () => {
     history.push({
       pathname: `/rooms`,
@@ -59,12 +82,25 @@ const RoomDetailsPage = () => {
               <RoomCleanerCard room={room} cleaner={cleaner} setCleaner={setCleaner}/>
             </div>
             <CommentsList reports={reports}/>
-            <Typography variant={"h5"}>Room map</Typography>
-            <div style={{width: 600, height: 400}}/>
+            <div className={styles.row}>
+              <Typography variant={"h5"}>Room map</Typography>
+              <Button variant={"outlined"} color={"primary"} onClick={() => setShowMap(!showMap)}>
+                {showMap ? 'Hide map' : 'Show Map'}
+              </Button>
+            </div>
+            {showMap && (
+              <>
+                <canvas id="aux" style={{display: 'none'}}/>
+                <canvas id="main" width={72} height={56} className={styles.map}/>
+              </>
+            )}
             <CleaningReportsTable reports={reports} type={'room'}/>
           </div>
         </>
       ) : <CircularProgress color="secondary" style={{margin: '16px auto'}}/>}
+      <Snackbar open={error} autoHideDuration={6000} onClose={() => setError(false)}>
+        <Alert onClose={() => setError(false)} severity="error">{errorMsg}</Alert>
+      </Snackbar>
     </PageContainer>
   );
 }

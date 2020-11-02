@@ -12,6 +12,8 @@ import Divider from "@material-ui/core/Divider";
 import {assignRoom, unAssignRoom} from "../../utils/api";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
+import {Link as RouterLink} from "react-router-dom";
+import Link from "@material-ui/core/Link";
 
 
 const RoomCleanerCard = ({room, cleaner, setCleaner}) => {
@@ -57,8 +59,13 @@ const RoomCleanerCard = ({room, cleaner, setCleaner}) => {
           <StatusDot variant={getColor()} size={'tiny'} tooltip={'Cleaner name'}/>
           {hasCleaner ? (
               <>
-                <Typography style={{marginLeft: 16}} variant={'h6'}
-                            className={styles.semiBold}>{cleaner.name}</Typography>
+                <Link component={RouterLink} style={{marginLeft: 16}} color="secondary"
+                      to={{
+                        pathname: `/cleaners/${cleaner['_id']}`,
+                        state: {id: cleaner['_id']}
+                      }}>
+                  <Typography variant={'h6'} className={styles.semiBold}>{cleaner.name}</Typography>
+                </Link>
                 <Tooltip title="Remove assignment">
                   <IconButton style={{marginLeft: 'auto'}} size={"small"} onClick={removeCleanerAssignment}>
                     <ClearOutlined/>

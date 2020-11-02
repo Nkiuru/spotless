@@ -6,11 +6,12 @@ import styles from './Toolbar.module.scss';
 import {
   ArrowBackRounded, AssessmentRounded,
   BusinessRounded,
-  DashboardRounded,
+  DashboardRounded, ExitToApp,
   FormatListBulletedRounded,
   PeopleRounded
 } from "@material-ui/icons";
 import Tooltip from "@material-ui/core/Tooltip";
+import {logout} from "../../utils/api";
 
 const NavTabs = withStyles({
   root: {
@@ -74,6 +75,14 @@ const Toolbar = () => {
                value={getTabValue("/analysis")} component={Link} to={"/analysis"}
                disableRipple={true} className={styles.tab}/>
         </NavTabs>
+        <Tooltip title={'Sign out'} color={"secondary"}>
+          <IconButton onClick={() => {
+            logout();
+            history.push('/');
+          }}>
+            <ExitToApp/>
+          </IconButton>
+        </Tooltip>
       </MaterialToolbar>
     </AppBar>
   );

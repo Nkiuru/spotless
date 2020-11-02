@@ -8,13 +8,17 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import styles from './ReportPage.module.scss';
 import {Check, CloseRounded} from "@material-ui/icons";
+import {update_img} from "../../utils/utils";
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
 
 const ReportPage = () => {
   const location = useLocation();
   const {id} = location.state;
   const [report, setReport] = useState({});
   const [type, setType] = useState('');
-
+  const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
     getReport(id)
@@ -27,12 +31,19 @@ const ReportPage = () => {
     setType(event.target.value);
     await getHeatmap(id, event.target.value)
       .then((res) => {
-        console.log(res);
-      }, (err) => console.log(err));
+        const aux = document.getElementById('aux');
+        const canvas = document.getElementById('main');
+        update_img(res, aux, canvas);
+      }).catch((err) => {
+        console.error(err)
+        setErrorMsg('Could not load map');
+        setError(true);
+      });
   }
 
   const getIcon = (successful) => {
-    return successful ? (<Check className={styles.good} fontSize={"large"}/>) : (<CloseRounded color={"error"} fontSize={"large"}/>);
+    return successful ? (<Check className={styles.good} fontSize={"large"}/>) : (
+      <CloseRounded color={"error"} fontSize={"large"}/>);
   }
 
   return (
@@ -47,14 +58,16 @@ const ReportPage = () => {
               <Select label="Contamination map type" onChange={mapSelected} value={type}>
                 <MenuItem value="clean">After cleaning</MenuItem>
                 <MenuItem value="contamination">Before cleaning</MenuItem>
-                <MenuItem value="Combined">After cleaning</MenuItem>
               </Select>
             </FormControl>
           </div>
-          <div className={styles.map} />
+          <div style={{display: 'flex', flexDirection: 'column'}}>
+            <canvas id="aux" style={{display: 'none'}}/>
+            <canvas id="main" width={72} height={56} className={styles.map}/>
+          </div>
           <Typography variant={"h5"}>Cleaner comments:</Typography>
           <div className={styles.comments}>
-            <Typography variant={"body"} className={styles.comment}>{report.comments}</Typography>
+            <Typography variant={"body1"} className={styles.comment}>{report.comments}</Typography>
           </div>
         </Grid>
         <Grid item xs={6}>
@@ -76,6 +89,9 @@ const ReportPage = () => {
           </div>
         </Grid>
       </Grid>
+      <Snackbar open={error} autoHideDuration={6000} onClose={() => setError(false)}>
+        <Alert onClose={() => setError(false)} severity="error">{errorMsg}</Alert>
+      </Snackbar>
     </PageContainer>
   )
 }
