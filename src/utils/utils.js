@@ -34,9 +34,9 @@ function convert64to8(array) {
     }
   }
   // eslint-disable-next-line no-undef
-  max = BigInt(maxRaw)
+  max = BigInt(maxRaw) / 30n;
   // eslint-disable-next-line no-undef
-  min = BigInt(minRaw)
+  min = BigInt(minRaw);
   let pix1;
   let im_p = [];
   if (max <= min) {

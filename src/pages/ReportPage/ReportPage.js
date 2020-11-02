@@ -11,6 +11,7 @@ import {Check, CloseRounded} from "@material-ui/icons";
 import {update_img} from "../../utils/utils";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
+import moment from "moment";
 
 const ReportPage = () => {
   const location = useLocation();
@@ -77,7 +78,7 @@ const ReportPage = () => {
           </div>
           <div className={styles.row}>
             <Typography variant={"h5"} className={styles.reportInfo}>Cleaning time:</Typography>
-            <Typography style={{marginLeft: '4px'}} variant={"h5"}>{report['cleaning_time']}</Typography>
+            <Typography style={{marginLeft: '4px'}} variant={"h5"}>{moment(report['cleaning_time']).format('YYYY-MM-DD HH:mm:ss')}</Typography>
           </div>
           <div className={styles.row}>
             <Typography variant={"h5"} className={styles.reportInfo}>Contamination index:</Typography>

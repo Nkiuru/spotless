@@ -1,10 +1,12 @@
 import React from 'react';
+import PageContainer from "../../containers/PageContainer";
+import {Typography} from "@material-ui/core";
 
 const AnalysisPage = () => {
   return (
-    <div>
-      Analysis
-    </div>
+    <PageContainer style={{textAlign: 'start'}}>
+      <Typography variant={"h5"}>Analysis</Typography>
+    </PageContainer>
   )
 }
 
