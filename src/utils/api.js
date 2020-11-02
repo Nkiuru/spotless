@@ -63,6 +63,12 @@ export const assignRoomsToCleaner = async (rooms, cleaner) => {
   }));
 }
 
+export const unAssignRooms = async (rooms) => {
+  return Promise.all(rooms.map((room) => {
+    return unAssignRoom(room['_id'], room['assigned_cleaners'][0]['_id']);
+  }));
+}
+
 export const assignRoom = async (room, cleaner) => {
   return doPostRequest('cleaners/rooms', JSON.stringify({
     'cleaner_id': cleaner,
