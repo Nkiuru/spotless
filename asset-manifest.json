@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/spotless/static/css/main.e5259ba6.chunk.css",
+    "main.js": "/spotless/static/js/main.8e88b116.chunk.js",
+    "main.js.map": "/spotless/static/js/main.8e88b116.chunk.js.map",
+    "runtime-main.js": "/spotless/static/js/runtime-main.e434c42d.js",
+    "runtime-main.js.map": "/spotless/static/js/runtime-main.e434c42d.js.map",
+    "static/js/2.101670c4.chunk.js": "/spotless/static/js/2.101670c4.chunk.js",
+    "static/js/2.101670c4.chunk.js.map": "/spotless/static/js/2.101670c4.chunk.js.map",
+    "index.html": "/spotless/index.html",
+    "precache-manifest.fe4af8e4be97883c9dfdbfc6b7c21184.js": "/spotless/precache-manifest.fe4af8e4be97883c9dfdbfc6b7c21184.js",
+    "service-worker.js": "/spotless/service-worker.js",
+    "static/css/main.e5259ba6.chunk.css.map": "/spotless/static/css/main.e5259ba6.chunk.css.map",
+    "static/js/2.101670c4.chunk.js.LICENSE.txt": "/spotless/static/js/2.101670c4.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.e434c42d.js",
+    "static/js/2.101670c4.chunk.js",
+    "static/css/main.e5259ba6.chunk.css",
+    "static/js/main.8e88b116.chunk.js"
+  ]
+}
