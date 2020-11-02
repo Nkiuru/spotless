@@ -48,8 +48,20 @@
   }
 }
 
+.good {
+  color: $color-good;
+}
+
+.med {
+  color: $color-medium;
+}
+
 .critical {
   color: $color-critical;
+}
+
+.neutral {
+  color: $color-neutral;
 }
 
 .btn {

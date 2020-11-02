@@ -7,6 +7,18 @@ import {getRoomTypeProp} from "../../utils/utils";
 
 
 const RoomDetailsCard = ({room}) => {
+
+  const getVariant = (contamination) => {
+    let variant = 'neutral';
+    if (contamination >= 60) {
+      variant = 'critical';
+    } else if (contamination >= 30) {
+      variant = 'med';
+    } else if (contamination < 30) {
+      variant = 'good';
+    }
+    return variant;
+  }
   return (
     <Card className={styles.card}>
       <div className={styles.cardContent}>
@@ -30,7 +42,7 @@ const RoomDetailsCard = ({room}) => {
         <div className={styles.row}>
           <Typography variant={"body1"} className={styles.semiBold}>Contamination index</Typography>
           <Typography variant={"body1"}
-                      className={[styles.critical, styles.medium].join(' ')}>{room['contamination_index']}</Typography>
+                      className={[styles[getVariant(room['contamination_index'])], styles.medium].join(' ')}>{room['contamination_index']}</Typography>
         </div>
       </div>
     </Card>

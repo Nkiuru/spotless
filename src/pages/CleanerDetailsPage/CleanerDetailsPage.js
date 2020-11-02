@@ -90,7 +90,8 @@ const CleanerDetailsPage = () => {
     <PageContainer style={{textAlign: 'start'}}>
       <div className={styles.row} style={{justifyContent: 'space-between'}}>
         <Typography variant={"h5"} className={styles.semiBold}>Cleaner details</Typography>
-        <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} variant={"outlined"} color={"primary"}>
+        <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} variant={"outlined"}
+                color={"primary"}>
           Actions
         </Button>
         <Menu
@@ -132,7 +133,7 @@ const CleanerDetailsPage = () => {
             </div>
           </div>
           <Typography variant={"h5"} className={styles.semiBold}>Assigned Rooms</Typography>
-          <AssignmentsTable cleaner={cleaner}/>
+          <AssignmentsTable cleaner={cleaner} setSnackOpen={setSnackOpen} setSnackText={setSnackText}/>
           <CleaningReportsTable reports={reports} type={"cleaner"}/>
         </>
       ) : <CircularProgress color="secondary" style={{margin: '16px auto'}}/>}
@@ -172,10 +173,9 @@ const CleanerDetailsPage = () => {
   );
 }
 
-const AssignmentsTable = ({cleaner}) => {
+const AssignmentsTable = ({cleaner, setSnackOpen, setSnackText}) => {
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     getAssignedRooms(cleaner['_id'])
@@ -194,15 +194,9 @@ const AssignmentsTable = ({cleaner}) => {
     const newAssignments = [...assignments];
     newAssignments.splice(assignments.indexOf(room), 1);
     setAssignments(newAssignments);
-    setOpen(true);
+    setSnackText('Assignment removed');
+    setSnackOpen(true);
   }
-
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpen(false);
-  };
 
   return (
     <div style={{margin: '16px 0'}}>
@@ -243,12 +237,6 @@ const AssignmentsTable = ({cleaner}) => {
                   ))}
                 </TableBody>
               </Table>
-              <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}
-                        anchorOrigin={{vertical: "top", horizontal: "center"}}>
-                <Alert variant={"filled"} severity="success" onClose={handleClose}>
-                  Assignment removed
-                </Alert>
-              </Snackbar>
             </TableContainer> : <Typography variant={"h6"}>No assigned rooms</Typography>
         )}
     </div>
