@@ -18,6 +18,7 @@ const DashboardPage = () => {
       <Grid container spacing={6}>
         <Grid item xs={5}>
           <Typography variant={"h5"} className={styles.semiBold}>Alerts</Typography>
+          <Typography variant={"h6"} style={{marginTop: 16}} className={styles.semiBold}>No active alerts</Typography>
         </Grid>
         <Grid item xs={3}>
           <Grid container spacing={4}>

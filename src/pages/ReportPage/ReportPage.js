@@ -63,7 +63,7 @@ const ReportPage = () => {
           </div>
           <div style={{display: 'flex', flexDirection: 'column'}}>
             <canvas id="aux" style={{display: 'none'}}/>
-            <canvas id="main" width={72} height={56}/>
+            <canvas id="main" width={72} height={56} className={styles.map}/>
           </div>
           <Typography variant={"h5"}>Cleaner comments:</Typography>
           <div className={styles.comments}>

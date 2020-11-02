@@ -10,7 +10,7 @@ import PageContainer from "../../containers/PageContainer";
 import Tooltip from "@material-ui/core/Tooltip";
 import Alert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
-import {getRoomTypeProp} from "../../utils/utils";
+import {getRoomTypeProp, getStatus} from "../../utils/utils";
 import CleaningReportsTable from "../../components/CleaningReportsTable";
 import styles from './CleanerDetailsPage.module.scss';
 import Button from "@material-ui/core/Button";
@@ -225,7 +225,7 @@ const AssignmentsTable = ({cleaner}) => {
                   {assignments.map((row) => (
                     <TableRow key={row['_id']}>
                       <TableCell component="th" scope="row">{row.name}</TableCell>
-                      <TableCell align="right">{}</TableCell>
+                      <TableCell align="right">{getStatus(row['contamination_index'])}</TableCell>
                       <TableCell align="right">{row['contamination_index']}</TableCell>
                       <TableCell align="right">{getRoomTypeProp(row, 'displayName')}</TableCell>
                       <TableCell

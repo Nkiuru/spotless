@@ -1,7 +1,21 @@
 import {ROOM_TYPES} from "./constants";
+import StatusDot from "../components/StatusDot";
+import React from "react";
 
 export const getRoomTypeProp = (room, propName) => {
   return room['room_type'] !== '<empty>' ? ROOM_TYPES[room['room_type']][propName] : '';
+}
+
+export const getStatus = (contamination) => {
+  let variant = 'neutral';
+  if (contamination >= 60) {
+    variant = 'critical';
+  } else if (contamination >= 30) {
+    variant = 'medium';
+  } else if (contamination < 30) {
+    variant = 'good';
+  }
+  return <StatusDot variant={variant} size={"tiny"} tooltip={contamination}/>
 }
 
 function convert64to8(array) {

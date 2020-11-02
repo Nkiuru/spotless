@@ -32,15 +32,16 @@ import Alert from "@material-ui/lab/Alert";
 import {AssignCleanerDialog} from "./AssignCleanerDialog";
 import Link from "@material-ui/core/Link";
 import {Link as RouterLink} from 'react-router-dom';
-import {getRoomTypeProp} from "../../utils/utils";
+import {getRoomTypeProp, getStatus} from "../../utils/utils";
+import StatusDot from "../../components/StatusDot";
 
 const headCells = [
   {id: 'name', numeric: false, disablePadding: true, label: 'Name'},
   {id: 'building', numeric: true, disablePadding: false, label: 'Building'},
   {id: 'floor', numeric: true, disablePadding: false, label: 'Floor'},
   {id: 'cleaner', numeric: false, disablePadding: false, label: 'Assigned Cleaner'},
+  {id: 'status', numeric: false, disablePadding: false, label: 'Status'},
   {id: 'contamination_index', numeric: true, disablePadding: false, label: 'Contamination index'},
-  {id: 'has_patient', numeric: false, disablePadding: false, label: 'Has patient'},
   {id: 'room_type', numeric: false, disablePadding: false, label: 'Room type'},
   {id: 'last_cleaned', numeric: true, disablePadding: false, label: 'Last cleaned'},
   {id: 'action', numeric: true, disablePadding: false, label: 'Action'},
@@ -134,7 +135,7 @@ const EnhancedTableToolbar = (props) => {
           {numSelected} selected
         </Typography>
       ) : (
-        <Typography className={styles.title} variant="h6" id="tableTitle" component="div" style={{fontWeight: '600'}}>
+        <Typography className={styles.title} variant="h5" id="tableTitle" component="div" style={{fontWeight: '600'}}>
           Assign rooms to cleaner
         </Typography>
       )}
@@ -242,10 +243,6 @@ export default function AssignmentsPage() {
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
-  const getPatient = (patient) => {
-    return patient === "<empty>" ? 'No' : 'Yes';
-  }
-
   const getDate = (date) => {
     return date ? moment(date).format('YYYY-MM-DD HH:mm:ss') : 'Never';
   }
@@ -329,8 +326,8 @@ export default function AssignmentsPage() {
                         <TableCell align="right">{row.building}</TableCell>
                         <TableCell align="right">{row.floor}</TableCell>
                         <TableCell>{getCleaner(row)}</TableCell>
+                        <TableCell>{getStatus(row['contamination_index'])}</TableCell>
                         <TableCell align="right">{row['contamination_index']}</TableCell>
-                        <TableCell>{getPatient(row.patient)}</TableCell>
                         <TableCell>{getRoomTypeProp(row, 'displayName')}</TableCell>
                         <TableCell align="right">{getDate(row['last_cleaned'])}</TableCell>
                         <TableCell align="right">

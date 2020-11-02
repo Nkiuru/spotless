@@ -14,7 +14,7 @@ const CleaningReportsTable = ({reports, type}) => {
   const viewReport = (report) => {
     const id = report['_id'];
     history.push({
-      pathname: `/reports/${id}`,
+      pathname: `/rooms/reports/${id}`,
       state: {id}
     })
   }
