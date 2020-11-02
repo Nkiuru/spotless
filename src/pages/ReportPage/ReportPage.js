@@ -9,13 +9,16 @@ import MenuItem from "@material-ui/core/MenuItem";
 import styles from './ReportPage.module.scss';
 import {Check, CloseRounded} from "@material-ui/icons";
 import {update_img} from "../../utils/utils";
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
 
 const ReportPage = () => {
   const location = useLocation();
   const {id} = location.state;
   const [report, setReport] = useState({});
   const [type, setType] = useState('');
-
+  const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
     getReport(id)
@@ -31,7 +34,11 @@ const ReportPage = () => {
         const aux = document.getElementById('aux');
         const canvas = document.getElementById('main');
         update_img(res, aux, canvas);
-      }).catch( (err) => console.log(err));
+      }).catch((err) => {
+        console.error(err)
+        setErrorMsg('Could not load map');
+        setError(true);
+      });
   }
 
   const getIcon = (successful) => {
@@ -51,7 +58,6 @@ const ReportPage = () => {
               <Select label="Contamination map type" onChange={mapSelected} value={type}>
                 <MenuItem value="clean">After cleaning</MenuItem>
                 <MenuItem value="contamination">Before cleaning</MenuItem>
-                <MenuItem value="Combined">After cleaning</MenuItem>
               </Select>
             </FormControl>
           </div>
@@ -83,6 +89,9 @@ const ReportPage = () => {
           </div>
         </Grid>
       </Grid>
+      <Snackbar open={error} autoHideDuration={6000} onClose={() => setError(false)}>
+        <Alert onClose={() => setError(false)} severity="error">{errorMsg}</Alert>
+      </Snackbar>
     </PageContainer>
   )
 }

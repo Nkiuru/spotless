@@ -126,7 +126,9 @@ export const getHeatmap = async (reportId, type) => {
   if (response.ok) {
     return response.arrayBuffer();
   } else {
-    throw new Error(await response.json().message);
+    const json = await response.json();
+    console.log(json)
+    throw new Error(json.error);
   }
 }
 
@@ -143,7 +145,8 @@ export const getRoomHeatmap = async (roomId, type) => {
   if (response.ok) {
     return response.arrayBuffer();
   } else {
-    throw new Error(await response.json().message);
+    const json = await response.json();
+    throw new Error(json.error);
   }
 }
 

@@ -5,13 +5,11 @@ export const getRoomTypeProp = (room, propName) => {
 }
 
 function convert64to8(array) {
-  let min;
-  let max;
+  let min, max, pix;
   // eslint-disable-next-line no-undef
   let minRaw = BigInt(Number.MAX_SAFE_INTEGER);
   // eslint-disable-next-line no-undef
   let maxRaw = BigInt(0);
-  let pix;
   for (let j = 0; j < array.length; j++) {
     pix = array[j]
     if (pix < minRaw) {
@@ -32,7 +30,7 @@ function convert64to8(array) {
   }
   for (let i = 0; i < array.length; i++) {
     // eslint-disable-next-line no-undef
-    pix1 = ((array[i] - min) * 255n) / (max - min)
+    pix1 = (array[i] - min) * 255n / (max - min);
     if (pix1 > 255n) {
       pix1 = 255
     }
@@ -41,7 +39,6 @@ function convert64to8(array) {
     }
     im_p.push(Number(pix1));
   }
-  console.log(im_p.length);
   return new Uint8Array(im_p);
 }
 
@@ -68,7 +65,7 @@ function initColorMaps() {
     tableGreen.push(green)
     tableBlue.push(blue)
   }
-  return [new Uint8Array(tableRed), new Uint8Array(tableGreen), new Uint8Array(tableBlue)];
+  return [new Uint8ClampedArray(tableRed), new Uint8ClampedArray(tableGreen), new Uint8ClampedArray(tableBlue)];
 }
 
 export function update_img(arrayBuffer, auxCanvas, canvas) {
