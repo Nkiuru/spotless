@@ -23,16 +23,16 @@ const DashboardPage = () => {
         <Grid item xs={3}>
           <Grid container spacing={4}>
             <Grid item xs>
-              <KeyStat subtitle={"Rooms cleaned today"} value={1} color={"#27AE60"}/>
+              <KeyStat subtitle={"Rooms cleaned today"} value={0} color={"#27AE60"}/>
             </Grid>
             <Grid item xs>
-              <KeyStat subtitle={"Average contamination index"} value={50} color={"#F2C94C"}/>
+              <KeyStat subtitle={"Average contamination index"} value={20} color={"#27AE60"}/>
             </Grid>
             <Grid item xs>
-              <KeyStat subtitle={"Green rooms"} value={0} color={"#27AE60"}/>
+              <KeyStat subtitle={"Green rooms"} value={4} color={"#27AE60"}/>
             </Grid>
             <Grid item xs>
-              <KeyStat subtitle={"Red rooms"} value={4} color={"#EB5757"}/>
+              <KeyStat subtitle={"Red rooms"} value={1} color={"#EB5757"}/>
             </Grid>
           </Grid>
         </Grid>

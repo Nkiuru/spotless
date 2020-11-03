@@ -68,6 +68,14 @@ const RoomDetailsPage = () => {
     })
   }
 
+  const handleSnackClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setError(false);
+    setShowMap(false);
+  };
+
   return (
     <PageContainer style={{width: '65%'}}>
       {roomLoaded ? (
@@ -99,7 +107,7 @@ const RoomDetailsPage = () => {
           </div>
         </>
       ) : <CircularProgress color="secondary" style={{margin: '16px auto'}}/>}
-      <Snackbar open={error} autoHideDuration={6000} onClose={() => setError(false)}>
+      <Snackbar open={error} autoHideDuration={6000} onClose={handleSnackClose}>
         <Alert onClose={() => setError(false)} severity="error">{errorMsg}</Alert>
       </Snackbar>
     </PageContainer>
