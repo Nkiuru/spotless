@@ -10,3 +10,10 @@
     font-weight: $semi-bold;
   }
 }
+
+.map {
+  width: 50%;
+  margin: 16px auto;
+  border-radius: 16px;
+  border: 1px solid $color-neutral;
+}

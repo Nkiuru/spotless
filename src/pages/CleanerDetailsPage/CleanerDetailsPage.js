@@ -4,7 +4,7 @@ import {IconButton, Paper, Table, TableContainer, TableHead, TableRow, Typograph
 import {getAssignedRooms, getCleaner, getReports, unAssignRoom, deleteCleaner as removeCleaner} from "../../utils/api";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
-import {AccountCircleRounded, Clear, DeleteForever, Edit} from "@material-ui/icons";
+import {AccountCircleRounded, AddCircleOutline, Clear, DeleteForever, Edit} from "@material-ui/icons";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import PageContainer from "../../containers/PageContainer";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -132,7 +132,12 @@ const CleanerDetailsPage = () => {
               </Typography>
             </div>
           </div>
-          <Typography variant={"h5"} className={styles.semiBold}>Assigned Rooms</Typography>
+          <div className={styles.row} style={{justifyContent: 'space-between'}}>
+            <Typography variant={"h5"} className={styles.semiBold}>Assigned Rooms</Typography>
+            <Tooltip title={"Add assignments"}>
+              <IconButton><AddCircleOutline/></IconButton>
+            </Tooltip>
+          </div>
           <AssignmentsTable cleaner={cleaner} setSnackOpen={setSnackOpen} setSnackText={setSnackText}/>
           <CleaningReportsTable reports={reports} type={"cleaner"}/>
         </>
