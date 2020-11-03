@@ -12,6 +12,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import {update_img} from "../../utils/utils";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
+import heatmap from "../../assets/heatmap2.png";
 
 const RoomDetailsPage = () => {
   const location = useLocation();
@@ -51,8 +52,7 @@ const RoomDetailsPage = () => {
           const aux = document.getElementById('aux');
           const canvas = document.getElementById('main');
           // eslint-disable-next-line no-undef
-          const arr = new BigUint64Array(response);
-          update_img(arr, aux, canvas);
+          update_img(response, aux, canvas, 20n);
         })
         .catch((err) => {
           console.log(err.message)
@@ -88,6 +88,7 @@ const RoomDetailsPage = () => {
                 {showMap ? 'Hide map' : 'Show Map'}
               </Button>
             </div>
+            <img className={styles.map} src={heatmap} alt="contamination map"/>
             {showMap && (
               <>
                 <canvas id="aux" style={{display: 'none'}}/>

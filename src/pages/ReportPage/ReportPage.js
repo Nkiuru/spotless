@@ -34,7 +34,8 @@ const ReportPage = () => {
       .then((res) => {
         const aux = document.getElementById('aux');
         const canvas = document.getElementById('main');
-        update_img(res, aux, canvas);
+        console.log(res)
+        update_img(res, aux, canvas, 1n);
       }).catch((err) => {
         console.error(err)
         setErrorMsg('Could not load map');

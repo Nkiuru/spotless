@@ -18,7 +18,7 @@ export const getStatus = (contamination) => {
   return <StatusDot variant={variant} size={"tiny"} tooltip={contamination}/>
 }
 
-function convert64to8(array) {
+function convert64to8(array, scaler) {
   let min, max, pix;
   // eslint-disable-next-line no-undef
   let minRaw = BigInt(Number.MAX_SAFE_INTEGER);
@@ -34,7 +34,7 @@ function convert64to8(array) {
     }
   }
   // eslint-disable-next-line no-undef
-  max = BigInt(maxRaw) / 30n;
+  max = BigInt(maxRaw) / scaler;
   // eslint-disable-next-line no-undef
   min = BigInt(minRaw);
   let pix1;
@@ -82,7 +82,7 @@ function initColorMaps() {
   return [new Uint8ClampedArray(tableRed), new Uint8ClampedArray(tableGreen), new Uint8ClampedArray(tableBlue)];
 }
 
-export function update_img(arrayBuffer, auxCanvas, canvas) {
+export function update_img(arrayBuffer, auxCanvas, canvas, scaler) {
   let arr = null;
   try {
     // eslint-disable-next-line no-undef
@@ -90,34 +90,23 @@ export function update_img(arrayBuffer, auxCanvas, canvas) {
   } catch (error) {
     throw error;
   }
-  let bytearray = convert64to8(arr);
+  let bytearray = convert64to8(arr, scaler);
   let [redMap, greenMap, blueMap] = initColorMaps();
   let img = null; //ImageData
   let imgArr = null; //Uint8ClampedArray
-  const h = bytearray.length / 72;
+  const h = Math.round(bytearray.length / 72);
   if (bytearray) {
     img = new ImageData(72, h); // Note: the actual array is 4 times bigger because has (RGBA) pixels
     imgArr = img.data;
     let byteIdx = 0;
-
-    if (true) { // color mapped image
-      for (let imgIdx = 0; imgIdx < imgArr.length; imgIdx += 4) {
-        let grayValue = bytearray[byteIdx];
-        imgArr[imgIdx] = redMap[grayValue]; // R value
-        imgArr[imgIdx + 1] = greenMap[grayValue]; // G value
-        imgArr[imgIdx + 2] = blueMap[grayValue]; // B value
-        imgArr[imgIdx + 3] = 255; // Alpha value
-        byteIdx++;
-      }
-    } else { // Normal grayscale image
-      for (let imgIdx = 0; imgIdx < imgArr.length; imgIdx += 4) {
-        let grayValue = bytearray[byteIdx];
-        imgArr[imgIdx] = grayValue; // R value
-        imgArr[imgIdx + 1] = grayValue; // G value
-        imgArr[imgIdx + 2] = grayValue; // B value
-        imgArr[imgIdx + 3] = 255; // Alpha value
-        byteIdx++;
-      }
+    // color mapped image
+    for (let imgIdx = 0; imgIdx < imgArr.length; imgIdx += 4) {
+      let grayValue = bytearray[byteIdx];
+      imgArr[imgIdx] = redMap[grayValue]; // R value
+      imgArr[imgIdx + 1] = greenMap[grayValue]; // G value
+      imgArr[imgIdx + 2] = blueMap[grayValue]; // B value
+      imgArr[imgIdx + 3] = 255; // Alpha value
+      byteIdx++;
     }
   }
   console.log(img)
