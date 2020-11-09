@@ -96,7 +96,6 @@ const RoomDetailsPage = () => {
                 {showMap ? 'Hide map' : 'Show Map'}
               </Button>
             </div>
-            <img className={styles.map} src={heatmap} alt="contamination map"/>
             {showMap && (
               <>
                 <canvas id="aux" style={{display: 'none'}}/>

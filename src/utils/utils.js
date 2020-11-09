@@ -18,6 +18,18 @@ export const getStatus = (contamination) => {
   return <StatusDot variant={variant} size={"tiny"} tooltip={contamination}/>
 }
 
+export const getVariant = (contamination) => {
+  let variant = 'neutral';
+  if (contamination >= 60) {
+    variant = 'critical';
+  } else if (contamination >= 30) {
+    variant = 'medium';
+  } else if (contamination < 30) {
+    variant = 'good';
+  }
+  return variant;
+}
+
 function convert64to8(array, scaler) {
   let min, max, pix;
   // eslint-disable-next-line no-undef
