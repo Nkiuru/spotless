@@ -8,3 +8,12 @@
 .critical {
   background-color: $color-critical;
 }
+
+.row {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}

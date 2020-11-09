@@ -33,6 +33,7 @@ import {AssignCleanerDialog} from "./AssignCleanerDialog";
 import Link from "@material-ui/core/Link";
 import {Link as RouterLink} from 'react-router-dom';
 import {getRoomTypeProp, getStatus} from "../../utils/utils";
+import TableFilters from "./TableFilters";
 
 const headCells = [
   {id: 'name', numeric: false, disablePadding: true, label: 'Name'},
@@ -103,7 +104,8 @@ const useToolbarStyles = makeStyles((theme) => ({
   root: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1),
-    textAlign: 'left'
+    textAlign: 'left',
+    flexDirection: 'column'
   },
   highlight:
     theme.palette.type === 'light'
@@ -115,12 +117,16 @@ const useToolbarStyles = makeStyles((theme) => ({
         color: theme.palette.text.primary,
         backgroundColor: theme.palette.secondary.dark,
       },
+  filters: {
+    minHeight: 96
+  }
 }));
 
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
-  const {numSelected, selected, setSelected, setSnackOpen, setSnackText, getData} = props;
+  const {numSelected, selected, setSelected, setSnackOpen, setSnackText, getData, rooms} = props;
   const [open, setOpen] = React.useState(false);
+  const [filter, showFilters] = React.useState(true);
   const selectedWithCleaner = selected.filter((room) => {
     return room['assigned_cleaners'].length > 0;
   });
@@ -136,43 +142,50 @@ const EnhancedTableToolbar = (props) => {
     <Toolbar
       className={clsx(classes.root, {
         [classes.highlight]: numSelected > 0,
+        [classes.filters]: filter
       })}
     >
-      {numSelected > 0 ? (
-        <Typography className={styles.title} color="inherit" variant="subtitle1" component="div"
-                    style={{fontWeight: 600}}>
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography className={styles.title} variant="h5" id="tableTitle" component="div" style={{fontWeight: '600'}}>
-          Assign rooms to cleaner
-        </Typography>
-      )}
-
-      {numSelected > 0 ? (
-        <>
-          {selectedWithCleaner.length > 0 &&
-          <Tooltip title="Remove room assignments">
-            <Button variant={'contained'} startIcon={<Close/>} className={styles.critical}
-                    style={{flexBasis: '300px', marginRight: 32}} onClick={removeAssignments}>Remove assignments
-            </Button>
+      <div className={styles.row}>
+        {numSelected > 0 ? (
+          <Typography className={styles.title} color="inherit" variant="subtitle1" component="div"
+                      style={{fontWeight: 600}}>
+            {numSelected} selected
+          </Typography>
+        ) : (
+          <Typography className={styles.title} variant="h5" id="tableTitle" component="div" style={{fontWeight: '600'}}>
+            Assign rooms to cleaner
+          </Typography>
+        )}
+        {numSelected > 0 ? (
+          <>
+            {selectedWithCleaner.length > 0 &&
+            <Tooltip title="Remove room assignments">
+              <Button variant={'contained'} startIcon={<Close/>} className={styles.critical}
+                      style={{flexBasis: '300px', marginRight: 32}} onClick={removeAssignments}>Remove assignments
+              </Button>
+            </Tooltip>
+            }
+            <Tooltip title="Assign to cleaner">
+              <Button variant={'contained'} color={'secondary'} style={{flexBasis: '180px'}} onClick={() => {
+                setOpen(true);
+              }}>Assign rooms</Button>
+            </Tooltip>
+          </>
+        ) : (
+          <Tooltip title="Filter list">
+            <IconButton aria-label="filter list" onClick={() => {
+              showFilters(!filter);
+            }}>
+              <FilterList color={filter ? 'secondary' : 'inherit'}/>
+            </IconButton>
           </Tooltip>
-          }
-          <Tooltip title="Assign to cleaner">
-            <Button variant={'contained'} color={'secondary'} style={{flexBasis: '180px'}} onClick={() => {
-              setOpen(true);
-            }}>Assign rooms</Button>
-          </Tooltip>
-        </>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton aria-label="filter list" onClick={() => {
-            // TODO implement filters
-          }}>
-            <FilterList/>
-          </IconButton>
-        </Tooltip>
-      )}
+        )}
+      </div>
+      {filter &&
+      <div className={styles.row}>
+        <TableFilters rooms={rooms}/>
+      </div>
+      }
       <AssignCleanerDialog open={open} setOpen={setOpen} selected={selected} onClose={() => {
         setSelected([]);
         getData(true);
@@ -185,7 +198,8 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
   selected: PropTypes.array.isRequired,
   setSelected: PropTypes.func.isRequired,
-  setSnackOpen: PropTypes.func.isRequired
+  setSnackOpen: PropTypes.func.isRequired,
+  rooms: PropTypes.array.isRequired
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -307,7 +321,7 @@ export default function AssignmentsPage() {
       {isLoaded ?
         <Paper className={classes.paper}>
           <EnhancedTableToolbar numSelected={selected.length} selected={selected} setSnackOpen={setSnackOpen}
-                                setSelected={setSelected} setSnackText={setSnackText} getData={getData}/>
+                                setSelected={setSelected} setSnackText={setSnackText} getData={getData} rooms={rooms}/>
           <TableContainer>
             <Table
               className={classes.table}
