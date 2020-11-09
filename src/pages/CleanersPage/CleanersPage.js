@@ -19,7 +19,7 @@ import {
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import {AddCircleOutline, VisibilityOutlined} from "@material-ui/icons";
-import {createCleaner, getCleaners} from "../../utils/api";
+import {createCleaner, getCleaners, getRooms} from "../../utils/api";
 import styles from './CleanersPage.module.scss';
 import * as Yup from "yup";
 import {Formik, Form, Field} from "formik";
@@ -29,22 +29,24 @@ import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import ShiftPicker from "../../components/ShiftPicker/ShiftPicker";
+import moment from "moment";
 
 const CleanersPage = () => {
   const [cleaners, setCleaners] = useState([]);
+  const [rooms, setRooms] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [open, setOpen] = React.useState(false);
   const [snackOpen, setSnackOpen] = useState(false);
 
   useEffect(() => {
-    getCleaners()
-      .then((cleaners) => {
-        console.log(cleaners)
-        setCleaners(cleaners);
+    Promise.all([getCleaners(), getRooms(null, null, true)])
+      .then((responses) => {
+        setCleaners(responses[0]);
+        setRooms(responses[1]);
         setIsLoaded(true);
       }, (err) => {
         console.log(err);
-      })
+      });
   }, [setOpen, isLoaded])
 
   const handleSnackClose = (event, reason) => {
@@ -64,7 +66,7 @@ const CleanersPage = () => {
           </IconButton>
         </Tooltip>
       </div>
-      {isLoaded ? <CleanersTable cleaners={cleaners}/> :
+      {isLoaded ? <CleanersTable cleaners={cleaners} rooms={rooms}/> :
         <CircularProgress color="secondary" style={{margin: '16px auto'}}/>}
       <Typography variant={"h5"} className={styles.bold} style={{marginTop: 24}}>Unassigned rooms</Typography>
       <AddCleanerDialog open={open} setOpen={setOpen} setIsLoaded={setIsLoaded} setSnackOpen={setSnackOpen}/>
@@ -157,7 +159,7 @@ const AddCleanerDialog = ({open, setOpen, setIsLoaded, setSnackOpen}) => {
   );
 }
 
-const CleanersTable = ({cleaners}) => {
+const CleanersTable = ({cleaners, rooms}) => {
   const history = useHistory();
 
   const viewCleaner = (cleaner) => {
@@ -168,6 +170,23 @@ const CleanersTable = ({cleaners}) => {
     })
   }
 
+  const getCleaningProgress = (cleaner) => {
+    const assignedRooms = rooms.filter((room) => {
+      return room['assigned_cleaners'].length > 0 && room['assigned_cleaners'][0]['_id'] === cleaner['_id'];
+    });
+    const numCleaned = assignedRooms.filter((room) => {
+      if (!room['last_cleaned']) {
+        return false;
+      }
+      return moment(room['last_cleaned']).isSame(moment(), 'day');
+    }).length;
+    return (
+      <Tooltip title={`${numCleaned}/${assignedRooms.length}`} placement={"right"}>
+        <Typography>{Math.round(((numCleaned / assignedRooms.length) * 100)) || 0} %</Typography>
+      </Tooltip>
+    )
+  }
+
   return (
     <TableContainer component={Paper}>
       <Table size={'small'}>
@@ -176,7 +195,7 @@ const CleanersTable = ({cleaners}) => {
             <TableCell>Name</TableCell>
             <TableCell align="right">Shift start</TableCell>
             <TableCell align="right">Shift end</TableCell>
-            <TableCell align="right">Cleaning percent</TableCell>
+            <TableCell align="right">Cleaning progress</TableCell>
             <TableCell align="right">Current location</TableCell>
             <TableCell align="right">Status</TableCell>
             <TableCell>Action</TableCell>
@@ -188,7 +207,7 @@ const CleanersTable = ({cleaners}) => {
               <TableCell component="th" scope="row">{row.name}</TableCell>
               <TableCell align="right">{row['shift_start']}</TableCell>
               <TableCell align="right">{row['shift_end']}</TableCell>
-              <TableCell align="right">{}</TableCell>
+              <TableCell align="right">{getCleaningProgress(row)}</TableCell>
               <TableCell align="right">{}</TableCell>
               <TableCell align="right">{}</TableCell>
               <TableCell>
