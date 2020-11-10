@@ -27,7 +27,7 @@ const TableFilters = ({rooms, setRooms}) => {
         valid = room['room_type'] === roomType.key && valid;
       }
       if (!assigned) {
-        valid = room['assigned_cleaners'].length > 0 && valid;
+        valid = room['assigned_cleaners'].length === 0 && valid;
       }
       return valid;
     });

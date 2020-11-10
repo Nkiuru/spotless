@@ -142,7 +142,7 @@ const EnhancedTableToolbar = (props) => {
     <Toolbar
       className={clsx(classes.root, {
         [classes.highlight]: numSelected > 0,
-        [classes.filters]: filter
+        [classes.filters]: filter && numSelected === 0
       })}
     >
       <div className={styles.row}>
@@ -181,7 +181,7 @@ const EnhancedTableToolbar = (props) => {
           </Tooltip>
         )}
       </div>
-      {filter &&
+      {filter && numSelected === 0 &&
       <div className={styles.row}>
         <TableFilters rooms={rooms} setRooms={setRooms}/>
       </div>
