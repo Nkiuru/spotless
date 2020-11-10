@@ -179,7 +179,7 @@ const CleaningReportsTable = ({reports, type}) => {
                       <TableRow
                         hover
                         tabIndex={-1}
-                        key={row.name}
+                        key={labelId}
                         style={{height: '33px'}}
                       >
                         <TableCell component="th" id={labelId} scope="row">

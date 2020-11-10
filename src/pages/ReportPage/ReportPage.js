@@ -42,6 +42,12 @@ const ReportPage = () => {
         setError(true);
       });
   }
+  const handleSnackClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setError(false);
+  };
 
   const getIcon = (successful) => {
     return successful ? (<Check className={styles.good} fontSize={"large"}/>) : (
@@ -78,12 +84,12 @@ const ReportPage = () => {
             <Typography style={{marginLeft: '4px'}} variant={"h5"}>{report['cleaner_name']}</Typography>
           </div>
           <div className={styles.row}>
-            <Typography variant={"h5"} className={styles.reportInfo}>Cleaning time:</Typography>
-            <Typography style={{marginLeft: '4px'}} variant={"h5"}>{moment(report['cleaning_time']).format('YYYY-MM-DD HH:mm:ss')}</Typography>
+            <Typography variant={"h5"} className={styles.reportInfo}>Room:</Typography>
+            <Typography style={{marginLeft: '4px'}} variant={"h5"}>{report['room_name']}</Typography>
           </div>
           <div className={styles.row}>
-            <Typography variant={"h5"} className={styles.reportInfo}>Contamination index:</Typography>
-            <Typography style={{marginLeft: '4px'}} variant={"h5"}>75</Typography>
+            <Typography variant={"h5"} className={styles.reportInfo}>Cleaning time:</Typography>
+            <Typography style={{marginLeft: '4px'}} variant={"h5"}>{moment(report['cleaning_time']).format('YYYY-MM-DD HH:mm:ss')}</Typography>
           </div>
           <div className={styles.row}>
             <Typography variant={"h5"} className={styles.reportInfo}>Cleaning successful:</Typography>
@@ -91,7 +97,7 @@ const ReportPage = () => {
           </div>
         </Grid>
       </Grid>
-      <Snackbar open={error} autoHideDuration={6000} onClose={() => setError(false)}>
+      <Snackbar open={error} autoHideDuration={6000} onClose={handleSnackClose}>
         <Alert onClose={() => setError(false)} severity="error">{errorMsg}</Alert>
       </Snackbar>
     </PageContainer>
