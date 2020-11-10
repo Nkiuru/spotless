@@ -8,6 +8,7 @@ import {getRooms, getUser} from "../../utils/api";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import moment from "moment";
 import {getVariant} from "../../utils/utils";
+import ReportsPerDay from "../../components/Charts/ReportsPerDay";
 
 const DashboardPage = () => {
   const [user, setUser] = useState('');
@@ -68,7 +69,7 @@ const DashboardPage = () => {
           <Typography variant={"h5"} className={styles.semiBold}>Alerts</Typography>
           <Typography variant={"h6"} style={{marginTop: 16}} className={styles.semiBold}>No active alerts</Typography>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs className={styles.grid}>
           <Grid container spacing={4}>
             <Grid item xs>
               <KeyStat subtitle={"Rooms cleaned today"}
@@ -89,8 +90,8 @@ const DashboardPage = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={4}></Grid>
       </Grid>
+      <ReportsPerDay />
     </PageContainer>
   )
 }
