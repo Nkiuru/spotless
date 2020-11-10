@@ -124,7 +124,7 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
-  const {numSelected, selected, setSelected, setSnackOpen, setSnackText, getData, rooms} = props;
+  const {numSelected, selected, setSelected, setSnackOpen, setSnackText, getData, rooms, setRooms } = props;
   const [open, setOpen] = React.useState(false);
   const [filter, showFilters] = React.useState(true);
   const selectedWithCleaner = selected.filter((room) => {
@@ -183,7 +183,7 @@ const EnhancedTableToolbar = (props) => {
       </div>
       {filter &&
       <div className={styles.row}>
-        <TableFilters rooms={rooms}/>
+        <TableFilters rooms={rooms} setRooms={setRooms}/>
       </div>
       }
       <AssignCleanerDialog open={open} setOpen={setOpen} selected={selected} onClose={() => {
@@ -235,6 +235,7 @@ export default function AssignmentsPage() {
   const [roomsPerPage, setRoomsPerPage] = React.useState(25);
   const [isLoaded, setIsLoaded] = useState(false);
   const [rooms, setRooms] = useState([]);
+  const [origRooms, setOrigRooms] = useState([]);
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackText, setSnackText] = useState('');
   const [data, getData] = React.useState(true);
@@ -261,6 +262,7 @@ export default function AssignmentsPage() {
         .then((rooms) => {
             console.log(rooms);
             setRooms(rooms);
+            setOrigRooms(rooms);
             setIsLoaded(true);
             getData(false);
           },
@@ -321,7 +323,7 @@ export default function AssignmentsPage() {
       {isLoaded ?
         <Paper className={classes.paper}>
           <EnhancedTableToolbar numSelected={selected.length} selected={selected} setSnackOpen={setSnackOpen}
-                                setSelected={setSelected} setSnackText={setSnackText} getData={getData} rooms={rooms}/>
+                                setSelected={setSelected} setSnackText={setSnackText} getData={getData} rooms={origRooms} setRooms={setRooms}/>
           <TableContainer>
             <Table
               className={classes.table}

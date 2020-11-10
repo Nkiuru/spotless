@@ -6,65 +6,32 @@ import MenuItem from "@material-ui/core/MenuItem";
 import {ROOM_TYPES} from "../../utils/constants";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import {makeStyles} from "@material-ui/core/styles";
-const useStyles = makeStyles(() => ({
-  select: {
-    minWidth: 200,
-    background: 'white',
-    fontWeight:400,
-    borderStyle:'none',
-    borderWidth: 2,
-    borderRadius: 12,
-    paddingLeft: 24,
-    paddingTop: 14,
-    paddingBottom: 15,
-    boxShadow: '0px 5px 8px -3px rgba(0,0,0,0.14)',
-    "&:focus":{
-      borderRadius: 12,
-      background: 'white',
-    },
-  },
-  paper: {
-    borderRadius: 12,
-    marginTop: 0
-  },
-  list: {
-    paddingTop:0,
-    paddingBottom:0,
-    background:'white',
-    "& li":{
-      fontWeight:200,
-      paddingTop:12,
-      paddingBottom:12,
-    }
-  }
-}));
 
-const TableFilters = ({rooms}) => {
+const TableFilters = ({rooms, setRooms}) => {
   const [building, setBuilding] = React.useState('');
   const [floor, setFloor] = React.useState('');
   const [roomType, setRoomType] = React.useState('');
   const [assigned, setAssigned] = React.useState(true);
-  const classes = useStyles();
 
-  const menuProps = {
-    classes: {
-      paper: classes.paper,
-      list: classes.list
-    },
-    anchorOrigin: {
-      vertical: "bottom",
-      horizontal: "left"
-    },
-    transformOrigin: {
-      vertical: "top",
-      horizontal: "left"
-    },
-    getContentAnchorEl: null
-  };
-
-  const filter = () => {
-
+  const filter = (building, roomType, floor, assigned) => {
+    let filtered = rooms;
+    filtered = filtered.filter((room) => {
+      let valid = true;
+      if (building) {
+        valid = room.building === building;
+      }
+      if (floor) {
+        valid = room.floor === floor && valid;
+      }
+      if (roomType) {
+        valid = room['room_type'] === roomType.key && valid;
+      }
+      if (!assigned) {
+        valid = room['assigned_cleaners'].length > 0 && valid;
+      }
+      return valid;
+    });
+    setRooms(filtered);
   }
 
   const getBuildings = () => {
@@ -80,13 +47,13 @@ const TableFilters = ({rooms}) => {
   }
   return (
     <>
-      <FormControl variant={'outlined'} style={{minWidth: '320px', marginBottom: 8}}>
+      <FormControl variant={'outlined'} style={{minWidth: '240px', marginBottom: 8}}>
         <InputLabel id="building">Building</InputLabel>
         <Select label="Building" onChange={(event) => {
           setBuilding(event.target.value);
-          filter();
-        }} value={building} classes={{root:classes.select}} MenuProps={menuProps}>
-          <MenuItem value={null}>
+          filter(event.target.value, roomType, floor, assigned);
+        }} value={building}>
+          <MenuItem value={''}>
             <em>All</em>
           </MenuItem>
           {getBuildings().map(building => (
@@ -94,13 +61,13 @@ const TableFilters = ({rooms}) => {
           ))}
         </Select>
       </FormControl>
-      <FormControl variant={'outlined'} style={{minWidth: '320px', marginBottom: 8}}>
+      <FormControl variant={'outlined'} style={{minWidth: '240px', marginBottom: 8}}>
         <InputLabel id="floor">Floor</InputLabel>
         <Select label="Floor" onChange={(event) => {
           setFloor(event.target.value);
-          filter();
-        }} value={floor} classes={{root:classes.select}} MenuProps={menuProps}>
-          <MenuItem value={null}>
+          filter(building, roomType, event.target.value, assigned);
+        }} value={floor}>
+          <MenuItem value={''}>
             <em>All</em>
           </MenuItem>
           {getFloors().map(floor => (
@@ -108,13 +75,13 @@ const TableFilters = ({rooms}) => {
           ))}
         </Select>
       </FormControl>
-      <FormControl variant={'outlined'} style={{minWidth: '320px', marginBottom: 8}}>
+      <FormControl variant={'outlined'} style={{minWidth: '240px', marginBottom: 8}}>
         <InputLabel id="room-type">Room type</InputLabel>
         <Select label="Room type" onChange={(event) => {
           setRoomType(event.target.value);
-          filter();
-        }} value={roomType} classes={{root:classes.select}} MenuProps={menuProps}>
-          <MenuItem value={null}>
+          filter(building, event.target.value, floor, assigned);
+        }} value={roomType}>
+          <MenuItem value={''}>
             <em>All</em>
           </MenuItem>
           {Object.keys(ROOM_TYPES).map(type => (
@@ -125,7 +92,7 @@ const TableFilters = ({rooms}) => {
       </FormControl>
       <FormControlLabel control={<Checkbox checked={assigned} onChange={(event, checked) => {
         setAssigned(checked);
-        filter();
+        filter(building, roomType, floor, checked);
       }}/>} label="Show assigned"/>
     </>
   );

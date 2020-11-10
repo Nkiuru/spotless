@@ -5,31 +5,37 @@ export const ROOM_TYPES = Object.freeze({
   OFFICE: {
     frequency: 1,
     cleaningTime: 5,
-    displayName: 'Office'
+    displayName: 'Office',
+    key: 'OFFICE'
   },
   TOILET: {
     frequency: 5,
     cleaningTime: 5,
-    displayName: 'Toilet'
+    displayName: 'Toilet',
+    key: 'TOILET'
   },
   WARD_ROOM: {
     frequency: 5,
     cleaningTime: 8,
-    displayName: 'Ward room'
+    displayName: 'Ward room',
+    key: 'WARD_ROOM'
   },
   EXAMINATION_ROOM: {
     frequency: 5,
     cleaningTime: 6,
-    displayName: 'Examination room'
+    displayName: 'Examination room',
+    key: 'EXAMINATION_ROOM'
   },
   CORRIDOR: {
     frequency: 3,
     cleaningTime: 9,
-    displayName: 'Corridor'
+    displayName: 'Corridor',
+    key: 'CORRIDOR'
   },
   WAITING_ROOM: {
     frequency: 5,
     cleaningTime: 10,
-    displayName: 'Waiting room'
+    displayName: 'Waiting room',
+    key: 'WAITING_ROOM'
   },
 });
