@@ -7,6 +7,8 @@ import {getReports} from "../../../utils/api";
 import moment from "moment";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import styles from "./ReportsPerDay.module.scss";
+import Paper from "@material-ui/core/Paper";
+import {Typography} from "@material-ui/core";
 
 const ReportsPerDay = () => {
   const [loading, setLoading] = useState(true);
@@ -34,19 +36,22 @@ const ReportsPerDay = () => {
       });
   }, []);
   return (
-    <div style={{height:'100%'}}>
-      {loading ? <CircularProgress color={"secondary"}/> :
-        <ResponsiveContainer width="100%" height={400} className={styles.chart}>
-          <LineChart data={reports}>
-            <XAxis dataKey="date"/>
-            <YAxis/>
-            <CartesianGrid strokeDasharray="3 3"/>
-            <Tooltip/>
-            <Legend/>
-            <Line type="monotone" dataKey="amount" name="Cleaning events" stroke="#8884d8"/>
-          </LineChart>
-        </ResponsiveContainer>
-      }
+    <div style={{height: '100%'}}>
+      <Paper className={styles.container}>
+        <Typography variant={"h6"} className={styles.title}>Cleaning events per day</Typography>
+        {loading ? <CircularProgress color={"secondary"} style={{margin: 'auto'}}/> :
+          <ResponsiveContainer width="100%" height={400} className={styles.chart}>
+            <LineChart data={reports}>
+              <XAxis dataKey="date"/>
+              <YAxis/>
+              <CartesianGrid strokeDasharray="3 3"/>
+              <Tooltip/>
+              <Legend/>
+              <Line type="monotone" dataKey="amount" name="Cleaning events" stroke="#8884d8" strokeWidth={2}/>
+            </LineChart>
+          </ResponsiveContainer>
+        }
+      </Paper>
     </div>
   )
 }
