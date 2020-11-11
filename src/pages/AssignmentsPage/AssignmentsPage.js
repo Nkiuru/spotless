@@ -126,7 +126,7 @@ const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
   const {numSelected, selected, setSelected, setSnackOpen, setSnackText, getData, rooms, setRooms } = props;
   const [open, setOpen] = React.useState(false);
-  const [filter, showFilters] = React.useState(true);
+  const [filter, showFilters] = React.useState(false);
   const selectedWithCleaner = selected.filter((room) => {
     return room['assigned_cleaners'].length > 0;
   });

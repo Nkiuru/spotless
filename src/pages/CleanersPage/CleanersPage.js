@@ -178,7 +178,7 @@ const CleanersTable = ({cleaners, rooms}) => {
       if (!room['last_cleaned']) {
         return false;
       }
-      return moment(room['last_cleaned']).isSame(moment(), 'day');
+      return moment(room['last_cleaned'], 'YYYY-MM-DD').isSame(moment().format('YYYY-MM-DD'));
     }).length;
     return (
       <Tooltip title={`${numCleaned}/${assignedRooms.length}`} placement={"right"}>

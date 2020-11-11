@@ -31,7 +31,7 @@ const DashboardPage = () => {
       if (!room['last_cleaned']) {
          return false;
       }
-      return moment(room['last_cleaned']).isSame(moment(), 'day');
+      return moment(room['last_cleaned']).isSame(moment().format('YYYY-MM-DD'));
     }).length;
   }
 
