@@ -187,6 +187,13 @@ const CleanersTable = ({cleaners, rooms}) => {
     )
   }
 
+  const getStatus = (cleaner) => {
+    const shiftStart = moment(cleaner['shift_start'], 'HH:mm');
+    const shiftEnd = moment(cleaner['shift_end'], 'HH:mm');
+    const isBetween = moment().isBetween(shiftStart, shiftEnd);
+    return isBetween ? '' : 'Unavailable';
+  }
+
   return (
     <TableContainer component={Paper}>
       <Table size={'small'}>
@@ -209,7 +216,7 @@ const CleanersTable = ({cleaners, rooms}) => {
               <TableCell align="right">{row['shift_end']}</TableCell>
               <TableCell align="right">{getCleaningProgress(row)}</TableCell>
               <TableCell align="right">{}</TableCell>
-              <TableCell align="right">{}</TableCell>
+              <TableCell align="right">{getStatus(row)}</TableCell>
               <TableCell>
                 <IconButton size={"small"} color={"secondary"} onClick={() => {
                   viewCleaner(row)

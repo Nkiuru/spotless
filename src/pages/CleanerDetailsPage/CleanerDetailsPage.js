@@ -24,6 +24,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import EditCleanerDialog from "./EditCleanerDialog";
+import RoomSelector from "../../components/RoomSelector";
 
 const CleanerDetailsPage = () => {
   const location = useLocation();
@@ -38,6 +39,7 @@ const CleanerDetailsPage = () => {
   const [data, getData] = React.useState(false);
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackText, setSnackText] = useState('Cleaned deleted');
+  const [showRoomSelector, setShowRoomSelector] = useState(false);
 
   const handleConfirmClose = () => {
     setOpen(false);
@@ -135,7 +137,11 @@ const CleanerDetailsPage = () => {
           <div className={styles.row} style={{justifyContent: 'space-between'}}>
             <Typography variant={"h5"} className={styles.semiBold}>Assigned Rooms</Typography>
             <Tooltip title={"Add assignments"}>
-              <IconButton><AddCircleOutline/></IconButton>
+              <IconButton onClick={() => {
+                setShowRoomSelector(true);
+              }}>
+                <AddCircleOutline/>
+              </IconButton>
             </Tooltip>
           </div>
           <AssignmentsTable cleaner={cleaner} setSnackOpen={setSnackOpen} setSnackText={setSnackText}/>
@@ -168,6 +174,10 @@ const CleanerDetailsPage = () => {
       </Dialog>
       {cleanerLoaded &&
       <EditCleanerDialog cleaner={cleaner} open={editing} setOpen={setEditing} onSave={saved}/>}
+      <RoomSelector setSnackText={setSnackText} open={showRoomSelector} setSnackOpen={setSnackOpen}
+                    setOpen={setShowRoomSelector} onClose={() => {
+        getData(true);
+      }} cleaner={cleaner}/>
       <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}
                 anchorOrigin={{vertical: "top", horizontal: "center"}}>
         <Alert variant={"filled"} severity="success" onClose={handleSnackClose}>
