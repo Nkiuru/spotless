@@ -1,11 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import './App.scss';
 import {Route, Switch, Redirect} from "react-router-dom";
 import {authenticated as auth, getUser} from '../utils/api';
 import DashboardPage from "../pages/DashboardPage";
 import LoginPage from "../pages/LoginPage";
 import CleanersPage from "../pages/CleanersPage";
-//import PageContainer from "../containers/PageContainer";
 import Toolbar from "../components/Toolbar";
 import {useLocation} from 'react-router-dom';
 import AnalysisPage from "../pages/AnalysisPage";
