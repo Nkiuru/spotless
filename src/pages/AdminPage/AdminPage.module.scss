@@ -1,1 +1,13 @@
 @import "../../vars";
+
+.slider {
+  max-width: 40%;
+  margin-top: 32px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}

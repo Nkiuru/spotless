@@ -18,13 +18,7 @@ import AdminPage from "../pages/AdminPage";
 
 function App() {
   const location = useLocation();
-  const [user, setUser] = useState('');
-
-  useEffect(() => {
-    const u = getUser();
-    setUser(u);
-  }, []);
-
+  const user = getUser();
   const login = () => (auth() ? <Redirect to="/dashboard"/> : <LoginPage/>);
   const dash = () => (!auth() ? <Redirect to="/"/> : <DashboardPage/>);
   const cleaner = () => (!auth() ? <Redirect to="/"/> : <CleanerDetailsPage/>);

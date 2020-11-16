@@ -165,6 +165,10 @@ export const editCleaner = async (cleaner) => {
   }));
 }
 
+export const setSimulation = async (speed) => {
+  return doGetRequest('simulator', speed);
+}
+
 const doGetRequest = async (url, params) => {
   const requestURL = BASE_URL + url + (params || '');
   console.log(requestURL);
