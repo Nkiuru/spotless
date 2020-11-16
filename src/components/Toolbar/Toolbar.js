@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {AppBar, Typography, Tabs, Toolbar as MaterialToolbar, Tab, IconButton} from "@material-ui/core";
 import {Link, useLocation, matchPath, useHistory} from 'react-router-dom';
 import {withStyles} from "@material-ui/core/styles";
@@ -8,10 +8,15 @@ import {
   BusinessRounded,
   DashboardRounded, ExitToApp,
   FormatListBulletedRounded,
-  PeopleRounded
+  PeopleRounded, Settings
 } from "@material-ui/icons";
 import Tooltip from "@material-ui/core/Tooltip";
-import {logout} from "../../utils/api";
+import {getUser, logout} from "../../utils/api";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import MenuIcon from '@material-ui/icons/Menu';
 
 const NavTabs = withStyles({
   root: {
@@ -43,6 +48,21 @@ const Toolbar = () => {
   const history = useHistory();
   const tabId = 'myTabId';
   const getTabValue = mountTabValueFactory(location, tabId);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [user, setUser] = useState('');
+
+  useEffect(() => {
+    const u = getUser();
+    setUser(u);
+  }, []);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <AppBar position={"static"}>
@@ -75,14 +95,40 @@ const Toolbar = () => {
                value={getTabValue("/analysis")} component={Link} to={"/analysis"}
                disableRipple={true} className={styles.tab}/>
         </NavTabs>
-        <Tooltip title={'Sign out'} color={"secondary"}>
-          <IconButton onClick={() => {
+        <Tooltip title={"Open menu"}>
+          <IconButton aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+            <MenuIcon color={"secondary"}/>
+          </IconButton>
+        </Tooltip>
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          {user.superAdmin &&
+          <MenuItem onClick={() => {
+            handleClose();
+            history.push('/simulator');
+          }}>
+            <ListItemIcon>
+              <Settings fontSize="small" style={{color: '#808080'}}/>
+            </ListItemIcon>
+            <ListItemText primary="Simulator"/>
+          </MenuItem>}
+
+          <MenuItem onClick={() => {
+            handleClose();
             logout();
             history.push('/');
           }}>
-            <ExitToApp/>
-          </IconButton>
-        </Tooltip>
+            <ListItemIcon>
+              <ExitToApp color={"secondary"} fontSize="small"/>
+            </ListItemIcon>
+            <ListItemText primary="Sign out"/>
+          </MenuItem>
+        </Menu>
       </MaterialToolbar>
     </AppBar>
   );

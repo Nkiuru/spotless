@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.scss';
 import {Route, Switch, Redirect} from "react-router-dom";
-import {authenticated as auth} from '../utils/api';
+import {authenticated as auth, getUser} from '../utils/api';
 import DashboardPage from "../pages/DashboardPage";
 import LoginPage from "../pages/LoginPage";
 import CleanersPage from "../pages/CleanersPage";
@@ -14,9 +14,17 @@ import AssignmentsPage from "../pages/AssignmentsPage";
 import RoomDetailsPage from "../pages/RoomDetailsPage";
 import CleanerDetailsPage from "../pages/CleanerDetailsPage";
 import ReportPage from "../pages/ReportPage";
+import AdminPage from "../pages/AdminPage";
 
 function App() {
   const location = useLocation();
+  const [user, setUser] = useState('');
+
+  useEffect(() => {
+    const u = getUser();
+    setUser(u);
+  }, []);
+
   const login = () => (auth() ? <Redirect to="/dashboard"/> : <LoginPage/>);
   const dash = () => (!auth() ? <Redirect to="/"/> : <DashboardPage/>);
   const cleaner = () => (!auth() ? <Redirect to="/"/> : <CleanerDetailsPage/>);
@@ -26,6 +34,7 @@ function App() {
   const room = () => (!auth() ? <Redirect to="/"/> : <RoomDetailsPage/>);
   const analysis = () => (!auth() ? <Redirect to="/"/> : <AnalysisPage/>);
   const report = () => (!auth() ? <Redirect to="/"/> : <ReportPage/>);
+  const admin = () => (!auth() || !user.superAdmin ? <Redirect to="/"/> : <AdminPage/>);
 
   return (
     <div className="App">
@@ -39,6 +48,7 @@ function App() {
         <Route path={"/rooms/:id"} render={room}/>
         <Route path={"/rooms"} render={rooms}/>
         <Route path={"/analysis"} render={analysis}/>
+        <Route path={"/simulator"} render={admin}/>
         <Route path={"/"} render={login}/>
       </Switch>
     </div>
