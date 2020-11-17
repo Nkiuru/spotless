@@ -1,6 +1,8 @@
 import {API_KEY, BASE_URL} from "./constants";
 import {getRoomTypeProp} from "./utils";
 
+export let GLOBAL_HOSPITAL = localStorage.getItem('hospital') || false;
+
 export const authenticated = () => {
   return localStorage.getItem('user') !== null;
 };
@@ -25,6 +27,15 @@ export const authenticate = (username, password) => {
   return true;
 }
 
+export const setGlobalHospital = (hospital) => {
+  if (hospital) {
+    localStorage.setItem('hospital', hospital);
+  } else {
+    localStorage.removeItem('hospital');
+  }
+  GLOBAL_HOSPITAL = hospital;
+}
+
 export const logout = () => {
   localStorage.removeItem('user');
 }
@@ -32,6 +43,7 @@ export const logout = () => {
 
 export const getRooms = async (hospital, floor, showAssigned) => {
   const url = 'rooms';
+  hospital = hospital || GLOBAL_HOSPITAL;
   let params = hospital ? `?hospital_id=${hospital}` : '';
   params += floor ? `?floor_id=${floor}` : '';
   params += showAssigned ? `?assigned_cleaners=1` : '';
@@ -104,7 +116,7 @@ export const createCleaner = async (name, shiftStart, shiftEnd) => {
   }));
 }
 
-export const getReports = async (roomId, cleanerId) => {
+export const getReports = async (roomId, cleanerId, hospital) => {
   let params = roomId ? `?room_id=${roomId}` : '';
   params += cleanerId ? `?cleaner_id=${cleanerId}` : '';
   return doGetRequest('reports', params)

@@ -24,7 +24,7 @@ const RoomsPage = () => {
   const [hospital, setHospital] = useState('');
 
   useEffect(() => {
-    getHospitals('hospital0')
+    getHospitals()
       .then((result) => {
           console.log(result);
           setIsLoaded(true);
