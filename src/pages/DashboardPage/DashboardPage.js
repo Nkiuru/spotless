@@ -46,7 +46,7 @@ const DashboardPage = () => {
   }
 
   const getCleanedRooms = () => {
-    const today = moment().format('YYYY-MM-DD');
+    const today = moment();
     return rooms.filter((room) => {
       if (!room['last_cleaned']) {
         return false;

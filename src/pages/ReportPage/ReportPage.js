@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useLocation} from "react-router-dom";
+import {Link as RouterLink, useLocation} from "react-router-dom";
 import {getHeatmap, getReport} from "../../utils/api";
 import PageContainer from "../../containers/PageContainer";
 import {Typography, Select, Grid} from "@material-ui/core";
@@ -8,10 +8,11 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import styles from './ReportPage.module.scss';
 import {Check, CloseRounded} from "@material-ui/icons";
-import {update_img} from "../../utils/utils";
+import {getVariant, update_img} from "../../utils/utils";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
 import moment from "moment";
+import Link from "@material-ui/core/Link";
 
 const ReportPage = () => {
   const location = useLocation();
@@ -81,7 +82,13 @@ const ReportPage = () => {
         <Grid item xs={6}>
           <div className={styles.row}>
             <Typography variant={"h5"} className={styles.reportInfo}>Cleaner:</Typography>
-            <Typography style={{marginLeft: '4px'}} variant={"h5"}>{report['cleaner_name']}</Typography>
+            <Link component={RouterLink} color="secondary"
+                  to={{
+                    pathname: `/cleaners/${report['cleaner_id']}`,
+                    state: {id: report['cleaner_id']}
+                  }}>
+              <Typography style={{marginLeft: '4px'}} variant={"h5"}>{report['cleaner_name']}</Typography>
+            </Link>
           </div>
           <div className={styles.row}>
             <Typography variant={"h5"} className={styles.reportInfo}>Room:</Typography>
@@ -89,11 +96,21 @@ const ReportPage = () => {
           </div>
           <div className={styles.row}>
             <Typography variant={"h5"} className={styles.reportInfo}>Cleaning time:</Typography>
-            <Typography style={{marginLeft: '4px'}} variant={"h5"}>{moment(report['cleaning_time']).format('YYYY-MM-DD HH:mm:ss')}</Typography>
+            <Typography style={{marginLeft: '4px'}}
+                        variant={"h5"}>{moment(report['cleaning_time']).format('YYYY-MM-DD HH:mm:ss')}</Typography>
           </div>
           <div className={styles.row}>
             <Typography variant={"h5"} className={styles.reportInfo}>Cleaning successful:</Typography>
             <div style={{marginLeft: 4, height: 35}}>{getIcon(report['cleaning_succesful'])}</div>
+          </div>
+          <div className={styles.row}>
+            <Typography variant={"h5"} className={styles.reportInfo}>Overview:</Typography>
+            <Typography style={{marginLeft: '4px'}} variant={"h5"}>{report.overview}</Typography>
+          </div>
+          <div className={styles.row}>
+            <Typography variant={"h5"} className={styles.reportInfo}>Contamination index:</Typography>
+            <Typography style={{marginLeft: '4px'}} variant={"h5"}
+                        className={styles[getVariant(report['contamination_index'] || 75)]}>{report['contamination_index'] || 75}</Typography>
           </div>
         </Grid>
       </Grid>

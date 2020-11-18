@@ -174,11 +174,12 @@ const CleanersTable = ({cleaners, rooms}) => {
     const assignedRooms = rooms.filter((room) => {
       return room['assigned_cleaners'].length > 0 && room['assigned_cleaners'][0]['_id'] === cleaner['_id'];
     });
+    const today = moment();
     const numCleaned = assignedRooms.filter((room) => {
       if (!room['last_cleaned']) {
         return false;
       }
-      return moment(room['last_cleaned'], 'YYYY-MM-DD').isSame(moment().format('YYYY-MM-DD'));
+      return moment(room['last_cleaned']).isSame(today, 'date');
     }).length;
     return (
       <Tooltip title={`${numCleaned}/${assignedRooms.length}`} placement={"right"}>
