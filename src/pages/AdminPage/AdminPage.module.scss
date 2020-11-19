@@ -1,7 +1,7 @@
 @import "../../vars";
 
 .slider {
-  max-width: 40%;
+  max-width: 50%;
   margin-top: 32px;
 }
 
@@ -10,4 +10,26 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+}
+
+.divider {
+  margin: 32px 0;
+}
+
+.semiBold {
+  font-weight: $semi-bold;
+}
+
+.medium {
+  font-weight: $medium;
+}
+
+.card {
+  width: 40%;
+  border-radius: 20px;
+  flex: 1;
+}
+
+.cardContent {
+  margin: 32px;
 }

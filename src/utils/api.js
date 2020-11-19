@@ -178,8 +178,17 @@ export const editCleaner = async (cleaner) => {
   }));
 }
 
+export const getSimulatorSettings = async () => {
+  return doGetRequest('simulator/settings');
+}
+
 export const setSimulation = async (speed) => {
-  return doGetRequest('simulator', speed);
+  console.log(speed)
+  return doPutRequest('simulator/settings', JSON.stringify({'simulator_speed': speed}));
+}
+
+export const resetSimulation = async () => {
+  return doGetRequest('simulator/clear');
 }
 
 export const createRoom = async (room) => {
@@ -266,6 +275,7 @@ const doPutRequest = async (url, params) => {
     },
     body: params
   });
+  console.log(response)
   if (response.ok) {
     return response.json();
   } else {
