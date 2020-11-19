@@ -68,7 +68,6 @@ const CleanersPage = () => {
       </div>
       {isLoaded ? <CleanersTable cleaners={cleaners} rooms={rooms}/> :
         <CircularProgress color="secondary" style={{margin: '16px auto'}}/>}
-      <Typography variant={"h5"} className={styles.bold} style={{marginTop: 24}}>Unassigned rooms</Typography>
       <AddCleanerDialog open={open} setOpen={setOpen} setIsLoaded={setIsLoaded} setSnackOpen={setSnackOpen}/>
       <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}
                 anchorOrigin={{vertical: "top", horizontal: "center"}}>

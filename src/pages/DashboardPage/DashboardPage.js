@@ -4,7 +4,7 @@ import PageContainer from "../../containers/PageContainer";
 import styles from './DashboardPage.module.scss';
 import Grid from "@material-ui/core/Grid";
 import KeyStat from "./KeyStat";
-import {getHospitals, getRooms, getUser, GLOBAL_HOSPITAL, setGlobalHospital} from "../../utils/api";
+import {getHospitals, getReports, getRooms, getUser, GLOBAL_HOSPITAL, setGlobalHospital} from "../../utils/api";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import moment from "moment";
 import {getVariant} from "../../utils/utils";
@@ -13,10 +13,12 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import Alerts from "./Alerts";
 
 const DashboardPage = () => {
   const [user, setUser] = useState('');
   const [rooms, setRooms] = useState([]);
+  const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [hospitals, setHospitals] = useState([]);
   const [hospital, setHospital] = useState(GLOBAL_HOSPITAL);
@@ -26,9 +28,10 @@ const DashboardPage = () => {
     const u = getUser();
     setUser(u);
     setLoading(true);
-    getRooms()
+    Promise.all([getRooms(), getReports()])
       .then((result) => {
-        setRooms(result);
+        setRooms(result[0]);
+        setReports(result[1]);
         setLoading(false);
       });
     if (!hospitalSet) {
@@ -67,7 +70,7 @@ const DashboardPage = () => {
         contaminations.push(val);
       }
     })
-    return contaminations.reduce((a, b) => (a + b)) / contaminations.length;
+    return (contaminations.reduce((a, b) => (a + b)) / contaminations.length).toFixed(1);
   }
 
   const getGreenRooms = () => {
@@ -106,7 +109,7 @@ const DashboardPage = () => {
       <Grid container spacing={6}>
         <Grid item xs={5}>
           <Typography variant={"h5"} className={styles.semiBold}>Alerts</Typography>
-          <Typography variant={"h6"} style={{marginTop: 16}} className={styles.semiBold}>No active alerts</Typography>
+          <Alerts reports={reports} loading={loading}/>
         </Grid>
         <Grid item xs className={styles.grid}>
           <Grid container spacing={4}>
@@ -130,7 +133,7 @@ const DashboardPage = () => {
           </Grid>
         </Grid>
       </Grid>
-      <ReportsPerDay/>
+      <ReportsPerDay loading={loading} reports={reports}/>
     </PageContainer>
   )
 }

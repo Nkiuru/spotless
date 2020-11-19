@@ -1,6 +1,8 @@
 export const API_KEY = 'zL43mXgXk5xa7YFRBVZscbLnGFaqVh24q5G6fhGjmAv532FAVBRtnuCJpwXWXnhw';
 export const BASE_URL = 'https://cleaner-app-api.azurewebsites.net/api/';
 
+export const UNCLEANED = 'Uncleaned due to some reason';
+
 export const ROOM_TYPES = Object.freeze({
   OFFICE: {
     frequency: 1,
