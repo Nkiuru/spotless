@@ -110,7 +110,7 @@ const ReportPage = () => {
           <div className={styles.row}>
             <Typography variant={"h5"} className={styles.reportInfo}>Contamination index:</Typography>
             <Typography style={{marginLeft: '4px'}} variant={"h5"}
-                        className={styles[getVariant(report['contamination_index'] || 75)]}>{report['contamination_index'] || 75}</Typography>
+                        className={styles[getVariant(report['contamination_index'])]}>{report['contamination_index']}</Typography>
           </div>
         </Grid>
       </Grid>
