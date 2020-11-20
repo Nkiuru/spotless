@@ -6,7 +6,6 @@ import {
   Paper,
   Table,
   TableContainer,
-  TableHead,
   TableRow,
   Typography,
   Tooltip,
@@ -14,7 +13,7 @@ import {
   DialogTitle,
   DialogContent,
   Button,
-  DialogActions,
+  DialogActions, TablePagination,
 } from "@material-ui/core";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
@@ -30,6 +29,9 @@ import Alert from "@material-ui/lab/Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import ShiftPicker from "../../components/ShiftPicker/ShiftPicker";
 import moment from "moment";
+import EnhancedTableHead from "../../components/RoomSelector/EnhancedTableHead";
+import {makeStyles} from "@material-ui/core/styles";
+import {getComparator, stableSort} from "../../utils/tableUtils";
 
 const CleanersPage = () => {
   const [cleaners, setCleaners] = useState([]);
@@ -158,8 +160,27 @@ const AddCleanerDialog = ({open, setOpen, setIsLoaded, setSnackOpen}) => {
   );
 }
 
+const useStyles = makeStyles((theme) => ({
+  visuallyHidden: {
+    border: 0,
+    clip: 'rect(0 0 0 0)',
+    height: 1,
+    margin: -1,
+    overflow: 'hidden',
+    padding: 0,
+    position: 'absolute',
+    top: 20,
+    width: 1,
+  },
+}));
+
 const CleanersTable = ({cleaners, rooms}) => {
   const history = useHistory();
+  const classes = useStyles();
+  const [order, setOrder] = React.useState('asc');
+  const [orderBy, setOrderBy] = React.useState('name');
+  const [page, setPage] = React.useState(0);
+  const [cleanersPerPage, setCleanersPerPage] = React.useState(15);
 
   const viewCleaner = (cleaner) => {
     const id = cleaner['_id'];
@@ -168,6 +189,21 @@ const CleanersTable = ({cleaners, rooms}) => {
       state: {id}
     })
   }
+
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setCleanersPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   const getCleaningProgress = (cleaner) => {
     const assignedRooms = rooms.filter((room) => {
@@ -180,9 +216,10 @@ const CleanersTable = ({cleaners, rooms}) => {
       }
       return moment(room['last_cleaned']).isSame(today, 'date');
     }).length;
+    cleaner['cleaning_progress'] = Math.round(((numCleaned / assignedRooms.length) * 100)) || 0 + '%';
     return (
       <Tooltip title={`${numCleaned}/${assignedRooms.length}`} placement={"right"}>
-        <Typography>{Math.round(((numCleaned / assignedRooms.length) * 100)) || 0} %</Typography>
+        <Typography>{cleaner['cleaning_progress']}</Typography>
       </Tooltip>
     )
   }
@@ -191,42 +228,63 @@ const CleanersTable = ({cleaners, rooms}) => {
     const shiftStart = moment(cleaner['shift_start'], 'HH:mm');
     const shiftEnd = moment(cleaner['shift_end'], 'HH:mm');
     const isBetween = moment().isBetween(shiftStart, shiftEnd);
-    return isBetween ? '' : 'Unavailable';
+    cleaner.status = isBetween ? '' : 'Unavailable';
+    return cleaner.status;
   }
-
+  const headCells = [
+    {id: 'name', numeric: false, disablePadding: false, label: 'Name'},
+    {id: 'shift_start', numeric: true, disablePadding: false, label: 'Shift start'},
+    {id: 'shift_end', numeric: true, disablePadding: false, label: 'Shift end'},
+    {id: 'cleaning_progress', numeric: true, disablePadding: false, label: 'Cleaning progress'},
+    {id: 'current_location', numeric: true, disablePadding: false, label: 'Current location'},
+    {id: 'status', numeric: true, disablePadding: false, label: 'Status'},
+    {id: 'action', numeric: false, disablePadding: false, label: 'Action'},
+  ];
   return (
-    <TableContainer component={Paper}>
-      <Table size={'small'}>
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell align="right">Shift start</TableCell>
-            <TableCell align="right">Shift end</TableCell>
-            <TableCell align="right">Cleaning progress</TableCell>
-            <TableCell align="right">Current location</TableCell>
-            <TableCell align="right">Status</TableCell>
-            <TableCell>Action</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {cleaners.map((row) => (
-            <TableRow key={row['_id']}>
-              <TableCell component="th" scope="row">{row.name}</TableCell>
-              <TableCell align="right">{row['shift_start']}</TableCell>
-              <TableCell align="right">{row['shift_end']}</TableCell>
-              <TableCell align="right">{getCleaningProgress(row)}</TableCell>
-              <TableCell align="right">{}</TableCell>
-              <TableCell align="right">{getStatus(row)}</TableCell>
-              <TableCell>
-                <IconButton size={"small"} color={"secondary"} onClick={() => {
-                  viewCleaner(row)
-                }}><VisibilityOutlined/></IconButton>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <Paper>
+      <TableContainer>
+        <Table size={'small'}>
+          <EnhancedTableHead classes={classes} onRequestSort={handleRequestSort} order={order} orderBy={orderBy}
+                             headCells={headCells}/>
+          <TableBody>
+            {stableSort(cleaners, getComparator(order, orderBy))
+              .slice(page * cleanersPerPage, page * cleanersPerPage + cleanersPerPage)
+              .map((row, index) => {
+                const labelId = `enhanced-table-checkbox-${index}`;
+                return (
+                  <TableRow
+                    hover
+                    tabIndex={-1}
+                    key={labelId}
+                    style={{height: '33px'}}
+                  >
+                    <TableCell component="th" scope="row">{row.name}</TableCell>
+                    <TableCell align="right">{row['shift_start']}</TableCell>
+                    <TableCell align="right">{row['shift_end']}</TableCell>
+                    <TableCell align="right">{getCleaningProgress(row)}</TableCell>
+                    <TableCell align="right">{}</TableCell>
+                    <TableCell align="right">{getStatus(row)}</TableCell>
+                    <TableCell>
+                      <IconButton size={"small"} color={"secondary"} onClick={() => {
+                        viewCleaner(row)
+                      }}><VisibilityOutlined/></IconButton>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 15, 25, 50]}
+        component="div"
+        count={cleaners.length}
+        rowsPerPage={cleanersPerPage}
+        page={page}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
+      />
+    </Paper>
   );
 }
 
