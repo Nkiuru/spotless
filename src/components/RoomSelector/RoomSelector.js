@@ -11,9 +11,9 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableContainer, TableHead,
+  TableContainer,
   TablePagination,
-  TableRow, TableSortLabel, Toolbar, Tooltip, Typography
+  TableRow, Toolbar, Tooltip, Typography
 } from "@material-ui/core";
 import {getComparator, handleClick, stableSort} from "../../utils/tableUtils";
 import {getRoomTypeProp, getStatus, mergeCleaners} from "../../utils/utils";
@@ -245,6 +245,7 @@ const RoomSelector = ({cleaner, onClose, open, setOpen, setSnackOpen, setSnackTe
                     onRequestSort={handleRequestSort}
                     rowCount={rooms.length}
                     headCells={headCells}
+                    type={"selection"}
                   />
                   <TableBody>
                     {stableSort(rooms, getComparator(order, orderBy))

@@ -12,7 +12,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import {update_img} from "../../utils/utils";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
-import heatmap from "../../assets/heatmap2.png";
 
 const RoomDetailsPage = () => {
   const location = useLocation();
@@ -51,8 +50,18 @@ const RoomDetailsPage = () => {
         .then((response) => {
           const aux = document.getElementById('aux');
           const canvas = document.getElementById('main');
+          let scaler = 1n;
+          if (room['is_simulated']) {
+            if (room['contamination_index'] >= 60) {
+              scaler = 20n;
+            } else if (room['contamination_index'] >= 30) {
+              scaler = 10n;
+            } else {
+              scaler = 5n;
+            }
+          }
           // eslint-disable-next-line no-undef
-          update_img(response, aux, canvas, 1n);
+          update_img(response, aux, canvas, scaler);
         })
         .catch((err) => {
           console.log(err.message)

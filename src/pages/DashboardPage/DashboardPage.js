@@ -75,15 +75,15 @@ const DashboardPage = () => {
     const contaminations = [];
     rooms.forEach((room) => {
       const val = room['contamination_index'];
-      if (val > 100) {
-        contaminations.push(100);
+      if (val > 150) {
+        contaminations.push(150);
       } else if (val < 0) {
         contaminations.push(0);
       } else {
         contaminations.push(val);
       }
     });
-    return (contaminations.reduce((a, b) => (a + b)) / contaminations.length).toFixed(1);
+    return Math.round((contaminations.reduce((a, b) => (a + b)) / contaminations.length));
   }
 
   const getGreenRooms = () => {
@@ -144,7 +144,7 @@ const DashboardPage = () => {
             </Grid>
             <Grid item>
               <KeyStat subtitle={"Average contamination index"}
-                       value={loading ? <CircularProgress color={"secondary"}/> : getContaminationIndex()}
+                       value={loading ? <CircularProgress color={"secondary"}/> : getContaminationIndex() + '%'}
                        color={!loading && getColor()}/>
             </Grid>
             <Grid item>

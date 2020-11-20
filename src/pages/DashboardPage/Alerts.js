@@ -42,7 +42,7 @@ const Alerts = ({reports, loading}) => {
             </div>
           ))}
           {filtered.length === 0 &&
-          <Typography variant={"h6"} style={{marginTop: 16}} className={styles.semiBold}>No active alerts</Typography>
+          <Typography variant={"h6"} style={{marginTop: 16}} className={styles.semiBold}>No recent alerts</Typography>
           }
         </>
       }

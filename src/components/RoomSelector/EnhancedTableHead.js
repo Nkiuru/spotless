@@ -56,7 +56,7 @@ EnhancedTableHead.propTypes = {
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number,
   headCells: PropTypes.array.isRequired,
-  type: PropTypes.oneOf(['noSelection'])
+  type: PropTypes.oneOf(['noSelection', 'selection'])
 };
 
 export default EnhancedTableHead;

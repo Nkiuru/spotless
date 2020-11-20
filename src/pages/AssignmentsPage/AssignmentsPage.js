@@ -99,7 +99,7 @@ const EnhancedTableToolbar = (props) => {
           </Typography>
         ) : (
           <Typography className={styles.title} variant="h5" id="tableTitle" component="div" style={{fontWeight: '600'}}>
-            Assign rooms to cleaner
+            Select rows to assign to cleaner
           </Typography>
         )}
         {numSelected > 0 ? (
@@ -286,6 +286,7 @@ export default function AssignmentsPage() {
                 onRequestSort={handleRequestSort}
                 rowCount={rooms.length}
                 headCells={headCells}
+                type={"selection"}
               />
               <TableBody>
                 {stableSort(rooms, getComparator(order, orderBy))
