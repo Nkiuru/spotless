@@ -32,7 +32,7 @@ import Alert from "@material-ui/lab/Alert";
 import {AssignCleanerDialog} from "./AssignCleanerDialog";
 import Link from "@material-ui/core/Link";
 import {Link as RouterLink} from 'react-router-dom';
-import {getRoomTypeProp, getStatus} from "../../utils/utils";
+import {getRoomTypeProp, getStatus, mergeCleaners} from "../../utils/utils";
 import TableFilters from "./TableFilters";
 
 const headCells = [
@@ -260,18 +260,7 @@ export default function AssignmentsPage() {
     if (data) {
       getRooms(null, null, true)
         .then((rooms) => {
-            rooms.forEach((room) => {
-              room.status = room['contamination_index'];
-              const cleaners = room['assigned_cleaners'];
-              const cleaner = cleaners.length > 0 && cleaners[0];
-              if (cleaner) {
-                room.cleaner = cleaner;
-                room['cleaner_name'] = cleaner.name;
-              } else {
-                room['cleaner_name'] = '-';
-              }
-            });
-            console.log(rooms)
+            rooms = mergeCleaners(rooms);
             setRooms(rooms);
             setOrigRooms(rooms);
             setIsLoaded(true);

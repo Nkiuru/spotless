@@ -16,7 +16,7 @@ import {
   TableRow, TableSortLabel, Toolbar, Tooltip, Typography
 } from "@material-ui/core";
 import {getComparator, handleClick, stableSort} from "../../utils/tableUtils";
-import {getRoomTypeProp, getStatus} from "../../utils/utils";
+import {getRoomTypeProp, getStatus, mergeCleaners} from "../../utils/utils";
 import {FilterList, VisibilityOutlined} from "@material-ui/icons";
 import {useHistory} from "react-router-dom";
 import moment from "moment";
@@ -28,7 +28,7 @@ const headCells = [
   {id: 'name', numeric: false, disablePadding: true, label: 'Name'},
   {id: 'building', numeric: true, disablePadding: false, label: 'Building'},
   {id: 'floor', numeric: true, disablePadding: false, label: 'Floor'},
-  {id: 'cleaner', numeric: false, disablePadding: false, label: 'Assigned Cleaner'},
+  {id: 'cleaner_name', numeric: false, disablePadding: false, label: 'Assigned Cleaner'},
   {id: 'status', numeric: false, disablePadding: false, label: 'Status'},
   {id: 'contamination_index', numeric: true, disablePadding: false, label: 'Contamination index'},
   {id: 'room_type', numeric: false, disablePadding: false, label: 'Room type'},
@@ -212,6 +212,7 @@ const RoomSelector = ({cleaner, onClose, open, setOpen, setSnackOpen, setSnackTe
   useEffect(() => {
     getRooms(null, null, true)
       .then((rooms) => {
+          rooms = mergeCleaners(rooms);
           console.log(rooms);
           setRooms(rooms);
           setOrigRooms(rooms);
@@ -327,7 +328,7 @@ const RoomSelector = ({cleaner, onClose, open, setOpen, setSnackOpen, setSnackTe
                             <TableCell align="right">{row.floor}</TableCell>
                             <TableCell>{getCleaner(row)}</TableCell>
                             <TableCell>{getStatus(row['contamination_index'])}</TableCell>
-                            <TableCell align="right">{row['contamination_index']}</TableCell>
+                            <TableCell align="right">{row['contamination_index'].toFixed(2)}</TableCell>
                             <TableCell>{getRoomTypeProp(row, 'displayName')}</TableCell>
                             <TableCell align="right">{getDate(row['last_cleaned'])}</TableCell>
                             <TableCell align="right">

@@ -42,6 +42,21 @@ export const getVariantColor = (contamination) => {
   return variant;
 }
 
+export const mergeCleaners = (rooms) => {
+  return rooms.map((room) => {
+    room.status = room['contamination_index'];
+    const cleaners = room['assigned_cleaners'];
+    const cleaner = cleaners.length > 0 && cleaners[0];
+    if (cleaner) {
+      room.cleaner = cleaner;
+      room['cleaner_name'] = cleaner.name;
+    } else {
+      room['cleaner_name'] = '-';
+    }
+    return room;
+  });
+}
+
 function convert64to8(array, scaler) {
   let min, max, pix;
   // eslint-disable-next-line no-undef
