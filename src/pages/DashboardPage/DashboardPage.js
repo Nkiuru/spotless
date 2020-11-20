@@ -137,21 +137,21 @@ const DashboardPage = () => {
           <Alerts reports={reports} loading={loading}/>
         </Grid>
         <Grid item xs className={styles.grid} style={{marginTop: 48}}>
-          <Grid container spacing={4}>
-            <Grid item xs>
+          <Grid container spacing={4} justify={"space-between"}>
+            <Grid item>
               <KeyStat subtitle={"Rooms cleaned today"}
                        value={loading ? <CircularProgress color={"secondary"}/> : getCleanedRooms()} color={"#F2C94C"}/>
             </Grid>
-            <Grid item xs>
+            <Grid item>
               <KeyStat subtitle={"Average contamination index"}
                        value={loading ? <CircularProgress color={"secondary"}/> : getContaminationIndex()}
                        color={!loading && getColor()}/>
             </Grid>
-            <Grid item xs>
+            <Grid item>
               <KeyStat subtitle={"Green rooms"}
                        value={loading ? <CircularProgress color={"secondary"}/> : getGreenRooms()} color={"#27AE60"}/>
             </Grid>
-            <Grid item xs>
+            <Grid item>
               <KeyStat subtitle={"Red rooms"} value={loading ? <CircularProgress color={"secondary"}/> : getRedRooms()}
                        color={"#EB5757"}/>
             </Grid>
