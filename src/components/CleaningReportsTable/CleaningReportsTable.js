@@ -4,9 +4,8 @@ import {
   Paper,
   Table,
   TableContainer,
-  TableHead, TablePagination,
+  TablePagination,
   TableRow,
-  TableSortLabel,
   Typography
 } from "@material-ui/core";
 import TableCell from "@material-ui/core/TableCell";
@@ -19,49 +18,29 @@ import Link from "@material-ui/core/Link";
 import PropTypes from 'prop-types';
 import {getComparator, stableSort} from "../../utils/tableUtils";
 import {makeStyles} from "@material-ui/core/styles";
+import EnhancedTableHead from "../RoomSelector/EnhancedTableHead";
 
 function ReportsTableHead(props) {
   const {classes, order, orderBy, onRequestSort, type} = props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
   const headCells = [
     {id: 'cleaning_time', numeric: true, disablePadding: false, label: 'Cleaning time'},
     {id: 'cleaning_successful', numeric: false, disablePadding: false, label: 'Cleaning successful'},
     {id: 'action', numeric: true, disablePadding: false, label: 'Action'},
   ];
   if (type === 'room') {
-    headCells.unshift({id: 'room', numeric: false, disablePadding: false, label: 'Room'});
-  } else {
     headCells.unshift({id: 'cleaner', numeric: false, disablePadding: false, label: 'Cleaner'});
+  } else {
+    headCells.unshift({id: 'room', numeric: false, disablePadding: false, label: 'Room'});
   }
 
   return (
-    <TableHead>
-      <TableRow>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'default'}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <span className={classes.visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </span>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
+    <EnhancedTableHead
+      classes={classes}
+      order={order}
+      orderBy={orderBy}
+      onRequestSort={onRequestSort}
+      headCells={headCells}
+    />
   );
 }
 

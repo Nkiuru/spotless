@@ -7,10 +7,8 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TablePagination,
   TableRow,
-  TableSortLabel,
   Toolbar,
   Typography,
   Paper,
@@ -34,6 +32,7 @@ import Link from "@material-ui/core/Link";
 import {Link as RouterLink} from 'react-router-dom';
 import {getRoomTypeProp, getStatus, mergeCleaners} from "../../utils/utils";
 import TableFilters from "./TableFilters";
+import EnhancedTableHead from "../../components/RoomSelector/EnhancedTableHead";
 
 const headCells = [
   {id: 'name', numeric: false, disablePadding: true, label: 'Name'},
@@ -46,59 +45,6 @@ const headCells = [
   {id: 'last_cleaned', numeric: true, disablePadding: false, label: 'Last cleaned'},
   {id: 'action', numeric: true, disablePadding: false, label: 'Action'},
 ];
-
-function EnhancedTableHead(props) {
-  const {classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort} = props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
-
-  return (
-    <TableHead>
-      <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{'aria-label': 'select all desserts'}}
-          />
-        </TableCell>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'default'}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <span className={classes.visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </span>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-}
-
-EnhancedTableHead.propTypes = {
-  classes: PropTypes.object.isRequired,
-  numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-};
 
 const useToolbarStyles = makeStyles((theme) => ({
   root: {
@@ -339,6 +285,7 @@ export default function AssignmentsPage() {
                 onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
                 rowCount={rooms.length}
+                headCells={headCells}
               />
               <TableBody>
                 {stableSort(rooms, getComparator(order, orderBy))
