@@ -63,7 +63,6 @@ const DashboardPage = () => {
 
   const getContaminationIndex = () => {
     const contaminations = [];
-    console.log(rooms);
     rooms.forEach((room) => {
       const val = room['contamination_index'];
       if (val > 100) {
