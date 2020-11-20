@@ -2,6 +2,8 @@ import {API_KEY, BASE_URL} from "./constants";
 import {getRoomTypeProp} from "./utils";
 
 export let GLOBAL_HOSPITAL = localStorage.getItem('hospital') || false;
+export let GLOBAL_HOSPITAL_NAME = localStorage.getItem('hospital_name') || false;
+
 
 export const authenticated = () => {
   return localStorage.getItem('user') !== null;
@@ -36,17 +38,37 @@ export const setGlobalHospital = (hospital) => {
   GLOBAL_HOSPITAL = hospital;
 }
 
+export const setGlobalHospitalName = (hospital) => {
+  if (hospital) {
+    localStorage.setItem('hospital_name', hospital);
+  } else {
+    localStorage.removeItem('hospital_name');
+  }
+  GLOBAL_HOSPITAL_NAME = hospital;
+}
+
 export const logout = () => {
   localStorage.removeItem('user');
+}
+
+const addParam = (property, params, parameter) => {
+  let newParams = params;
+  if (params.length > 0 && parameter) {
+    newParams += `&${property}=${parameter}`;
+  } else if (parameter) {
+    newParams += `?${property}=${parameter}`;
+  }
+  return newParams;
 }
 
 
 export const getRooms = async (hospital, floor, showAssigned) => {
   const url = 'rooms';
   hospital = hospital || GLOBAL_HOSPITAL;
-  let params = hospital ? `?hospital_id=${hospital}` : '';
-  params += floor ? `?floor_id=${floor}` : '';
-  params += showAssigned ? `?assigned_cleaners=1` : '';
+  let params = addParam('hospital_id', '', hospital);
+  params = addParam('floor', params, floor);
+  showAssigned = showAssigned ? 1 : 0;
+  params = addParam('assigned_cleaners', params, showAssigned);
   return doGetRequest(url, params);
 }
 
@@ -117,8 +139,10 @@ export const createCleaner = async (name, shiftStart, shiftEnd) => {
 }
 
 export const getReports = async (roomId, cleanerId, hospital) => {
-  let params = roomId ? `?room_id=${roomId}` : '';
-  params += cleanerId ? `?cleaner_id=${cleanerId}` : '';
+  hospital = hospital || GLOBAL_HOSPITAL_NAME;
+  let params = addParam('room_id', '', roomId);
+  params = addParam('cleaner_id', params, cleanerId);
+  params = addParam('hospital_name', params, hospital);
   return doGetRequest('reports', params)
 }
 

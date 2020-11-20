@@ -4,7 +4,15 @@ import PageContainer from "../../containers/PageContainer";
 import styles from './DashboardPage.module.scss';
 import Grid from "@material-ui/core/Grid";
 import KeyStat from "./KeyStat";
-import {getHospitals, getReports, getRooms, getUser, GLOBAL_HOSPITAL, setGlobalHospital} from "../../utils/api";
+import {
+  getHospitals,
+  getReports,
+  getRooms,
+  getUser,
+  GLOBAL_HOSPITAL,
+  setGlobalHospital,
+  setGlobalHospitalName
+} from "../../utils/api";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import moment from "moment";
 import {getStatus, getVariant, getVariantColor} from "../../utils/utils";
@@ -48,6 +56,8 @@ const DashboardPage = () => {
   const hospitalSelected = (event) => {
     setHospital(event.target.value);
     setGlobalHospital(event.target.value);
+    const hospital = hospitals.find((x) => x['_id'] === event.target.value);
+    setGlobalHospitalName(hospital ? hospital.name : false);
     setHospitalSet(!hospitalSet);
   }
 
