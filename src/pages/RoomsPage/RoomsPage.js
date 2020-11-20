@@ -59,7 +59,7 @@ const RoomsPage = () => {
           (
             <FormControl variant={'outlined'} style={{minWidth: '320px', margin: '8px'}}>
               <InputLabel id="demo-simple-select-outlined-label">Select hospital</InputLabel>
-              <Select label="Select Hospital" onChange={hospitalSelected} value={hospital}>
+              <Select label="Select Hospital" onChange={hospitalSelected} value={hospital} style={{textAlign: "start"}}>
                 <MenuItem value={{}}>
                   <em>None</em>
                 </MenuItem>

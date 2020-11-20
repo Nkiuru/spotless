@@ -39,7 +39,7 @@ const headCells = [
   {id: 'name', numeric: false, disablePadding: true, label: 'Name'},
   {id: 'building', numeric: true, disablePadding: false, label: 'Building'},
   {id: 'floor', numeric: true, disablePadding: false, label: 'Floor'},
-  {id: 'cleaner', numeric: false, disablePadding: false, label: 'Assigned Cleaner'},
+  {id: 'cleaner_name', numeric: false, disablePadding: false, label: 'Assigned Cleaner'},
   {id: 'status', numeric: false, disablePadding: false, label: 'Status'},
   {id: 'contamination_index', numeric: true, disablePadding: false, label: 'Contamination index'},
   {id: 'room_type', numeric: false, disablePadding: false, label: 'Room type'},
@@ -124,7 +124,7 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
-  const {numSelected, selected, setSelected, setSnackOpen, setSnackText, getData, rooms, setRooms } = props;
+  const {numSelected, selected, setSelected, setSnackOpen, setSnackText, getData, rooms, setRooms} = props;
   const [open, setOpen] = React.useState(false);
   const [filter, showFilters] = React.useState(false);
   const selectedWithCleaner = selected.filter((room) => {
@@ -260,7 +260,18 @@ export default function AssignmentsPage() {
     if (data) {
       getRooms(null, null, true)
         .then((rooms) => {
-            console.log(rooms);
+            rooms.forEach((room) => {
+              room.status = room['contamination_index'];
+              const cleaners = room['assigned_cleaners'];
+              const cleaner = cleaners.length > 0 && cleaners[0];
+              if (cleaner) {
+                room.cleaner = cleaner;
+                room['cleaner_name'] = cleaner.name;
+              } else {
+                room['cleaner_name'] = '-';
+              }
+            });
+            console.log(rooms)
             setRooms(rooms);
             setOrigRooms(rooms);
             setIsLoaded(true);
@@ -303,12 +314,11 @@ export default function AssignmentsPage() {
     setSnackOpen(false);
   };
 
-  const getCleaner = (room) => {
-    const cleaners = room['assigned_cleaners'];
-    const cleaner = cleaners.length > 0 && cleaners[0];
-    if (!cleaner) {
-      return '-';
+  const getCleaner = (row) => {
+    if (!row.cleaner) {
+      return row['cleaner_name'];
     }
+    const cleaner = row.cleaner;
     return (<Link component={RouterLink} color="secondary"
                   to={{
                     pathname: `/cleaners/${cleaner['_id']}`,
@@ -323,7 +333,8 @@ export default function AssignmentsPage() {
       {isLoaded ?
         <Paper className={classes.paper}>
           <EnhancedTableToolbar numSelected={selected.length} selected={selected} setSnackOpen={setSnackOpen}
-                                setSelected={setSelected} setSnackText={setSnackText} getData={getData} rooms={origRooms} setRooms={setRooms}/>
+                                setSelected={setSelected} setSnackText={setSnackText} getData={getData}
+                                rooms={origRooms} setRooms={setRooms}/>
           <TableContainer>
             <Table
               className={classes.table}

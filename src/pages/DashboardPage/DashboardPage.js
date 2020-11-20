@@ -94,7 +94,7 @@ const DashboardPage = () => {
 
   return (
     <PageContainer style={{textAlign: 'start'}}>
-      <Grid container direction={"row"} justify={"space-between"} alignItems={"center"} style={{marginBottom: '32px'}}>
+      <Grid container direction={"row"} justify={"space-between"} alignItems={"center"}>
         <Grid item style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
           <Typography variant={"h4"}>Hello {user && user.username}!</Typography>
           <Tooltip title={"Refresh"}>
@@ -126,7 +126,7 @@ const DashboardPage = () => {
           <Typography variant={"h5"} className={styles.semiBold}>Alerts</Typography>
           <Alerts reports={reports} loading={loading}/>
         </Grid>
-        <Grid item xs className={styles.grid}>
+        <Grid item xs className={styles.grid} style={{marginTop: 48}}>
           <Grid container spacing={4}>
             <Grid item xs>
               <KeyStat subtitle={"Rooms cleaned today"}

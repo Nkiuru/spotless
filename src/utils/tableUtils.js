@@ -1,13 +1,24 @@
 export function descendingComparator(a, b, orderBy) {
-  if (a[orderBy] === undefined) return 1;
+  if (typeof a[orderBy] === 'string' && typeof b[orderBy] === 'string') {
+    if (a[orderBy] === undefined) return 1;
+    if (b[orderBy].toUpperCase() < a[orderBy].toUpperCase()) {
+      return -1;
+    }
+    if (b[orderBy].toUpperCase() > a[orderBy].toUpperCase()) {
+      return 1;
+    }
+    return 0;
+  } else {
+    if (a[orderBy] === undefined) return 1;
 
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
+    if (b[orderBy] < a[orderBy]) {
+      return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+      return 1;
+    }
+    return 0;
   }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
 }
 
 export function getComparator(order, orderBy) {
