@@ -7,13 +7,15 @@ import KeyStat from "./KeyStat";
 import {getHospitals, getReports, getRooms, getUser, GLOBAL_HOSPITAL, setGlobalHospital} from "../../utils/api";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import moment from "moment";
-import {getVariant} from "../../utils/utils";
+import {getStatus, getVariant, getVariantColor} from "../../utils/utils";
 import ReportsPerDay from "../../components/Charts/ReportsPerDay";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Alerts from "./Alerts";
+import {IconButton, Tooltip} from "@material-ui/core";
+import {Refresh} from "@material-ui/icons";
 
 const DashboardPage = () => {
   const [user, setUser] = useState('');
@@ -23,6 +25,7 @@ const DashboardPage = () => {
   const [hospitals, setHospitals] = useState([]);
   const [hospital, setHospital] = useState(GLOBAL_HOSPITAL);
   const [hospitalSet, setHospitalSet] = useState(false);
+  const [fetchData, setFetchData] = useState(false);
 
   useEffect(() => {
     const u = getUser();
@@ -40,7 +43,7 @@ const DashboardPage = () => {
           setHospitals(result);
         });
     }
-  }, [hospitalSet, hospital]);
+  }, [hospitalSet, hospital, fetchData]);
 
   const hospitalSelected = (event) => {
     setHospital(event.target.value);
@@ -60,6 +63,7 @@ const DashboardPage = () => {
 
   const getContaminationIndex = () => {
     const contaminations = [];
+    console.log(rooms);
     rooms.forEach((room) => {
       const val = room['contamination_index'];
       if (val > 100) {
@@ -69,7 +73,7 @@ const DashboardPage = () => {
       } else {
         contaminations.push(val);
       }
-    })
+    });
     return (contaminations.reduce((a, b) => (a + b)) / contaminations.length).toFixed(1);
   }
 
@@ -84,11 +88,23 @@ const DashboardPage = () => {
       return getVariant(room['contamination_index']) === 'critical';
     }).length;
   }
+
+  const getColor = () => {
+    return getVariantColor(getContaminationIndex());
+  }
+
   return (
     <PageContainer style={{textAlign: 'start'}}>
       <Grid container direction={"row"} justify={"space-between"} alignItems={"center"} style={{marginBottom: '32px'}}>
-        <Grid item>
-          <Typography variant={"h4"} style={{marginBottom: 16}}>Hello {user && user.username}!</Typography>
+        <Grid item style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+          <Typography variant={"h4"}>Hello {user && user.username}!</Typography>
+          <Tooltip title={"Refresh"}>
+            <IconButton onClick={() => {
+              setFetchData(!fetchData);
+            }}>
+              <Refresh/>
+            </IconButton>
+          </Tooltip>
         </Grid>
         <Grid item>
           <FormControl variant={'outlined'} style={{minWidth: '320px', margin: '8px'}}>
@@ -119,8 +135,7 @@ const DashboardPage = () => {
             </Grid>
             <Grid item xs>
               <KeyStat subtitle={"Average contamination index"}
-                       value={loading ? <CircularProgress color={"secondary"}/> : getContaminationIndex()}
-                       color={"#27AE60"}/>
+                       value={loading ? <CircularProgress color={"secondary"}/> : getContaminationIndex()} color={!loading && getColor()}/>
             </Grid>
             <Grid item xs>
               <KeyStat subtitle={"Green rooms"}

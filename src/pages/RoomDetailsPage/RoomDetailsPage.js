@@ -52,7 +52,7 @@ const RoomDetailsPage = () => {
           const aux = document.getElementById('aux');
           const canvas = document.getElementById('main');
           // eslint-disable-next-line no-undef
-          update_img(response, aux, canvas, 20n);
+          update_img(response, aux, canvas, 1n);
         })
         .catch((err) => {
           console.log(err.message)

@@ -30,6 +30,18 @@ export const getVariant = (contamination) => {
   return variant;
 }
 
+export const getVariantColor = (contamination) => {
+  let variant = '#CFD3DA';
+  if (contamination >= 60) {
+    variant = '#EB5757';
+  } else if (contamination >= 30) {
+    variant = '#F2C94C';
+  } else if (contamination < 30) {
+    variant = '#27AE60';
+  }
+  return variant;
+}
+
 function convert64to8(array, scaler) {
   let min, max, pix;
   // eslint-disable-next-line no-undef
