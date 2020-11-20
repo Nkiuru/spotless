@@ -15,7 +15,7 @@ import {
 } from "../../utils/api";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import moment from "moment";
-import {getStatus, getVariant, getVariantColor} from "../../utils/utils";
+import {getVariant, getVariantColor} from "../../utils/utils";
 import ReportsPerDay from "../../components/Charts/ReportsPerDay";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -144,7 +144,8 @@ const DashboardPage = () => {
             </Grid>
             <Grid item xs>
               <KeyStat subtitle={"Average contamination index"}
-                       value={loading ? <CircularProgress color={"secondary"}/> : getContaminationIndex()} color={!loading && getColor()}/>
+                       value={loading ? <CircularProgress color={"secondary"}/> : getContaminationIndex()}
+                       color={!loading && getColor()}/>
             </Grid>
             <Grid item xs>
               <KeyStat subtitle={"Green rooms"}

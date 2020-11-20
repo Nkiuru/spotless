@@ -29,18 +29,25 @@ const ReportsPerDay = ({reports, loading}) => {
     <div style={{height: '100%'}}>
       <Paper className={styles.container}>
         <Typography variant={"h6"} className={styles.title}>Cleaning events per day</Typography>
-        {loading ? <CircularProgress color={"secondary"} style={{margin: 'auto'}}/> :
-          <ResponsiveContainer width="100%" height={400} className={styles.chart}>
-            <LineChart data={formattedReports}>
-              <XAxis dataKey="date"/>
-              <YAxis/>
-              <CartesianGrid strokeDasharray="3 3"/>
-              <Tooltip/>
-              <Legend/>
-              <Line type="monotone" dataKey="amount" name="Cleaning events" stroke="#8884d8" strokeWidth={2}/>
-            </LineChart>
-          </ResponsiveContainer>
-        }
+        <>
+          {loading ? <CircularProgress color={"secondary"} style={{margin: 'auto'}}/> :
+            <ResponsiveContainer width="100%" height={400} className={styles.chart}>
+              {formattedReports.length === 0 ?
+                <Typography variant={"h6"} className={styles.title} style={{textAlign: 'center'}}>No cleaning events</Typography>
+                :
+                <LineChart data={formattedReports}>
+                  <XAxis dataKey="date"/>
+                  <YAxis/>
+                  <CartesianGrid strokeDasharray="3 3"/>
+                  <Tooltip/>
+                  <Legend/>
+                  <Line type="monotone" dataKey="amount" name="Cleaning events" stroke="#8884d8" strokeWidth={2}/>
+                </LineChart>
+              }
+
+            </ResponsiveContainer>
+          }
+        </>
       </Paper>
     </div>
   )
