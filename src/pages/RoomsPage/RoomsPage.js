@@ -14,7 +14,7 @@ import {useHistory} from 'react-router-dom';
 import styles from "./RoomsPage.module.scss";
 import PageContainer from "../../containers/PageContainer";
 import {getRoomTypeProp} from "../../utils/utils";
-import hospitalImg from "../../assets/hospital.png";
+import RoomsMap from "./RoomsMap";
 
 const RoomsPage = () => {
   const [error, setError] = useState(null);
@@ -73,7 +73,9 @@ const RoomsPage = () => {
           )
         }
       </div>
-      <img src={hospitalImg} alt="hospital" className={styles.map} />
+      {rooms &&
+      <RoomsMap rooms={rooms} />
+      }
       {rooms.length > 0 && (
         <RoomTable rooms={rooms}/>
       )}
