@@ -13,6 +13,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
 import moment from "moment";
 import Link from "@material-ui/core/Link";
+import heatmap from "../../assets/heatmap2.png";
 
 const ReportPage = () => {
   const location = useLocation();
@@ -21,6 +22,8 @@ const ReportPage = () => {
   const [type, setType] = useState('');
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [showContImg, setShowContImg] = useState(false);
+  const [showCleanImg, setShowCleanImg] = useState(false);
 
   useEffect(() => {
     getReport(id)
@@ -31,17 +34,27 @@ const ReportPage = () => {
 
   const mapSelected = async (event) => {
     setType(event.target.value);
-    await getHeatmap(id, event.target.value)
-      .then((res) => {
-        const aux = document.getElementById('aux');
-        const canvas = document.getElementById('main');
-        console.log(res)
-        update_img(res, aux, canvas, 1n);
-      }).catch((err) => {
-        console.error(err)
-        setErrorMsg('Could not load map');
-        setError(true);
-      });
+    if (report['is_simulated']) {
+      setShowContImg(false);
+      setShowCleanImg(false);
+      if (event.target.value === 'contamination') {
+        setShowContImg(true);
+      } else {
+        setShowCleanImg(true);
+      }
+    } else {
+      await getHeatmap(id, event.target.value)
+        .then((res) => {
+          const aux = document.getElementById('aux');
+          const canvas = document.getElementById('main');
+          console.log(res)
+          update_img(res, aux, canvas, 1n);
+        }).catch((err) => {
+          console.error(err)
+          setErrorMsg('Could not load map');
+          setError(true);
+        });
+    }
   }
   const handleSnackClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -71,8 +84,18 @@ const ReportPage = () => {
             </FormControl>
           </div>
           <div style={{display: 'flex', flexDirection: 'column'}}>
-            <canvas id="aux" style={{display: 'none'}}/>
-            <canvas id="main" width={72} height={56} className={styles.map}/>
+            {showContImg &&
+            <img src={heatmap} alt="contamination map" className={styles.map}/>
+            }
+            {showCleanImg &&
+            <img src={heatmap} alt="clean map" className={styles.map}/>
+            }
+            {!showCleanImg && !showContImg &&
+            <>
+              <canvas id="aux" style={{display: 'none'}}/>
+              <canvas id="main" width={72} height={56} className={styles.map}/>
+            </>
+            }
           </div>
           <Typography variant={"h5"}>Cleaner comments:</Typography>
           <div className={styles.comments}>
