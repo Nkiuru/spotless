@@ -7,11 +7,13 @@ import {UNCLEANED} from "../../utils/constants";
 import {ArrowForward} from "@material-ui/icons";
 import Grid from "@material-ui/core/Grid";
 import {useHistory} from "react-router-dom";
+import moment from "moment";
 
 const Alerts = ({reports, loading}) => {
   const history = useHistory();
+  const today = moment();
   const filtered = reports.filter((report) => {
-    return report.overview === 'Patialy cleaned';
+    return report.overview === 'Patialy cleaned' && today.isSame(report['cleaning_time'], 'date');
   });
 
   const openReport = (id) => {
