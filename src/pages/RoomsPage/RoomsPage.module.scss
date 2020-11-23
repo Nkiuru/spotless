@@ -5,19 +5,29 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-
-  .bold {
-    font-weight: $semi-bold;
-  }
 }
 
+.bold {
+  font-weight: $semi-bold;
+}
 .map {
-  width: 50%;
   margin: 16px auto;
   border-radius: 16px;
   border: 1px solid $color-neutral;
+  overflow: hidden;
 }
 
 .area {
   background-color: #7e5fbf;
+}
+
+.roomInfo {
+  position: fixed;
+  max-width: 160px;
+  border: 1px solid $color-neutral;
+  border-radius: 4px;
+  background-color: #fafafa;
+  z-index: 99;
+  text-align: start;
+  padding: 8px
 }

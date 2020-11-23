@@ -158,12 +158,11 @@ export function update_img(arrayBuffer, auxCanvas, canvas, scaler) {
   canvas.style = "transform: scale(1, 1); flex: 0";
 }
 
-/*function update_scale(){
-  // clear
-  auxCanvas.getContext("2d").clearRect(0,0,auxCanvas.width,auxCanvas.height);
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  //scale = Number($("scale").value);
-
-  ctx.scale(scale, scale);
-  //console.log("new scale: %f", scale);
-}*/
+export function hexToRgb(hex) {
+  let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+  } : null;
+}

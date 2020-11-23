@@ -42,13 +42,12 @@ export const ROOM_TYPES = Object.freeze({
   },
 });
 
-export const HOSPITAL_MAP = {
+export const HOSPITAL_MAP = Object.freeze({
   name: "hospital map",
   areas: [
     {
       shape: "rect",
       coords: [132, 25, 193, 144],
-      preFillColor: '#EB5757'
     },
     {
       shape: "rect",
@@ -64,7 +63,7 @@ export const HOSPITAL_MAP = {
     },
     {
       shape: "poly",
-      coords: [367, 26, 369, 114, 316, 113, 316, 27, 367, 26],
+      coords: [368, 27, 368, 113, 316, 113, 316, 27, 369, 27],
     },
     {
       shape: "poly",
@@ -240,6 +239,10 @@ export const HOSPITAL_MAP = {
       coords: [13, 363, 57, 474],
     },
     {
+      shape: "rect",
+      coords: [61, 376, 129, 492],
+    },
+    {
       shape: "poly",
       coords: [
         368,
@@ -282,4 +285,4 @@ export const HOSPITAL_MAP = {
       ],
     },
   ],
-};
+});
