@@ -1,5 +1,4 @@
 import {API_KEY, BASE_URL} from "./constants";
-import {getRoomTypeProp} from "./utils";
 
 export let GLOBAL_HOSPITAL = localStorage.getItem('hospital') || false;
 export let GLOBAL_HOSPITAL_NAME = localStorage.getItem('hospital_name') || false;
@@ -215,21 +214,15 @@ export const resetSimulation = async () => {
   return doGetRequest('simulator/clear');
 }
 
-export const createRoom = async (room) => {
+export const createRoom = async (hospital, name, type, building, floor) => {
   return doPostRequest('/room', JSON.stringify({
-    'hospital_id': room['hospital_id'],
-    'name': room.name,
-    'is_simulated': true
+    'hospital_id': hospital,
+    'name': name,
+    'is_simulated': true,
+    'room_type': type,
+    'building': building,
+    'floor': floor
   }));
-}
-
-export const updateRoom = async (room) => {
-  return doPutRequest('/room', JSON.stringify({
-    '_id': room['_id'],
-    'room_type': getRoomTypeProp(room, 'key'),
-    'building': room.building,
-    'floor': room.floor
-  }))
 }
 
 export const getFloorplan = async (id) => {

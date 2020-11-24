@@ -3,7 +3,7 @@ import PageContainer from "../../containers/PageContainer";
 import {Button, Divider, Typography} from "@material-ui/core";
 import styles from "./AdminPage.module.scss";
 import Slider from "@material-ui/core/Slider";
-import {getSimulatorSettings, resetSimulation, setSimulation} from "../../utils/api";
+import {createRoom, getSimulatorSettings, resetSimulation, setSimulation} from "../../utils/api";
 import Input from "@material-ui/core/Input";
 import Grid from "@material-ui/core/Grid";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -15,12 +15,16 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
+import CircularProgressWithLabel from "../../components/CircularProgressWithLabel";
+import {ROOM_TYPES} from "../../utils/constants";
 
 const AdminPage = () => {
   const [simSpeed, setSimSpeed] = useState(10);
   const [loading, setLoading] = useState(true);
   const [snackOpen, setSnackOpen] = useState(false);
   const [open, setOpen] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [generating, setGenerating] = useState(false);
   const [snackText, setSnackText] = useState('Simulation speed updated');
 
   const handleSnackClose = (event, reason) => {
@@ -88,6 +92,25 @@ const AdminPage = () => {
     setOpen(false);
   };
 
+  const generate = async () => {
+    return;
+    setGenerating(true);
+    const hospitalId = "5fb5226d3d8e1d45045cfc3f";
+    const roomType = ROOM_TYPES.WAITING_ROOM.key;
+    const roomName = 'B20';
+    const building = 1;
+    const floor = 1;
+    let start = 0;
+    const end = 0;
+    for (start;start <= end; start++) {
+      const name = roomName + start;
+      await createRoom(hospitalId, name, roomType, building, floor);
+      await new Promise(r => setTimeout(r, 1000));
+      setProgress(start);
+    }
+    setGenerating(false);
+  }
+
   return (
     <PageContainer style={{textAlign: 'start'}}>
       <Typography variant={"h5"}>Simulator</Typography>
@@ -143,6 +166,9 @@ const AdminPage = () => {
                 <Button onClick={() => {
                   setOpen(true);
                 }} variant={"contained"} color={"secondary"}>Reset simulated rooms</Button>
+                <Button disabled={generating} onClick={() => {
+                  generate();
+                }} variant={"contained"} color={"primary"} style={{float: "right"}}>Generate rooms</Button>
               </div>
             </Card>
           </Grid>
@@ -154,6 +180,7 @@ const AdminPage = () => {
           {snackText}
         </Alert>
       </Snackbar>
+      {generating && <CircularProgressWithLabel value={progress} style={{margin: "auto"}}/>}
       <Dialog
         open={open}
         onClose={handleConfirmClose}
