@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useLocation, useHistory} from 'react-router-dom';
 import {Button, Typography} from "@material-ui/core";
-import {getAssignedCleaners, getReports, getRoom, getRoomHeatmap} from "../../utils/api";
+import {getAssignedCleaners, getFloorplan, getReports, getRoom, getRoomHeatmap} from "../../utils/api";
 import PageContainer from "../../containers/PageContainer";
 import styles from "./RoomDetailsPage.module.scss";
 import RoomDetailsCard from "./RoomDetailsCard";
@@ -21,6 +21,7 @@ const RoomDetailsPage = () => {
   const [room, setRoom] = useState({});
   const [reports, setReports] = useState([]);
   const [cleaner, setCleaner] = useState({});
+  const [image, setImage] = useState({});
   const [showMap, setShowMap] = useState(false);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -42,6 +43,11 @@ const RoomDetailsPage = () => {
       .then((reports) => {
         setReports(reports.sort((a, b) => new Date(b['cleaning_time']) - new Date(a['cleaning_time'])));
       })
+    getFloorplan(params.id).then((img) => {
+      setImage(URL.createObjectURL(img));
+    }).catch((err) => {
+      //console.log(err)
+    })
   }, [params.id]);
 
   useEffect(() => {

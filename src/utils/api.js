@@ -232,6 +232,22 @@ export const updateRoom = async (room) => {
   }))
 }
 
+export const getFloorplan = async (id) => {
+  const response = await fetch(`${BASE_URL}floorplan?_id=${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'image/png',
+      'Authorization': API_KEY,
+      'charset': 'utf-8'
+    }
+  });
+  if (response.ok) {
+    return response.blob();
+  } else {
+    throw new Error(response.statusText);
+  }
+}
+
 const doGetRequest = async (url, params) => {
   const requestURL = BASE_URL + url + (params || '');
   console.log(requestURL);
