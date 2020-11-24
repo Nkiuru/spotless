@@ -6,6 +6,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import {ROOM_TYPES} from "../../utils/constants";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import PropTypes from "prop-types";
 
 const TableFilters = ({rooms, setRooms}) => {
   const [building, setBuilding] = React.useState('');
@@ -96,6 +97,11 @@ const TableFilters = ({rooms, setRooms}) => {
       }}/>} label="Show assigned"/>
     </>
   );
+}
+
+TableFilters.propTypes = {
+  rooms: PropTypes.array.isRequired,
+  setRooms: PropTypes.func.isRequired
 }
 
 export default TableFilters;

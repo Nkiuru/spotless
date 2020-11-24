@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useReducer, useState} from "react";
 import hospitalImg from "../../assets/hospital.png";
 import styles from "./RoomsPage.module.scss";
 import ImageMapper from 'react-image-mapper';
@@ -7,24 +7,30 @@ import {useHistory} from "react-router-dom";
 import {getRoomTypeProp, getVariantColor, hexToRgb} from "../../utils/utils";
 import {Typography} from "@material-ui/core";
 
+const initMap = (rooms) => {
+  let map = {};
+  map = JSON.parse(JSON.stringify(HOSPITAL_MAP));
+  rooms.forEach((room, index) => {
+    const color = hexToRgb(getVariantColor(room['contamination_index']));
+    map.areas[index].preFillColor = `rgba(${color.r}, ${color.g}, ${color.b}, 0.5)`
+    map.areas[index]['_id'] = room['_id'];
+    map.areas[index].room = room;
+  });
+  return map;
+}
+
 const RoomsMap = ({rooms}) => {
   const history = useHistory();
   const [hovering, setHovering] = useState(false);
   const [room, setRoom] = useState({});
   const [hoverStyle, setHoverStyle] = useState({});
+  const [map, setMap] = useState({});
+  const [ignored, forceUpdate] = useState(642);
 
-
-  const map = ((rooms) => {
-    let map = {};
-    map = Object.assign({}, HOSPITAL_MAP);
-    rooms.forEach((room, index) => {
-      const color = hexToRgb(getVariantColor(room['contamination_index']));
-      map.areas[index].preFillColor = `rgba(${color.r}, ${color.g}, ${color.b}, 0.5)`
-      map.areas[index]['_id'] = room['_id'];
-      map.areas[index].room = room;
-    });
-    return map;
-  })(rooms);
+  useEffect(() => {
+    setMap(initMap(rooms));
+    forceUpdate(i => i === 642 ? 643 : 642);
+  }, [rooms, setMap])
 
   const click = (area, num, event) => {
     const id = area['_id'];
@@ -39,7 +45,6 @@ const RoomsMap = ({rooms}) => {
 
   const enter = (area, index, event) => {
     if (area.room) {
-      console.log(event.screenX, event.screenY);
       const style = {
         top: event.pageY,
         left: event.pageX
@@ -54,13 +59,14 @@ const RoomsMap = ({rooms}) => {
 
   return (
     <>
+      {Object.keys(map).length !== 0 &&
       <div className={styles.map}>
         <ImageMapper src={hospitalImg}
                      map={map}
                      fillColor={'rgba(0,0,0, 0.2)'}
                      onClick={click}
                      width={width}
-                     imgWidth={642}
+                     imgWidth={ignored}
                      onMouseEnter={enter}
                      onMouseLeave={() => {
                        setHovering(false);
@@ -69,12 +75,13 @@ const RoomsMap = ({rooms}) => {
                      }}
         />
       </div>
+      }
       {hovering &&
       <div id="info" className={styles.roomInfo} style={hoverStyle}>
         <Typography variant={"h6"} className={styles.bold}>Room: {room.name}</Typography>
         <Typography variant={"body1"}>{getRoomTypeProp(room, 'displayName')}</Typography>
-        <Typography variant={"body1"} color={"textSecondary"}>Contamination Index: <div
-          style={{color: getVariantColor(room['contamination_index'])}}>{room['contamination_index'].toFixed(1)}</div>
+        <Typography variant={"body1"} color={"textSecondary"}>Contamination Index: <span
+          style={{color: getVariantColor(room['contamination_index'])}}>{room['contamination_index'].toFixed(1)}</span>
         </Typography>
       </div>
       }

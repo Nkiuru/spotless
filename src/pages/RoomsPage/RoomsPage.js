@@ -1,10 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {getHospitals, getRooms} from "../../utils/api";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
+import {getRooms} from "../../utils/api";
 import {IconButton, Paper, Table, TableContainer, TableHead, TableRow, Typography} from "@material-ui/core";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
@@ -15,70 +10,41 @@ import styles from "./RoomsPage.module.scss";
 import PageContainer from "../../containers/PageContainer";
 import {getRoomTypeProp} from "../../utils/utils";
 import RoomsMap from "./RoomsMap";
+import TableFilters from "../AssignmentsPage/TableFilters";
 
 const RoomsPage = () => {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [rooms, setRooms] = useState([]);
-  const [hospitals, setHospitals] = useState([]);
-  const [hospital, setHospital] = useState('');
+  const [origRooms, setOrigRooms] = useState([]);
 
   useEffect(() => {
-    getHospitals()
-      .then((result) => {
-          console.log(result);
-          setIsLoaded(true);
-          setHospitals(result);
-        },
-        (err) => {
-          setError(true);
-          setIsLoaded(true);
-          console.log(err);
-        })
-  }, []);
-
-  const hospitalSelected = (event) => {
-    setHospital(event.target.value);
-    getRooms(event.target.value['_id'])
+    getRooms(null, null, true)
       .then((rooms) => {
-          console.log(rooms);
           setRooms(rooms);
+          setOrigRooms(rooms);
+          setIsLoaded(true);
         },
         (error) => {
           setError(true);
           setIsLoaded(true);
           console.log(error);
         });
-  }
+  }, []);
 
   return (
     <PageContainer>
       <div className={styles.headerRow}>
         <Typography variant={"h5"} className={styles.bold}>Rooms</Typography>
-        {!isLoaded ? <CircularProgress color="secondary"/> :
-          (
-            <FormControl variant={'outlined'} style={{minWidth: '320px', margin: '8px'}}>
-              <InputLabel id="demo-simple-select-outlined-label">Select hospital</InputLabel>
-              <Select label="Select Hospital" onChange={hospitalSelected} value={hospital} style={{textAlign: "start"}}>
-                <MenuItem value={{}}>
-                  <em>None</em>
-                </MenuItem>
-                {
-                  hospitals.map(hosp => (
-                    <MenuItem value={hosp} key={hosp['_id']}>{hosp.name}</MenuItem>
-                  ))
-                }
-              </Select>
-            </FormControl>
-          )
-        }
       </div>
-      {rooms &&
-      <RoomsMap rooms={rooms} />
+      {isLoaded &&
+      <div className={styles.filters}>
+        <TableFilters rooms={origRooms} setRooms={setRooms}/>
+      </div>
       }
-      {rooms.length > 0 && (
-        <RoomTable rooms={rooms}/>
-      )}
+      {isLoaded &&
+      <RoomsMap rooms={rooms}/>
+      }
       {error && <p>ERROR</p>}
     </PageContainer>
   )
@@ -116,7 +82,7 @@ const RoomTable = ({rooms}) => {
             <TableCell align="right">Last cleaned</TableCell>
             <TableCell>Action</TableCell>
           </TableRow>
-         </TableHead>
+        </TableHead>
         <TableBody>
           {rooms.map((row) => (
             <TableRow key={row['_id']}>

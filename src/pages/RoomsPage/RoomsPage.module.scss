@@ -31,3 +31,12 @@
   text-align: start;
   padding: 8px
 }
+
+.filters {
+  display: flex;
+  flex-direction: row;
+  text-align: start;
+  width: 80%;
+  margin: auto;
+  justify-content: space-evenly;
+}
