@@ -232,10 +232,6 @@ export const HOSPITAL_MAP = Object.freeze({
     },
     {
       shape: "rect",
-      coords: [290, 362, 369, 405],
-    },
-    {
-      shape: "rect",
       coords: [13, 363, 57, 474],
     },
     {

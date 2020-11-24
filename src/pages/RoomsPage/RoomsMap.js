@@ -11,10 +11,14 @@ const initMap = (rooms) => {
   let map = {};
   map = JSON.parse(JSON.stringify(HOSPITAL_MAP));
   rooms.forEach((room, index) => {
+    const area = map.areas[index];
+    if (!area) {
+      return;
+    }
     const color = hexToRgb(getVariantColor(room['contamination_index']));
-    map.areas[index].preFillColor = `rgba(${color.r}, ${color.g}, ${color.b}, 0.5)`
-    map.areas[index]['_id'] = room['_id'];
-    map.areas[index].room = room;
+    area.preFillColor = `rgba(${color.r}, ${color.g}, ${color.b}, 0.5)`
+    area['_id'] = room['_id'];
+    area.room = room;
   });
   return map;
 }
