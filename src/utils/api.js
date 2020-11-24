@@ -233,7 +233,7 @@ export const updateRoom = async (room) => {
 }
 
 export const getFloorplan = async (id) => {
-  const response = await fetch(`${BASE_URL}floorplan?_id=${id}`, {
+  const response = await fetch(`${BASE_URL}room/floorplan?_id=${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'image/png',

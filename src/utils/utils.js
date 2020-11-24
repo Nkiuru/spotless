@@ -155,7 +155,7 @@ export function update_img(arrayBuffer, auxCanvas, canvas, scaler) {
   auxCanvas.getContext("2d").putImageData(img, 0, 0);
   ctx.drawImage(auxCanvas, 0, 0)
   // flip Y AND X axis
-  canvas.style = "transform: scale(1, 1); flex: 0";
+  canvas.style = "transform: scale(1, 1); flex: 1";
 }
 
 export function hexToRgb(hex) {

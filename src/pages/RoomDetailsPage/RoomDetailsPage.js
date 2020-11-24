@@ -21,7 +21,7 @@ const RoomDetailsPage = () => {
   const [room, setRoom] = useState({});
   const [reports, setReports] = useState([]);
   const [cleaner, setCleaner] = useState({});
-  const [image, setImage] = useState({});
+  const [image, setImage] = useState('');
   const [showMap, setShowMap] = useState(false);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -46,7 +46,7 @@ const RoomDetailsPage = () => {
     getFloorplan(params.id).then((img) => {
       setImage(URL.createObjectURL(img));
     }).catch((err) => {
-      //console.log(err)
+      console.log(err)
     })
   }, [params.id]);
 
@@ -70,6 +70,7 @@ const RoomDetailsPage = () => {
           update_img(response, aux, canvas, scaler);
         })
         .catch((err) => {
+          setShowMap(false);
           console.log(err.message)
           setErrorMsg(err.message);
           setError(true);
@@ -104,19 +105,20 @@ const RoomDetailsPage = () => {
               <RoomDetailsCard room={room}/>
               <RoomCleanerCard room={room} cleaner={cleaner} setCleaner={setCleaner}/>
             </div>
-            <CommentsList reports={reports}/>
-            <div className={styles.row}>
+            <div className={styles.row} style={{marginTop: 32}}>
               <Typography variant={"h5"}>Room map</Typography>
               <Button variant={"outlined"} color={"primary"} onClick={() => setShowMap(!showMap)}>
                 {showMap ? 'Hide map' : 'Show Map'}
               </Button>
             </div>
             {showMap && (
-              <>
+              <div className={styles.container}>
                 <canvas id="aux" style={{display: 'none'}}/>
-                <canvas id="main" width={72} height={56} className={styles.map}/>
-              </>
+                <canvas id="main" width={72} height={56} className={styles.map} />
+                <img src={image} alt={""} className={styles.overlay} />
+              </div>
             )}
+            <CommentsList reports={reports}/>
             <CleaningReportsTable reports={reports} type={'room'}/>
           </div>
         </>
