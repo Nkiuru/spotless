@@ -76,7 +76,7 @@ const RoomDetailsPage = () => {
           setError(true);
         })
     }
-  }, [params.id, showMap])
+  }, [params.id, room, showMap])
   const navigateToMap = () => {
     history.push({
       pathname: `/rooms`,

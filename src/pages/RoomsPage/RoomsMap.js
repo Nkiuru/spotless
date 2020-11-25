@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer, useState} from "react";
+import React, {useEffect, useState} from "react";
 import hospitalImg from "../../assets/hospital.png";
 import styles from "./RoomsPage.module.scss";
 import ImageMapper from 'react-image-mapper';
@@ -22,8 +22,6 @@ const initMap = (rooms) => {
   });
   return map;
 }
-
-const roomAlloc = {};
 
 const RoomsMap = ({rooms}) => {
   const history = useHistory();

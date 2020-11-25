@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import PageContainer from "../../containers/PageContainer";
-import {Typography} from "@material-ui/core";
+import {Grid, Typography} from "@material-ui/core";
 import CleaningsByCleaner from "../../components/Charts/CleaningsByCleaner";
 import {getReports} from "../../utils/api";
-import styles from './AnalysisPage.module.scss';
+import ContaminationIndexOverTime from "../../components/Charts/ContaminationIndexOverTime";
 
 const AnalysisPage = () => {
   const [reports, setReports] = useState([]);
@@ -19,9 +19,14 @@ const AnalysisPage = () => {
   return (
     <PageContainer style={{textAlign: 'start'}}>
       <Typography variant={"h5"}>Analysis</Typography>
-      <div className={styles.graph}>
-        <CleaningsByCleaner reports={reports} loading={loading}/>
-      </div>
+      <Grid container spacing={2}>
+        <Grid item xs>
+          <CleaningsByCleaner reports={reports} loading={loading}/>
+        </Grid>
+        <Grid item xs>
+          <ContaminationIndexOverTime reports={reports} loading={loading}/>
+        </Grid>
+      </Grid>
     </PageContainer>
   )
 }

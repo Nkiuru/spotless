@@ -3,7 +3,7 @@ import PageContainer from "../../containers/PageContainer";
 import {Button, Divider, Typography} from "@material-ui/core";
 import styles from "./AdminPage.module.scss";
 import Slider from "@material-ui/core/Slider";
-import {createRoom, getSimulatorSettings, resetSimulation, setSimulation} from "../../utils/api";
+import {getSimulatorSettings, resetSimulation, setSimulation} from "../../utils/api";
 import Input from "@material-ui/core/Input";
 import Grid from "@material-ui/core/Grid";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -16,7 +16,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import CircularProgressWithLabel from "../../components/CircularProgressWithLabel";
-import {ROOM_TYPES} from "../../utils/constants";
+//import {ROOM_TYPES} from "../../utils/constants";
 
 const AdminPage = () => {
   const [simSpeed, setSimSpeed] = useState(10);
@@ -93,18 +93,17 @@ const AdminPage = () => {
   };
 
   const generate = async () => {
-    return;
     setGenerating(true);
-    const hospitalId = "5fb5226d3d8e1d45045cfc3f";
-    const roomType = ROOM_TYPES.WAITING_ROOM.key;
-    const roomName = 'B20';
-    const building = 1;
-    const floor = 1;
+    //const hospitalId = "5fb5226d3d8e1d45045cfc3f";
+    //const roomType = ROOM_TYPES.WAITING_ROOM.key;
+    //const roomName = 'B20';
+    //const building = 1;
+    //const floor = 1;
     let start = 0;
     const end = 0;
     for (start;start <= end; start++) {
-      const name = roomName + start;
-      await createRoom(hospitalId, name, roomType, building, floor);
+      //const name = roomName + start;
+      //await createRoom(hospitalId, name, roomType, building, floor);
       await new Promise(r => setTimeout(r, 1000));
       setProgress(start);
     }
