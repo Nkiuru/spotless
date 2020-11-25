@@ -2,29 +2,40 @@ import React, {useEffect, useState} from 'react';
 import PageContainer from "../../containers/PageContainer";
 import {Grid, Typography} from "@material-ui/core";
 import CleaningsByCleaner from "../../components/Charts/CleaningsByCleaner";
-import {getReports} from "../../utils/api";
+import {getReports, getRooms} from "../../utils/api";
 import ContaminationIndexOverTime from "../../components/Charts/ContaminationIndexOverTime";
+import CleaningDuration from "../../components/Charts/CleaningDuration";
 
 const AnalysisPage = () => {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
-    getReports()
+    Promise.all([getRooms(), getReports()])
       .then((result) => {
-        setReports(result);
+        result[1].forEach((report) => {
+          report.room = result[0].find((room) => {
+            return room['_id'] === report['room_id'];
+          });
+        })
+        setRooms(result[0]);
+        setReports(result[1]);
         setLoading(false);
       });
   }, []);
   return (
     <PageContainer style={{textAlign: 'start'}}>
-      <Typography variant={"h5"}>Analysis</Typography>
+      <Typography variant={"h5"} style={{marginBottom: 16}}>Analysis</Typography>
       <Grid container spacing={2}>
-        <Grid item xs>
+        <Grid item xs={6}>
           <CleaningsByCleaner reports={reports} loading={loading}/>
         </Grid>
-        <Grid item xs>
+        <Grid item xs={6}>
           <ContaminationIndexOverTime reports={reports} loading={loading}/>
+        </Grid>
+        <Grid item xs={6}>
+          <CleaningDuration reports={reports} loading={loading}/>
         </Grid>
       </Grid>
     </PageContainer>
