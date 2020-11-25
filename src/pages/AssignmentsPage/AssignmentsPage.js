@@ -178,7 +178,7 @@ export default function AssignmentsPage() {
   const [orderBy, setOrderBy] = React.useState('name');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [roomsPerPage, setRoomsPerPage] = React.useState(25);
+  const [roomsPerPage, setRoomsPerPage] = React.useState(15);
   const [isLoaded, setIsLoaded] = useState(false);
   const [rooms, setRooms] = useState([]);
   const [origRooms, setOrigRooms] = useState([]);
@@ -337,7 +337,7 @@ export default function AssignmentsPage() {
             </Table>
           </TableContainer>
           <TablePagination
-            rowsPerPageOptions={[5, 10, 25, 50]}
+            rowsPerPageOptions={[5, 10, 15, 25, 50]}
             component="div"
             count={rooms.length}
             rowsPerPage={roomsPerPage}

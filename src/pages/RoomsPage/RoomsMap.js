@@ -23,6 +23,8 @@ const initMap = (rooms) => {
   return map;
 }
 
+const roomAlloc = {};
+
 const RoomsMap = ({rooms}) => {
   const history = useHistory();
   const [hovering, setHovering] = useState(false);

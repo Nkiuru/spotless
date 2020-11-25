@@ -8,9 +8,9 @@ import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import PropTypes from "prop-types";
 
-const TableFilters = ({rooms, setRooms}) => {
-  const [building, setBuilding] = React.useState('');
-  const [floor, setFloor] = React.useState('');
+const TableFilters = ({rooms, setRooms, initialBuilding, initialFloor, hideAll, hideAssigned}) => {
+  const [building, setBuilding] = React.useState(initialBuilding || '');
+  const [floor, setFloor] = React.useState(initialFloor || '');
   const [roomType, setRoomType] = React.useState('');
   const [assigned, setAssigned] = React.useState(true);
 
@@ -27,7 +27,7 @@ const TableFilters = ({rooms, setRooms}) => {
       if (roomType) {
         valid = room['room_type'] === roomType.key && valid;
       }
-      if (!assigned) {
+      if (!hideAssigned && !assigned) {
         valid = room['assigned_cleaners'].length === 0 && valid;
       }
       return valid;
@@ -38,13 +38,13 @@ const TableFilters = ({rooms, setRooms}) => {
   const getBuildings = () => {
     return [...new Set(rooms.map(room => {
       return room.building;
-    }))];
+    }))].sort();
   };
 
   const getFloors = () => {
     return [...new Set(rooms.map(room => {
       return room.floor;
-    }))];
+    }))].sort();
   }
   return (
     <>
@@ -54,9 +54,10 @@ const TableFilters = ({rooms, setRooms}) => {
           setBuilding(event.target.value);
           filter(event.target.value, roomType, floor, assigned);
         }} value={building}>
+          {!hideAll &&
           <MenuItem value={''}>
             <em>All</em>
-          </MenuItem>
+          </MenuItem>}
           {getBuildings().map(building => (
             <MenuItem value={building} key={building}>{building}</MenuItem>
           ))}
@@ -68,9 +69,11 @@ const TableFilters = ({rooms, setRooms}) => {
           setFloor(event.target.value);
           filter(building, roomType, event.target.value, assigned);
         }} value={floor}>
+          {!hideAll &&
           <MenuItem value={''}>
             <em>All</em>
           </MenuItem>
+          }
           {getFloors().map(floor => (
             <MenuItem value={floor} key={floor}>{floor}</MenuItem>
           ))}
@@ -91,17 +94,22 @@ const TableFilters = ({rooms, setRooms}) => {
           ))}
         </Select>
       </FormControl>
+      {!hideAssigned &&
       <FormControlLabel control={<Checkbox checked={assigned} onChange={(event, checked) => {
         setAssigned(checked);
         filter(building, roomType, floor, checked);
-      }}/>} label="Show assigned"/>
+      }}/>} label="Show assigned"/>}
     </>
   );
 }
 
 TableFilters.propTypes = {
   rooms: PropTypes.array.isRequired,
-  setRooms: PropTypes.func.isRequired
+  setRooms: PropTypes.func.isRequired,
+  initialBuilding: PropTypes.string,
+  initialFloor: PropTypes.string,
+  hideAll: PropTypes.bool,
+  hideAssigned: PropTypes.bool
 }
 
 export default TableFilters;

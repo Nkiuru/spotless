@@ -19,7 +19,7 @@ const RoomsPage = () => {
   const [origRooms, setOrigRooms] = useState([]);
 
   useEffect(() => {
-    getRooms(null, null, true)
+    getRooms()
       .then((rooms) => {
           setRooms(rooms);
           setOrigRooms(rooms);
@@ -39,7 +39,7 @@ const RoomsPage = () => {
       </div>
       {isLoaded &&
       <div className={styles.filters}>
-        <TableFilters rooms={origRooms} setRooms={setRooms}/>
+        <TableFilters rooms={origRooms} setRooms={setRooms} hideAll={true} hideAssigned={true} initialBuilding={rooms[0] && rooms[0].building} initialFloor={rooms[0] && rooms[0].floor}/>
       </div>
       }
       {isLoaded &&
