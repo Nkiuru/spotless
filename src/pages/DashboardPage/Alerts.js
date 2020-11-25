@@ -13,7 +13,7 @@ const Alerts = ({reports, loading}) => {
   const history = useHistory();
   const today = moment();
   const filtered = reports.filter((report) => {
-    return report.overview === 'Patialy cleaned' && today.isSame(report['cleaning_time'], 'date');
+    return report.overview === UNCLEANED && today.isSame(report['cleaning_time'], 'date');
   });
 
   const openReport = (id) => {

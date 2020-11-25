@@ -243,7 +243,6 @@ export const getFloorplan = async (id) => {
 
 const doGetRequest = async (url, params) => {
   const requestURL = BASE_URL + url + (params || '');
-  console.log(requestURL);
   const response = await fetch(requestURL, {
     method: 'GET',
     headers: {
@@ -261,7 +260,6 @@ const doGetRequest = async (url, params) => {
 
 const doPostRequest = async (url, params) => {
   const requestURL = BASE_URL + url;
-  console.log(requestURL);
   const response = await fetch(requestURL, {
     method: 'POST',
     headers: {
@@ -298,7 +296,6 @@ const doDeleteRequest = async (url, params) => {
 
 const doPutRequest = async (url, params) => {
   const requestURL = BASE_URL + url;
-  console.log(requestURL);
   const response = await fetch(requestURL, {
     method: 'PUT',
     headers: {
@@ -308,7 +305,6 @@ const doPutRequest = async (url, params) => {
     },
     body: params
   });
-  console.log(response)
   if (response.ok) {
     return response.json();
   } else {
