@@ -36,12 +36,12 @@ const RoomsPage = () => {
     <PageContainer>
       <div className={styles.headerRow}>
         <Typography variant={"h5"} className={styles.bold}>Rooms</Typography>
+        {isLoaded &&
+        <div className={styles.filters}>
+          <TableFilters rooms={origRooms} setRooms={setRooms} hideAll={true} hideAssigned={true} initialBuilding={rooms[0] && rooms[0].building} initialFloor={rooms[0] && rooms[0].floor}/>
+        </div>
+        }
       </div>
-      {isLoaded &&
-      <div className={styles.filters}>
-        <TableFilters rooms={origRooms} setRooms={setRooms} hideAll={true} hideAssigned={true} initialBuilding={rooms[0] && rooms[0].building} initialFloor={rooms[0] && rooms[0].floor}/>
-      </div>
-      }
       {isLoaded &&
       <RoomsMap rooms={rooms}/>
       }

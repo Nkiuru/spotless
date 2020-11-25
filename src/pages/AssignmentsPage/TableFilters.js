@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -13,28 +13,31 @@ const TableFilters = ({rooms, setRooms, initialBuilding, initialFloor, hideAll, 
   const [floor, setFloor] = React.useState(initialFloor || '');
   const [roomType, setRoomType] = React.useState('');
   const [assigned, setAssigned] = React.useState(true);
+  const [filters, setFilters] = React.useState(true);
 
-  const filter = (building, roomType, floor, assigned) => {
-    let filtered = rooms;
-    filtered = filtered.filter((room) => {
-      let valid = true;
-      if (building) {
-        valid = room.building === building;
-      }
-      if (floor) {
-        valid = room.floor === floor && valid;
-      }
-      if (roomType) {
-        valid = room['room_type'] === roomType.key && valid;
-      }
-      if (!hideAssigned && !assigned) {
-        valid = room['assigned_cleaners'].length === 0 && valid;
-      }
-      return valid;
-    });
-    setRooms(filtered);
-  }
-
+  useEffect(() => {
+    if (filters) {
+      let filtered = rooms;
+      filtered = filtered.filter((room) => {
+        let valid = true;
+        if (building) {
+          valid = room.building === building;
+        }
+        if (floor) {
+          valid = room.floor === floor && valid;
+        }
+        if (roomType) {
+          valid = room['room_type'] === roomType.key && valid;
+        }
+        if (!hideAssigned && !assigned) {
+          valid = room['assigned_cleaners'].length === 0 && valid;
+        }
+        return valid;
+      });
+      setRooms(filtered);
+      setFilters(false);
+    }
+  }, [assigned, building, floor, roomType, filters, rooms, setRooms, hideAssigned])
   const getBuildings = () => {
     return [...new Set(rooms.map(room => {
       return room.building;
@@ -52,7 +55,7 @@ const TableFilters = ({rooms, setRooms, initialBuilding, initialFloor, hideAll, 
         <InputLabel id="building">Building</InputLabel>
         <Select label="Building" onChange={(event) => {
           setBuilding(event.target.value);
-          filter(event.target.value, roomType, floor, assigned);
+          setFilters(true);
         }} value={building}>
           {!hideAll &&
           <MenuItem value={''}>
@@ -67,7 +70,7 @@ const TableFilters = ({rooms, setRooms, initialBuilding, initialFloor, hideAll, 
         <InputLabel id="floor">Floor</InputLabel>
         <Select label="Floor" onChange={(event) => {
           setFloor(event.target.value);
-          filter(building, roomType, event.target.value, assigned);
+          setFilters(true);
         }} value={floor}>
           {!hideAll &&
           <MenuItem value={''}>
@@ -83,7 +86,7 @@ const TableFilters = ({rooms, setRooms, initialBuilding, initialFloor, hideAll, 
         <InputLabel id="room-type">Room type</InputLabel>
         <Select label="Room type" onChange={(event) => {
           setRoomType(event.target.value);
-          filter(building, event.target.value, floor, assigned);
+          setFilters(true);
         }} value={roomType}>
           <MenuItem value={''}>
             <em>All</em>
@@ -97,7 +100,7 @@ const TableFilters = ({rooms, setRooms, initialBuilding, initialFloor, hideAll, 
       {!hideAssigned &&
       <FormControlLabel control={<Checkbox checked={assigned} onChange={(event, checked) => {
         setAssigned(checked);
-        filter(building, roomType, floor, checked);
+        setFilters(true);
       }}/>} label="Show assigned"/>}
     </>
   );
