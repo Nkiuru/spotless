@@ -19,6 +19,7 @@ const ReportPage = () => {
   const location = useLocation();
   const {id} = location.state;
   const [report, setReport] = useState({});
+  const [loading, setLoading] = useState(true);
   const [type, setType] = useState('');
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -29,6 +30,7 @@ const ReportPage = () => {
     getReport(id)
       .then((report) => {
         setReport(report);
+        setLoading(false);
       })
   }, [id]);
 
@@ -102,6 +104,7 @@ const ReportPage = () => {
             <Typography variant={"body1"} className={styles.comment}>{report.comments}</Typography>
           </div>
         </Grid>
+        {!loading &&
         <Grid item xs={6}>
           <div className={styles.row}>
             <Typography variant={"h5"} className={styles.reportInfo}>Cleaner:</Typography>
@@ -135,7 +138,12 @@ const ReportPage = () => {
             <Typography style={{marginLeft: '4px'}} variant={"h5"}
                         className={styles[getVariant(report['contamination_index'])]}>{report['contamination_index']}</Typography>
           </div>
-        </Grid>
+          <div className={styles.row}>
+            <Typography variant={"h5"} className={styles.reportInfo}>Cleaning duration:</Typography>
+            <Typography style={{marginLeft: '4px'}}
+                        variant={"h5"}>{moment(report['cleaning_duration_seconds'], 's').format('m [minutes] s [seconds]')}</Typography>
+          </div>
+        </Grid>}
       </Grid>
       <Snackbar open={error} autoHideDuration={6000} onClose={handleSnackClose}>
         <Alert onClose={() => setError(false)} severity="error">{errorMsg}</Alert>
