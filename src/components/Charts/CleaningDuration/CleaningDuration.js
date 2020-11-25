@@ -27,14 +27,19 @@ const CleaningDuration = ({reports, loading}) => {
       }
     });
   });
-  console.log(counts)
   const formattedReports = [];
   const und = counts['undefined'];
-  delete counts['undefined'];
-  formattedReports.push({
-    type: 'No type',
-    amount: 0
-  });
+  if (und) {
+    formattedReports.push({
+      type: 'No type',
+      amount: Math.round(und.reduce((acc, report) => {
+        return acc + report['cleaning_duration_seconds'];
+      }, 0) / und.length),
+      estimated: 0
+    });
+    delete counts['undefined'];
+  }
+
   Object.keys(counts).forEach((x) => {
     formattedReports.push({
       type: ROOM_TYPES[x].displayName,
