@@ -19,6 +19,10 @@ const RoomDetailsCard = ({room}) => {
     }
     return variant;
   }
+
+  const getIndex = (index) => {
+    return Math.min(index, 150).toFixed(2);
+  }
   return (
     <Card className={styles.card}>
       <div className={styles.cardContent}>
@@ -42,7 +46,7 @@ const RoomDetailsCard = ({room}) => {
         <div className={styles.row}>
           <Typography variant={"body1"} className={styles.semiBold}>Contamination index</Typography>
           <Typography variant={"body1"}
-                      className={[styles[getVariant(room['contamination_index'])], styles.medium].join(' ')}>{room['contamination_index']}</Typography>
+                      className={[styles[getVariant(room['contamination_index'])], styles.medium].join(' ')}>{getIndex(room['contamination_index'])}%</Typography>
         </div>
       </div>
     </Card>

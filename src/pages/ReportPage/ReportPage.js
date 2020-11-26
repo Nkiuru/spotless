@@ -141,7 +141,7 @@ const ReportPage = () => {
           <div className={styles.row}>
             <Typography variant={"h5"} className={styles.reportInfo}>Cleaning duration:</Typography>
             <Typography style={{marginLeft: '4px'}}
-                        variant={"h5"}>{moment(report['cleaning_duration_seconds'], 's').format('m [minutes] s [seconds]')}</Typography>
+                        variant={"h5"}>{moment.utc((report['cleaning_duration_seconds']*1000)).format('m [minutes] s [seconds]')}</Typography>
           </div>
         </Grid>}
       </Grid>

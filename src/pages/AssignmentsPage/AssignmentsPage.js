@@ -319,7 +319,7 @@ export default function AssignmentsPage() {
                         <TableCell align="right">{row.floor}</TableCell>
                         <TableCell>{getCleaner(row)}</TableCell>
                         <TableCell>{getStatus(row['contamination_index'])}</TableCell>
-                        <TableCell align="right">{row['contamination_index'].toFixed(2)}</TableCell>
+                        <TableCell align="right">{Math.min(row['contamination_index'].toFixed(2), 150)} %</TableCell>
                         <TableCell>{getRoomTypeProp(row, 'displayName')}</TableCell>
                         <TableCell align="right">{getDate(row['last_cleaned'])}</TableCell>
                         <TableCell align="right">

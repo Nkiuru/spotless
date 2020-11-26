@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar
+  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar
 } from 'recharts';
-import moment from "moment";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import styles from "./CleaningDuration.module.scss";
 import Paper from "@material-ui/core/Paper";

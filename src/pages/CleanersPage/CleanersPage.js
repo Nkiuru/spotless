@@ -216,7 +216,7 @@ const CleanersTable = ({cleaners, rooms}) => {
       }
       return moment(room['last_cleaned']).isSame(today, 'date');
     }).length;
-    cleaner['cleaning_progress'] = Math.round(((numCleaned / assignedRooms.length) * 100)) || 0 + '%';
+    cleaner['cleaning_progress'] = (Math.round(((numCleaned / assignedRooms.length) * 100)) || 0) + '%';
     return (
       <Tooltip title={`${numCleaned}/${assignedRooms.length}`} placement={"right"}>
         <Typography>{cleaner['cleaning_progress']}</Typography>
