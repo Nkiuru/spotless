@@ -27,7 +27,7 @@ const CleaningsByCleaner = ({reports, loading}) => {
   return (
     <div style={{height: '100%'}}>
       <Paper className={styles.container}>
-        <Typography variant={"h6"} className={styles.title}>Cleanings done by cleaner</Typography>
+        <Typography variant={"h6"} className={styles.title}>Cleanings per cleaner</Typography>
         <>
           {loading ? <CircularProgress color={"secondary"} style={{margin: 'auto'}}/> :
             <ResponsiveContainer width="100%" height={400} className={styles.chart}>
