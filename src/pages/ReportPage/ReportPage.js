@@ -55,7 +55,7 @@ const ReportPage = () => {
           const aux = document.getElementById('aux');
           const canvas = document.getElementById('main');
           console.log(res)
-          update_img(res, aux, canvas, 1n, event.target.value === 'contamination');
+          update_img(res, aux, canvas, 1n, event.target.value === 'clean');
           setShowMap(true);
         }).catch((err) => {
           console.error(err)
@@ -86,8 +86,8 @@ const ReportPage = () => {
             <FormControl variant={'outlined'} style={{minWidth: '320px', marginBottom: 8}}>
               <InputLabel id="demo-simple-select-outlined-label">Contamination map type</InputLabel>
               <Select label="Contamination map type" onChange={mapSelected} value={type}>
-                <MenuItem value="clean">Before cleaning</MenuItem>
-                <MenuItem value="contamination">Cleaning</MenuItem>
+                <MenuItem value="clean">Cleaning</MenuItem>
+                <MenuItem value="contamination">Before cleaning</MenuItem>
               </Select>
             </FormControl>
           </div>
