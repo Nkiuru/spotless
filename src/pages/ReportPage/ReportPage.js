@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Link as RouterLink, useLocation} from "react-router-dom";
-import {getHeatmap, getReport} from "../../utils/api";
+import {getFloorplan, getHeatmap, getReport} from "../../utils/api";
 import PageContainer from "../../containers/PageContainer";
 import {Typography, Select, Grid} from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
@@ -25,12 +25,17 @@ const ReportPage = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [showContImg, setShowContImg] = useState(false);
   const [showCleanImg, setShowCleanImg] = useState(false);
+  const [image, setImage] = useState('');
+  const [showMap, setShowMap] = useState(false);
 
   useEffect(() => {
     getReport(id)
       .then((report) => {
         setReport(report);
         setLoading(false);
+        getFloorplan(report['room_id']).then((img) => {
+          setImage(URL.createObjectURL(img));
+        });
       })
   }, [id]);
 
@@ -51,6 +56,7 @@ const ReportPage = () => {
           const canvas = document.getElementById('main');
           console.log(res)
           update_img(res, aux, canvas, 1n);
+          setShowMap(true);
         }).catch((err) => {
           console.error(err)
           setErrorMsg('Could not load map');
@@ -93,10 +99,11 @@ const ReportPage = () => {
             <img src={heatmap} alt="clean map" className={styles.map}/>
             }
             {!showCleanImg && !showContImg &&
-            <>
+            <div className={styles.container}>
               <canvas id="aux" style={{display: 'none'}}/>
-              <canvas id="main" width={72} height={56} className={styles.map}/>
-            </>
+              <canvas id="main" width={72} height={56} className={styles.map} />
+              {showMap && <img src={image} alt={""} className={styles.overlay} />}
+            </div>
             }
           </div>
           <Typography variant={"h5"}>Cleaner comments:</Typography>
