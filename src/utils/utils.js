@@ -121,7 +121,7 @@ function initColorMaps() {
   return [new Uint8ClampedArray(tableRed), new Uint8ClampedArray(tableGreen), new Uint8ClampedArray(tableBlue)];
 }
 
-export function update_img(arrayBuffer, auxCanvas, canvas, scaler) {
+export function update_img(arrayBuffer, auxCanvas, canvas, scaler, clean) {
   let arr = null;
   try {
     // eslint-disable-next-line no-undef
@@ -145,10 +145,15 @@ export function update_img(arrayBuffer, auxCanvas, canvas, scaler) {
       imgArr[imgIdx + 1] = greenMap[grayValue]; // G value
       imgArr[imgIdx + 2] = blueMap[grayValue]; // B value
       imgArr[imgIdx + 3] = 255; // Alpha value
+      if (imgArr[imgIdx] !== redMap[0] && imgArr[imgIdx + 1] !== greenMap[0] && imgArr[imgIdx + 2] !== blueMap[0] && clean) {
+        imgArr[imgIdx] = 0; // R value
+        imgArr[imgIdx + 1] = greenMap[grayValue] // G value
+        imgArr[imgIdx + 2] = 0; // B value
+      }
+
       byteIdx++;
     }
   }
-  console.log(img)
   // Scaling. It seems that with putImageData we cannot scale the canvas directly
   // auxCanvas has the image and
   let ctx = canvas.getContext('2d');
