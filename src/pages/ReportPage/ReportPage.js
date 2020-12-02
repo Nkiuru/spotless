@@ -76,6 +76,24 @@ const ReportPage = () => {
       <CloseRounded color={"error"} fontSize={"large"}/>);
   }
 
+  const getRoom = (report) => {
+    return (<Link component={RouterLink} color="secondary"
+                  to={{
+                    pathname: `/rooms/${report['room_id']}`,
+                    state: {id: report['room_id']}
+                  }}>
+      {report['room_name']}
+    </Link>);
+  }
+
+  const getOverview = (report) => {
+    if (report.overview === '<empty>') {
+      return '-';
+    } else {
+      return report.overview;
+    }
+  }
+
   return (
     <PageContainer style={{textAlign: 'start'}}>
       <Typography variant={"h4"} className={styles.semiBold}>Cleaning report details</Typography>
@@ -101,8 +119,8 @@ const ReportPage = () => {
             {!showCleanImg && !showContImg &&
             <div className={styles.container}>
               <canvas id="aux" style={{display: 'none'}}/>
-              <canvas id="main" width={72} height={56} className={styles.map} />
-              {showMap && <img src={image} alt={""} className={styles.overlay} />}
+              <canvas id="main" width={72} height={56} className={styles.map}/>
+              {showMap && <img src={image} alt={""} className={styles.overlay}/>}
             </div>
             }
           </div>
@@ -125,7 +143,7 @@ const ReportPage = () => {
           </div>
           <div className={styles.row}>
             <Typography variant={"h5"} className={styles.reportInfo}>Room:</Typography>
-            <Typography style={{marginLeft: '4px'}} variant={"h5"}>{report['room_name']}</Typography>
+            <Typography style={{marginLeft: '4px'}} variant={"h5"}>{getRoom(report)}</Typography>
           </div>
           <div className={styles.row}>
             <Typography variant={"h5"} className={styles.reportInfo}>Cleaning time:</Typography>
@@ -138,17 +156,17 @@ const ReportPage = () => {
           </div>
           <div className={styles.row}>
             <Typography variant={"h5"} className={styles.reportInfo}>Overview:</Typography>
-            <Typography style={{marginLeft: '4px'}} variant={"h5"}>{report.overview}</Typography>
+            <Typography style={{marginLeft: '4px'}} variant={"h5"}>{getOverview(report)}</Typography>
           </div>
           <div className={styles.row}>
             <Typography variant={"h5"} className={styles.reportInfo}>Contamination index:</Typography>
             <Typography style={{marginLeft: '4px'}} variant={"h5"}
-                        className={styles[getVariant(report['contamination_index'])]}>{report['contamination_index']}</Typography>
+                        className={styles[getVariant(report['contamination_index'])]}>{report['contamination_index'].toFixed(2)} %</Typography>
           </div>
           <div className={styles.row}>
             <Typography variant={"h5"} className={styles.reportInfo}>Cleaning duration:</Typography>
             <Typography style={{marginLeft: '4px'}}
-                        variant={"h5"}>{moment.utc((report['cleaning_duration_seconds']*1000)).format('m [minutes] s [seconds]')}</Typography>
+                        variant={"h5"}>{moment.utc((report['cleaning_duration_seconds'] * 1000)).format('m [minutes] s [seconds]')}</Typography>
           </div>
         </Grid>}
       </Grid>

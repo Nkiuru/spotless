@@ -27,12 +27,12 @@ const AnalysisPage = () => {
   return (
     <PageContainer style={{textAlign: 'start'}}>
       <Typography variant={"h5"} style={{marginBottom: 16}}>Analysis</Typography>
-      <Grid container spacing={4}>
-        <Grid item xs={6}>
-          <CleaningsByCleaner reports={reports} loading={loading}/>
+      <Grid container spacing={4} style={{marginBottom: 16}}>
+        <Grid item xs={12}>
+          <ContaminationIndexOverTime reports={reports} loading={loading}/>
         </Grid>
         <Grid item xs={6}>
-          <ContaminationIndexOverTime reports={reports} loading={loading}/>
+          <CleaningsByCleaner reports={reports} loading={loading}/>
         </Grid>
         <Grid item xs={6}>
           <CleaningDuration reports={reports} loading={loading}/>

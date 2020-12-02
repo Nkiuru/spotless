@@ -24,9 +24,9 @@ const ContaminationIndexOverTime = ({reports, loading}) => {
   Object.keys(counts).forEach((x) => {
     formattedReports.push({
       date: x,
-      contamination: counts[x].reduce((acc, report) => {
+      contamination: Math.round(counts[x].reduce((acc, report) => {
         return acc + report['contamination_index'];
-      }, 0) / counts[x].length
+      }, 0) / counts[x].length)
     });
   });
 
