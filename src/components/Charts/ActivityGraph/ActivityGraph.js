@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from "prop-types";
 import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line
@@ -10,10 +10,11 @@ import {Typography} from "@material-ui/core";
 import moment from "moment";
 import {LTTB} from "downsample/methods/LTTB";
 
-function pad(n){return n<10 ? '0'+n : n}
+function pad(n) {
+  return n < 10 ? '0' + n : n
+}
 
 const ActivityGraph = ({activity, lastCleaned, loading}) => {
-  console.log(lastCleaned)
   const start = moment(lastCleaned).valueOf();
   const step = 20000;
   let formattedData = [];
@@ -39,11 +40,14 @@ const ActivityGraph = ({activity, lastCleaned, loading}) => {
           {loading ? <CircularProgress color={"secondary"} style={{margin: 'auto'}}/> :
             <ResponsiveContainer width="100%" height={400} className={styles.chart}>
               {formattedData.length === 0 ?
-                <Typography variant={"h6"} className={styles.title} style={{textAlign: 'center'}}>No cleaning
-                  events</Typography>
+                <Typography variant={"h6"} className={styles.title} style={{textAlign: 'center'}}>No data</Typography>
                 :
                 <LineChart data={formattedData}>
-                  <XAxis dataKey="x"/>
+                  <XAxis dataKey="x" label={{
+                    value: moment(lastCleaned).format('DD.MM.YY'),
+                    position: 'insideBottomLeft',
+                    offset: -20
+                  }} tick={<CustomizedAxisTick/>} height={48}/>
                   <YAxis/>
                   <CartesianGrid strokeDasharray="3 3"/>
                   <Tooltip/>
@@ -59,6 +63,20 @@ const ActivityGraph = ({activity, lastCleaned, loading}) => {
       </Paper>
     </div>
   )
+}
+
+class CustomizedAxisTick extends PureComponent {
+  render() {
+    const {
+      x, y, stroke, payload,
+    } = this.props;
+
+    return (
+      <g transform={`translate(${x},${y})`}>
+        <text x={0} y={0} dy={16} textAnchor="end" fill="#666" transform="rotate(-35)">{payload.value}</text>
+      </g>
+    );
+  }
 }
 
 ActivityGraph.propTypes = {
