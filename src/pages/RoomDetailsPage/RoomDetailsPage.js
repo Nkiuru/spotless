@@ -12,6 +12,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import {update_img} from "../../utils/utils";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
+import ActivityGraph from "../../components/Charts/ActivityGraph";
 
 const RoomDetailsPage = () => {
   const location = useLocation();
@@ -23,6 +24,7 @@ const RoomDetailsPage = () => {
   const [cleaner, setCleaner] = useState({});
   const [image, setImage] = useState('');
   const [showMap, setShowMap] = useState(false);
+  const [showActivity, setShowActivity] = useState(false);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -114,10 +116,17 @@ const RoomDetailsPage = () => {
             {showMap && (
               <div className={styles.container}>
                 <canvas id="aux" style={{display: 'none'}}/>
-                <canvas id="main" width={72} height={56} className={styles.map} />
-                <img src={image} alt={""} className={styles.overlay} />
+                <canvas id="main" width={72} height={56} className={styles.map}/>
+                <img src={image} alt={""} className={styles.overlay}/>
               </div>
             )}
+            <div className={styles.row} style={{marginTop: 32}}>
+              <Typography variant={"h5"}>Room activity</Typography>
+              <Button variant={"outlined"} color={"primary"} onClick={() => setShowActivity(!showActivity)}>
+                {showMap ? 'Hide activity graph' : 'Show activity graph'}
+              </Button>
+            </div>
+            {showActivity && <ActivityGraph loading={!roomLoaded} activity={room['between_cleaning_plot']} lastCleaned={room['last_cleaned'] || room['cleaning_end_time']}/>}
             <CommentsList reports={reports}/>
             <CleaningReportsTable reports={reports} type={'room'}/>
           </div>
