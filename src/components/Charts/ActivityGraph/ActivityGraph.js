@@ -13,6 +13,7 @@ import {LTTB} from "downsample/methods/LTTB";
 function pad(n){return n<10 ? '0'+n : n}
 
 const ActivityGraph = ({activity, lastCleaned, loading}) => {
+  console.log(lastCleaned)
   const start = moment(lastCleaned).valueOf();
   const step = 20000;
   let formattedData = [];
@@ -26,7 +27,7 @@ const ActivityGraph = ({activity, lastCleaned, loading}) => {
       x: new Date(start + step * i)
     });
   }
-  formattedData = LTTB(formattedData, 500);
+  formattedData = LTTB(formattedData, 400);
   formattedData.forEach((point) => {
     point.x = pad(point.x.getHours()) + ':' + pad(point.x.getMinutes());
   })

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {useLocation, useHistory} from 'react-router-dom';
+import {useHistory, useParams} from 'react-router-dom';
 import {Button, Typography} from "@material-ui/core";
 import {getAssignedCleaners, getFloorplan, getReports, getRoom, getRoomHeatmap} from "../../utils/api";
 import PageContainer from "../../containers/PageContainer";
@@ -15,9 +15,8 @@ import Alert from "@material-ui/lab/Alert";
 import ActivityGraph from "../../components/Charts/ActivityGraph";
 
 const RoomDetailsPage = () => {
-  const location = useLocation();
   const history = useHistory();
-  const params = location.state;
+  const params = useParams();
   const [roomLoaded, setRoomLoaded] = useState(false);
   const [room, setRoom] = useState({});
   const [reports, setReports] = useState([]);
@@ -94,6 +93,13 @@ const RoomDetailsPage = () => {
     setShowMap(false);
   };
 
+  const disableActivity = (room) => {
+    if (!room['between_cleaning_plot']) {
+      return true;
+    }
+    return !room['last_cleaned'] && !room['cleaning_end_time'];
+  }
+
   return (
     <PageContainer style={{width: '65%'}}>
       {roomLoaded ? (
@@ -122,8 +128,8 @@ const RoomDetailsPage = () => {
             )}
             <div className={styles.row} style={{marginTop: 32}}>
               <Typography variant={"h5"}>Room activity</Typography>
-              <Button variant={"outlined"} color={"primary"} onClick={() => setShowActivity(!showActivity)}>
-                {showMap ? 'Hide activity graph' : 'Show activity graph'}
+              <Button variant={"outlined"} color={"primary"} onClick={() => setShowActivity(!showActivity)} disabled={disableActivity(room)}>
+                {showActivity ? 'Hide activity graph' : 'Show activity graph'}
               </Button>
             </div>
             {showActivity && <ActivityGraph loading={!roomLoaded} activity={room['between_cleaning_plot']} lastCleaned={room['last_cleaned'] || room['cleaning_end_time']}/>}

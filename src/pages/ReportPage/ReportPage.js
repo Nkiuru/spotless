@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Link as RouterLink, useLocation} from "react-router-dom";
+import {Link as RouterLink, useParams} from "react-router-dom";
 import {getFloorplan, getHeatmap, getReport} from "../../utils/api";
 import PageContainer from "../../containers/PageContainer";
 import {Typography, Select, Grid} from "@material-ui/core";
@@ -16,8 +16,7 @@ import Link from "@material-ui/core/Link";
 import heatmap from "../../assets/heatmap2.png";
 
 const ReportPage = () => {
-  const location = useLocation();
-  const {id} = location.state;
+  const {id} = useParams();
   const [report, setReport] = useState({});
   const [loading, setLoading] = useState(true);
   const [type, setType] = useState('');

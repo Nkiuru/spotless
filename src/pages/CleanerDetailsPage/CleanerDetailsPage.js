@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {useLocation, useHistory} from 'react-router-dom';
+import {useParams, useHistory} from 'react-router-dom';
 import {IconButton, Paper, Table, TableContainer, TableHead, TableRow, Typography} from "@material-ui/core";
 import {getAssignedRooms, getCleaner, getReports, unAssignRoom, deleteCleaner as removeCleaner} from "../../utils/api";
 import TableCell from "@material-ui/core/TableCell";
@@ -27,9 +27,8 @@ import EditCleanerDialog from "./EditCleanerDialog";
 import RoomSelector from "../../components/RoomSelector";
 
 const CleanerDetailsPage = () => {
-  const location = useLocation();
   const history = useHistory();
-  const params = location.state;
+  const params = useParams();
   const [cleanerLoaded, setCleanerLoaded] = useState(false);
   const [editing, setEditing] = useState(false);
   const [cleaner, setCleaner] = useState({});
