@@ -34,10 +34,12 @@
 
 .container {
   width: 60%;
+  height: 60%;
   position: relative;
   display: flex;
   justify-content: center;
   margin: 24px auto;
+  flex-basis: 250px;
 }
 .map {
   display: block;

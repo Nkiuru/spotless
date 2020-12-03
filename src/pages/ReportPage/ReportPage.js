@@ -14,6 +14,7 @@ import Alert from "@material-ui/lab/Alert";
 import moment from "moment";
 import Link from "@material-ui/core/Link";
 import heatmap from "../../assets/heatmap2.png";
+import ActivityGraph from "../../components/Charts/ActivityGraph";
 
 const ReportPage = () => {
   const {id} = useParams();
@@ -115,13 +116,15 @@ const ReportPage = () => {
             {showCleanImg &&
             <img src={heatmap} alt="clean map" className={styles.map}/>
             }
-            {!showCleanImg && !showContImg &&
             <div className={styles.container}>
-              <canvas id="aux" style={{display: 'none'}}/>
-              <canvas id="main" width={72} height={56} className={styles.map}/>
-              {showMap && <img src={image} alt={""} className={styles.overlay}/>}
+              {!showCleanImg && !showContImg &&
+              <>
+                <canvas id="aux" style={{display: 'none'}}/>
+                <canvas id="main" width={72} height={56} className={styles.map}/>
+                {showMap && <img src={image} alt={""} className={styles.overlay}/>}
+              </>
+              }
             </div>
-            }
           </div>
           <Typography variant={"h5"}>Cleaner comments:</Typography>
           <div className={styles.comments}>
@@ -167,6 +170,8 @@ const ReportPage = () => {
             <Typography style={{marginLeft: '4px'}}
                         variant={"h5"}>{moment.utc((report['cleaning_duration_seconds'] * 1000)).format('m [minutes] s [seconds]')}</Typography>
           </div>
+          <ActivityGraph activity={report['between_cleaning_plot']} loading={loading}
+                         lastCleaned={report['cleaning_time']} title={"Room activity before cleaning"}/>
         </Grid>}
       </Grid>
       <Snackbar open={error} autoHideDuration={6000} onClose={handleSnackClose}>
