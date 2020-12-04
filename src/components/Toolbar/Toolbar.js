@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {AppBar, Typography, Tabs, Toolbar as MaterialToolbar, Tab, IconButton} from "@material-ui/core";
+import {AppBar, Typography, Tabs, Toolbar as MaterialToolbar, Tab, IconButton, Icon} from "@material-ui/core";
 import {Link, useLocation, matchPath, useHistory} from 'react-router-dom';
 import {withStyles} from "@material-ui/core/styles";
 import styles from './Toolbar.module.scss';
@@ -17,6 +17,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import MenuIcon from '@material-ui/icons/Menu';
+import logo from "../../assets/logo.png";
 
 const NavTabs = withStyles({
   root: {
@@ -77,7 +78,10 @@ const Toolbar = () => {
               </IconButton>
             </Tooltip>
           ) : <div style={{width: 40}}/>}
-          <Typography variant={"h6"} className={styles.name}>Spotless</Typography>
+          <Typography variant={"h6"} className={styles.name} style={{display: "flex", flexDirection: 'row', width: '100%'}}>
+            <Icon style={{width: 36}}><img src={logo} alt="logo" className={styles.logo}/></Icon>
+            Spotless
+          </Typography>
         </div>
         <NavTabs variant={"fullWidth"} value={tabId}>
           <Tab label={<div className={styles.tab}><DashboardRounded fontSize={"small"}/> Dashboard</div>}
