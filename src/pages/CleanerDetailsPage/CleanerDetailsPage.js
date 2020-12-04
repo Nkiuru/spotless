@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {useParams, useHistory} from 'react-router-dom';
+import {useParams, useHistory, Link as RouterLink} from 'react-router-dom';
 import {IconButton, Paper, Table, TableContainer, TableHead, TableRow, Typography} from "@material-ui/core";
 import {getAssignedRooms, getCleaner, getReports, unAssignRoom, deleteCleaner as removeCleaner} from "../../utils/api";
 import TableCell from "@material-ui/core/TableCell";
@@ -25,6 +25,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import EditCleanerDialog from "./EditCleanerDialog";
 import RoomSelector from "../../components/RoomSelector";
+import Link from "@material-ui/core/Link";
 
 const CleanerDetailsPage = () => {
   const history = useHistory();
@@ -212,6 +213,26 @@ const AssignmentsTable = ({cleaner, setSnackOpen, setSnackText}) => {
     setSnackOpen(true);
   }
 
+  const getRoom = (room) => {
+    return (<Link component={RouterLink} color="secondary"
+                  to={{
+                    pathname: `/rooms/${room['_id']}`,
+                    state: {id: room['_id']}
+                  }}>
+      {room.name}
+    </Link>);
+  }
+
+  const getCleaningStatus = (room) => {
+    if (room['is_cleaning']) {
+      return 'Cleaning in progress';
+    }
+    if (room['contamination_index'] > 60) {
+      return 'Needs cleaning';
+    }
+    return 'Clean';
+  }
+
   return (
     <div style={{margin: '16px 0'}}>
       {loading ? <CircularProgress color="secondary"/> :
@@ -232,12 +253,12 @@ const AssignmentsTable = ({cleaner, setSnackOpen, setSnackText}) => {
                 <TableBody>
                   {assignments.map((row) => (
                     <TableRow key={row['_id']}>
-                      <TableCell component="th" scope="row">{row.name}</TableCell>
+                      <TableCell component="th" scope="row">{getRoom(row)}</TableCell>
                       <TableCell align="right">{getStatus(row['contamination_index'])}</TableCell>
-                      <TableCell align="right">{row['contamination_index']}</TableCell>
+                      <TableCell align="right">{Math.min(row['contamination_index'].toFixed(2), 150)} %</TableCell>
                       <TableCell align="right">{getRoomTypeProp(row, 'displayName')}</TableCell>
                       <TableCell
-                        align="right">{row['is_cleaning'] ? 'Cleaning in progress' : 'Needs cleaning'}</TableCell>
+                        align="right">{getCleaningStatus(row)}</TableCell>
                       <TableCell>
                         <Tooltip title={"Remove assignment"}>
                           <IconButton size={"small"} onClick={() => {
