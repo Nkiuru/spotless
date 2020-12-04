@@ -14,20 +14,31 @@ function pad(n) {
   return n < 10 ? '0' + n : n
 }
 
-const ActivityGraph = ({activity, lastCleaned, loading, title}) => {
+const ActivityGraph = ({activity, lastCleaned, loading, title, type}) => {
+  type = type || 'room';
   let formattedData = [];
   if (activity && lastCleaned) {
-    const start = moment(lastCleaned).valueOf();
+    let start = moment(lastCleaned).valueOf();
     const step = 20000;
-    formattedData.push({
-      y: activity[0],
-      x: new Date(start)
-    });
-    for (let i = 1; i < activity.length; i++) {
+    if (type === 'room') {
       formattedData.push({
-        y: activity[i],
-        x: new Date(start + step * i)
+        y: activity[0],
+        x: new Date(start)
       });
+      for (let i = 1; i < activity.length; i++) {
+        formattedData.push({
+          y: activity[i],
+          x: new Date(start + step * i)
+        });
+      }
+    } else {
+      start = start - step * activity.length;
+      for (let i = 0; i < activity.length; i++) {
+        formattedData.push({
+          y: activity[i],
+          x: new Date(start + step * i)
+        });
+      }
     }
     formattedData = LTTB(formattedData, 400);
     formattedData.forEach((point) => {
@@ -85,7 +96,8 @@ ActivityGraph.propTypes = {
   loading: PropTypes.bool.isRequired,
   activity: PropTypes.array.isRequired,
   lastCleaned: PropTypes.string.isRequired,
-  title: PropTypes.string
+  title: PropTypes.string,
+  type: PropTypes.oneOf(['report', 'room'])
 };
 
 export default ActivityGraph;

@@ -171,7 +171,7 @@ const ReportPage = () => {
                         variant={"h5"}>{moment.utc((report['cleaning_duration_seconds'] * 1000)).format('m [minutes] s [seconds]')}</Typography>
           </div>
           <ActivityGraph activity={report['between_cleaning_plot']} loading={loading}
-                         lastCleaned={report['cleaning_time']} title={"Room activity before cleaning"}/>
+                         lastCleaned={report['cleaning_time']} title={"Room activity before cleaning"} type="report"/>
         </Grid>}
       </Grid>
       <Snackbar open={error} autoHideDuration={6000} onClose={handleSnackClose}>
