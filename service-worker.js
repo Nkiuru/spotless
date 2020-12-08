@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/spotless/precache-manifest.e7d5f635c2b69987a6d33d55386c975f.js"
+  "/spotless/precache-manifest.08071d4a8eba476fbdaa1ad7ad2be311.js"
 );
 
 self.addEventListener('message', (event) => {
