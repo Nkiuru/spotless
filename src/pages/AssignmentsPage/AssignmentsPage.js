@@ -65,6 +65,9 @@ const useToolbarStyles = makeStyles((theme) => ({
       },
   filters: {
     minHeight: 96
+  },
+  button: {
+    minWidth: 160
   }
 }));
 
@@ -91,14 +94,15 @@ const EnhancedTableToolbar = (props) => {
         [classes.filters]: filter && numSelected === 0
       })}
     >
-      <div className={styles.row}>
+      <div className={styles.row} style={{minHeight: 64}}>
         {numSelected > 0 ? (
           <Typography className={styles.title} color="inherit" variant="subtitle1" component="div"
                       style={{fontWeight: 600}}>
             {numSelected} selected
           </Typography>
         ) : (
-          <Typography className={styles.title} variant="h5" id="tableTitle" component="div" style={{fontWeight: '600'}}>
+          <Typography className={styles.title} variant="h5" id="tableTitle" component="div" style={{fontWeight: '600'}}
+                      title="Click on row to select a room">
             Select rows to assign to cleaner
           </Typography>
         )}
@@ -119,11 +123,16 @@ const EnhancedTableToolbar = (props) => {
           </>
         ) : (
           <Tooltip title="Filter list">
-            <IconButton aria-label="filter list" onClick={() => {
-              showFilters(!filter);
-            }}>
-              <FilterList color={filter ? 'secondary' : 'inherit'}/>
-            </IconButton>
+            <Button
+              variant="contained"
+              className={classes.button}
+              startIcon={<FilterList color={filter ? 'secondary' : 'primary'}/>}
+              onClick={() => {
+                showFilters(!filter);
+              }}
+            >
+              {filter ? 'Hide filters' : 'Show filters'}
+            </Button>
           </Tooltip>
         )}
       </div>
