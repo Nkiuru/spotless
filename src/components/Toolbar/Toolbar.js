@@ -172,7 +172,7 @@ const AboutDialog = ({open, setOpen}) => {
     >
       <DialogTitle id="alert-dialog-title">{"About the app"}</DialogTitle>
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">
+        <DialogContentText id="alert-dialog-description" color="textPrimary">
           <p>
             The LeViteZer hospital room cleaning optimization solution aims to reduce hospital infection risk by
             optimizing the hospital room cleaning. The contamination of the rooms is tracked real time and the cleaning
@@ -180,12 +180,11 @@ const AboutDialog = ({open, setOpen}) => {
           </p>
 
           <p>
-            Realtime data of space usage is visualized in a cleaner application. On top of a room layout the most used
-            areas is visualized and provides the cleaner with simple and intuitive information on areas that need the
-            most attention. The application also track the cleaning event to making sure all areas has been cleaned and
-            then
-            automatically generate a report with minimal interaction by cleaner. The guiding line on the design has been
-            to keep it simple and make it easy for the users to do the right thing.
+            Realtime data of space usage is visualized in the Cleaner application. On top of a room layout the most used
+            areas are visualized to provide the cleaner with simple and intuitive information on areas that need the
+            most attention. The application also track the cleaning event to make sure all areas has been cleaned and
+            then automatically generate a report with minimal interaction by cleaner. The guiding line on the design has
+            been to keep it simple, provide only useful information and assist on making the cleaning report.
           </p>
 
           <p>
@@ -197,11 +196,9 @@ const AboutDialog = ({open, setOpen}) => {
 
           <p>
             Spotless is working name for the applications. The status of the applications is for demonstration purpose
-            and
-            for this purpose there is also a simple hospital contamination simulator as we currently only have few
+            and for this purpose there is also a simple hospital contamination simulator as we currently only have few
             locations equipped with the sensors. LeViteZer supports the use of the demonstrator. Comments and
-            improvement
-            proposals are most welcome
+            improvement proposals are most welcome
             <address>
               <a href="mailto:kim.janson@levitezer.com">kim.janson@levitezer.com</a>
             </address>
