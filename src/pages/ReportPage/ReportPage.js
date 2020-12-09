@@ -50,18 +50,31 @@ const ReportPage = () => {
         setShowCleanImg(true);
       }
     } else {
-      await getHeatmap(id, event.target.value)
-        .then((res) => {
-          const aux = document.getElementById('aux');
-          const canvas = document.getElementById('main');
-          console.log(res)
-          update_img(res, aux, canvas, 1n, event.target.value === 'clean');
-          setShowMap(true);
-        }).catch((err) => {
-          console.error(err)
-          setErrorMsg('Could not load map');
-          setError(true);
-        });
+      if (event.target.value === 'combined') {
+        Promise.all([getHeatmap(id, 'clean'), getHeatmap(id, 'contamination')])
+          .then((res) => {
+            const aux = document.getElementById('aux');
+            const canvas = document.getElementById('main');
+            console.log(res)
+            update_img(res[1], aux, canvas, 1n, false, false);
+            const combined = document.getElementById('combined');
+            update_img(res[0], aux, combined, 1n, true, true);
+            setShowMap(true);
+          });
+      } else {
+        await getHeatmap(id, event.target.value)
+          .then((res) => {
+            const aux = document.getElementById('aux');
+            const canvas = document.getElementById('main');
+            console.log(res)
+            update_img(res, aux, canvas, 1n, event.target.value === 'clean');
+            setShowMap(true);
+          }).catch((err) => {
+            console.error(err)
+            setErrorMsg('Could not load map');
+            setError(true);
+          });
+      }
     }
   }
   const handleSnackClose = (event, reason) => {
@@ -106,6 +119,7 @@ const ReportPage = () => {
               <Select label="Contamination map type" onChange={mapSelected} value={type}>
                 <MenuItem value="clean">Cleaning</MenuItem>
                 <MenuItem value="contamination">Before cleaning</MenuItem>
+                <MenuItem value="combined"><em>Combined</em></MenuItem>
               </Select>
             </FormControl>
           </div>
@@ -120,6 +134,8 @@ const ReportPage = () => {
               {!showCleanImg && !showContImg &&
               <>
                 <canvas id="aux" style={{display: 'none'}}/>
+                <canvas id="aux2" style={{display: 'none'}}/>
+                {type === 'combined' && <canvas id="combined" width={72} height={56} className={[styles.overlay, styles.map].join(' ')}/>}
                 <canvas id="main" width={72} height={56} className={styles.map}/>
                 {showMap && <img src={image} alt={""} className={styles.overlay}/>}
               </>

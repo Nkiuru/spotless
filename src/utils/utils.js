@@ -121,7 +121,7 @@ function initColorMaps() {
   return [new Uint8ClampedArray(tableRed), new Uint8ClampedArray(tableGreen), new Uint8ClampedArray(tableBlue)];
 }
 
-export function update_img(arrayBuffer, auxCanvas, canvas, scaler, clean) {
+export function update_img(arrayBuffer, auxCanvas, canvas, scaler, clean, overlay) {
   let arr = null;
   try {
     // eslint-disable-next-line no-undef
@@ -144,11 +144,12 @@ export function update_img(arrayBuffer, auxCanvas, canvas, scaler, clean) {
       imgArr[imgIdx] = redMap[grayValue]; // R value
       imgArr[imgIdx + 1] = greenMap[grayValue]; // G value
       imgArr[imgIdx + 2] = blueMap[grayValue]; // B value
-      imgArr[imgIdx + 3] = 255; // Alpha value
+      imgArr[imgIdx + 3] = overlay ? 0 : 255; // Alpha value
       if (imgArr[imgIdx] !== redMap[0] && imgArr[imgIdx + 1] !== greenMap[0] && imgArr[imgIdx + 2] !== blueMap[0] && clean) {
         imgArr[imgIdx] = 0; // R value
         imgArr[imgIdx + 1] = greenMap[grayValue] // G value
         imgArr[imgIdx + 2] = 0; // B value
+        imgArr[imgIdx + 3] = 255; // Alpha value
       }
 
       byteIdx++;
