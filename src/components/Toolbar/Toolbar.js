@@ -7,7 +7,7 @@ import {
   ArrowBackRounded, AssessmentRounded,
   BusinessRounded,
   DashboardRounded, ExitToApp,
-  FormatListBulletedRounded,
+  FormatListBulletedRounded, Info,
   PeopleRounded, Settings
 } from "@material-ui/icons";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -18,6 +18,13 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import MenuIcon from '@material-ui/icons/Menu';
 import logo from "../../assets/logo.png";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
+import Button from "@material-ui/core/Button";
+import PageContainer from "../../containers/PageContainer";
 
 const NavTabs = withStyles({
   root: {
@@ -51,6 +58,7 @@ const Toolbar = () => {
   const getTabValue = mountTabValueFactory(location, tabId);
   const [anchorEl, setAnchorEl] = useState(null);
   const [user, setUser] = useState('');
+  const [open, setOpen] = React.useState(false);
 
   useEffect(() => {
     const u = getUser();
@@ -78,7 +86,8 @@ const Toolbar = () => {
               </IconButton>
             </Tooltip>
           ) : <div style={{width: 40}}/>}
-          <Typography variant={"h6"} className={styles.name} style={{display: "flex", flexDirection: 'row', width: '100%'}}>
+          <Typography variant={"h6"} className={styles.name}
+                      style={{display: "flex", flexDirection: 'row', width: '100%'}}>
             <Icon style={{width: 36}}><img src={logo} alt="logo" className={styles.logo}/></Icon>
             Spotless
           </Typography>
@@ -121,7 +130,15 @@ const Toolbar = () => {
             </ListItemIcon>
             <ListItemText primary="Simulator"/>
           </MenuItem>}
-
+          <MenuItem onClick={() => {
+            setOpen(true);
+            handleClose();
+          }}>
+            <ListItemIcon>
+              <Info fontSize="small"/>
+            </ListItemIcon>
+            <ListItemText primary="About"/>
+          </MenuItem>
           <MenuItem onClick={() => {
             handleClose();
             logout();
@@ -132,9 +149,79 @@ const Toolbar = () => {
             </ListItemIcon>
             <ListItemText primary="Sign out"/>
           </MenuItem>
+
         </Menu>
+        <AboutDialog open={open} setOpen={setOpen}/>
       </MaterialToolbar>
     </AppBar>
+  );
+}
+
+const AboutDialog = ({open, setOpen}) => {
+
+  const handleConfirmClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <Dialog
+      open={open}
+      onClose={handleConfirmClose}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">{"About the app"}</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+          <p>
+            The LeViteZer hospital room cleaning optimization solution aims to reduce hospital infection risk by
+            optimizing the hospital room cleaning. The contamination of the rooms is tracked real time and the cleaning
+            prioritized based on need.
+          </p>
+
+          <p>
+            Realtime data of space usage is visualized in a cleaner application. On top of a room layout the most used
+            areas is visualized and provides the cleaner with simple and intuitive information on areas that need the
+            most attention. The application also track the cleaning event to making sure all areas has been cleaned and
+            then
+            automatically generate a report with minimal interaction by cleaner. The guiding line on the design has been
+            to keep it simple and make it easy for the users to do the right thing.
+          </p>
+
+          <p>
+            The Management application supports efficient resource management and planning in case of changes in
+            staffing or reallocation of time and resources. Furthermore, It displays data from the hospital in real time
+            and offers tools to verify & track cleaning efficiency. The application also presents detailed information
+            about rooms and their generated cleaning reports.
+          </p>
+
+          <p>
+            Spotless is working name for the applications. The status of the applications is for demonstration purpose
+            and
+            for this purpose there is also a simple hospital contamination simulator as we currently only have few
+            locations equipped with the sensors. LeViteZer supports the use of the demonstrator. Comments and
+            improvement
+            proposals are most welcome
+            <address>
+              <a href="mailto:kim.janson@levitezer.com">kim.janson@levitezer.com</a>
+            </address>
+          </p>
+
+          <p>
+            The Spotless management and cleaners applications have been developed in Metropolia University of Applied
+            Sciences, innovation project supervised and supported by LeViteZer and in co-operation with Sodexo.
+          </p>
+
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => {
+          handleConfirmClose();
+        }} color="primary" autoFocus>
+          Close
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }
 
