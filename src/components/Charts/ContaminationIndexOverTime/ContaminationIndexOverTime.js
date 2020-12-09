@@ -9,6 +9,16 @@ import Paper from "@material-ui/core/Paper";
 import {Typography} from "@material-ui/core";
 import moment from "moment";
 
+const getContaminationIndex = (val) => {
+  if (val > 150) {
+    return 150;
+  } else if (val < 0) {
+    return 0;
+  } else {
+    return val;
+  }
+}
+
 const ContaminationIndexOverTime = ({reports, loading}) => {
   let data = reports.map((report) => {
     return moment(report['cleaning_time']).format('DD.MM.YYYY');
@@ -20,12 +30,13 @@ const ContaminationIndexOverTime = ({reports, loading}) => {
       return moment(report['cleaning_time']).isSame(date, 'date');
     });
   });
+
   const formattedReports = [];
   Object.keys(counts).forEach((x) => {
     formattedReports.push({
       date: x,
       contamination: Math.round(counts[x].reduce((acc, report) => {
-        return acc + report['contamination_index'];
+        return acc + getContaminationIndex(report['contamination_index']);
       }, 0) / counts[x].length)
     });
   });
