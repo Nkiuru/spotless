@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import PageContainer from "../../containers/PageContainer";
-import {Button, Divider, Typography} from "@material-ui/core";
+import {Button, Divider, InputAdornment, Typography} from "@material-ui/core";
 import styles from "./AdminPage.module.scss";
 import Slider from "@material-ui/core/Slider";
 import {getSimulatorSettings, resetSimulation, setSimulation} from "../../utils/api";
@@ -119,7 +119,7 @@ const AdminPage = () => {
             <Grid item xs>
               <div className={styles.row}>
                 <Typography id="discrete-slider" gutterBottom>
-                  Simulation speed
+                  Simulation speed multiplier
                 </Typography>
                 <Button variant={"text"} color={"primary"} onClick={updateSimSpeed}>
                   Set
@@ -141,11 +141,12 @@ const AdminPage = () => {
               </Grid>
               <Grid item>
                 <Input
-                  style={{width: 42}}
+                  style={{width: 65}}
                   value={simSpeed}
                   margin="dense"
                   onChange={handleInputChange}
                   onBlur={handleBlur}
+                  endAdornment={<InputAdornment position="end">X</InputAdornment>}
                   inputProps={{
                     step: 5,
                     min: 0,
