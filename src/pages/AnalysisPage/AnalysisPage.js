@@ -29,7 +29,7 @@ const AnalysisPage = () => {
       <Typography variant={"h5"} style={{marginBottom: 16}}>Analysis</Typography>
       <Grid container spacing={4} style={{marginBottom: 16}}>
         <Grid item xs={12}>
-          <ContaminationIndexOverTime reports={reports} loading={loading}/>
+          <ContaminationIndexOverTime reports={reports} loading={loading} rooms={rooms}/>
         </Grid>
         <Grid item xs={6}>
           <CleaningsByCleaner reports={reports} loading={loading}/>

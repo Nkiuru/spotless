@@ -226,7 +226,7 @@ export default function AssignmentsPage() {
             console.log(error);
           });
     }
-  }, [data]);
+  }, [data, isLoaded]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
