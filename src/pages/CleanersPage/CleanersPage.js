@@ -238,7 +238,7 @@ const CleanersTable = ({cleaners, rooms}) => {
     {id: 'cleaning_progress', numeric: true, disablePadding: false, label: 'Cleaning progress'},
     {id: 'current_location', numeric: true, disablePadding: false, label: 'Current location'},
     {id: 'status', numeric: true, disablePadding: false, label: 'Status'},
-    {id: 'action', numeric: false, disablePadding: false, label: 'Action'},
+    {id: 'action', numeric: false, disablePadding: false, label: '', sort: false},
   ];
   return (
     <Paper>
@@ -264,10 +264,12 @@ const CleanersTable = ({cleaners, rooms}) => {
                     <TableCell align="right">{getCleaningProgress(row)}</TableCell>
                     <TableCell align="right">{}</TableCell>
                     <TableCell align="right">{getStatus(row)}</TableCell>
-                    <TableCell>
-                      <IconButton size={"small"} color={"secondary"} onClick={() => {
-                        viewCleaner(row)
-                      }}><VisibilityOutlined/></IconButton>
+                    <TableCell align="right">
+                      <Tooltip title={"View cleaner"}>
+                        <IconButton size={"small"} color={"secondary"} onClick={() => {
+                          viewCleaner(row)
+                        }}><VisibilityOutlined/></IconButton>
+                      </Tooltip>
                     </TableCell>
                   </TableRow>
                 );

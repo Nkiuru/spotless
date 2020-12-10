@@ -43,7 +43,7 @@ const headCells = [
   {id: 'contamination_index', numeric: true, disablePadding: false, label: 'Contamination index'},
   {id: 'room_type', numeric: false, disablePadding: false, label: 'Room type'},
   {id: 'last_cleaned', numeric: true, disablePadding: false, label: 'Last cleaned'},
-  {id: 'action', numeric: true, disablePadding: false, label: 'Action'},
+  {id: 'action', numeric: true, disablePadding: false, label: '', sort: false},
 ];
 
 const useToolbarStyles = makeStyles((theme) => ({
@@ -183,7 +183,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AssignmentsPage() {
   const classes = useStyles();
-  const [order, setOrder] = React.useState('asc');
+  const [order, setOrder] = React.useState('desc');
   const [orderBy, setOrderBy] = React.useState('name');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
@@ -332,12 +332,14 @@ export default function AssignmentsPage() {
                         <TableCell>{getRoomTypeProp(row, 'displayName')}</TableCell>
                         <TableCell align="right">{getDate(row['last_cleaned'])}</TableCell>
                         <TableCell align="right">
-                          <IconButton color={"secondary"} size={"small"}
-                                      onClick={() => {
-                                        openRoom(row)
-                                      }}>
-                            <VisibilityOutlined/>
-                          </IconButton>
+                          <Tooltip title={"View room"}>
+                            <IconButton color={"secondary"} size={"small"}
+                                        onClick={() => {
+                                          openRoom(row)
+                                        }}>
+                              <VisibilityOutlined/>
+                            </IconButton>
+                          </Tooltip>
                         </TableCell>
                       </TableRow>
                     );

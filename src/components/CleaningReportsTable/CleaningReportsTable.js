@@ -5,7 +5,7 @@ import {
   Table,
   TableContainer,
   TablePagination,
-  TableRow,
+  TableRow, Tooltip,
   Typography
 } from "@material-ui/core";
 import TableCell from "@material-ui/core/TableCell";
@@ -25,7 +25,7 @@ function ReportsTableHead(props) {
   const headCells = [
     {id: 'cleaning_time', numeric: true, disablePadding: false, label: 'Cleaning time'},
     {id: 'cleaning_successful', numeric: false, disablePadding: false, label: 'Cleaning successful'},
-    {id: 'action', numeric: true, disablePadding: false, label: 'Action'},
+    {id: 'action', numeric: true, disablePadding: false, label: '', sort: false},
   ];
   if (type === 'room') {
     headCells.unshift({id: 'cleaner', numeric: false, disablePadding: false, label: 'Cleaner'});
@@ -79,8 +79,8 @@ const useStyles = makeStyles((theme) => ({
 const CleaningReportsTable = ({reports, type}) => {
   const history = useHistory();
   const classes = useStyles();
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('name');
+  const [order, setOrder] = React.useState('desc');
+  const [orderBy, setOrderBy] = React.useState('cleaning_time');
   const [page, setPage] = React.useState(0);
   const [reportsPerPage, setReportsPerPage] = React.useState(10);
   const viewReport = (report) => {
@@ -167,12 +167,14 @@ const CleaningReportsTable = ({reports, type}) => {
                         <TableCell align="right">{moment(row['cleaning_time']).format('DD.MM.YYYY HH:mm')}</TableCell>
                         <TableCell>{getIcon(row['cleaning_succesful'])}</TableCell>
                         <TableCell align="right">
-                          <IconButton color={"secondary"} size={"small"}
-                                      onClick={() => {
-                                        viewReport(row)
-                                      }}>
-                            <VisibilityOutlined/>
-                          </IconButton>
+                          <Tooltip title={"View report"}>
+                            <IconButton color={"secondary"} size={"small"}
+                                        onClick={() => {
+                                          viewReport(row)
+                                        }}>
+                              <VisibilityOutlined/>
+                            </IconButton>
+                          </Tooltip>
                         </TableCell>
                       </TableRow>
                     );

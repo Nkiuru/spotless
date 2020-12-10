@@ -32,6 +32,7 @@ function EnhancedTableHead(props) {
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
+              disabled={headCell.sort === false}
             >
               {headCell.label}
               {orderBy === headCell.id ? (
