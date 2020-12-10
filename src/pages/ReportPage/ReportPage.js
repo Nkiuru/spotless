@@ -59,6 +59,8 @@ const ReportPage = () => {
             update_img(res[1], aux, canvas, 1n, false, false);
             const combined = document.getElementById('combined');
             update_img(res[0], aux, combined, 1n, true, true);
+            canvas.style.height = canvas.offsetWidth / (72/56) + 'px';
+            combined.style.height = combined.offsetWidth / (72/56) + 'px';
             setShowMap(true);
           });
       } else {
@@ -68,6 +70,7 @@ const ReportPage = () => {
             const canvas = document.getElementById('main');
             console.log(res)
             update_img(res, aux, canvas, 1n, event.target.value === 'clean');
+            canvas.style.height = canvas.offsetWidth / (72/56) + 'px';
             setShowMap(true);
           }).catch((err) => {
             console.error(err)

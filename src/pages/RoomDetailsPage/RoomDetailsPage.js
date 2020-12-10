@@ -69,6 +69,7 @@ const RoomDetailsPage = () => {
           }
           // eslint-disable-next-line no-undef
           update_img(response, aux, canvas, scaler);
+          canvas.style.height = canvas.offsetWidth / (72/56) + 'px';
         })
         .catch((err) => {
           setShowMap(false);

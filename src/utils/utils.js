@@ -149,7 +149,7 @@ export function update_img(arrayBuffer, auxCanvas, canvas, scaler, clean, overla
         imgArr[imgIdx] = 0; // R value
         imgArr[imgIdx + 1] = greenMap[grayValue] // G value
         imgArr[imgIdx + 2] = 0; // B value
-        imgArr[imgIdx + 3] = 255; // Alpha value
+        imgArr[imgIdx + 3] = 200; // Alpha value
       }
 
       byteIdx++;
