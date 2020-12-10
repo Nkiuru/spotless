@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/spotless/static/css/main.704c52ab.chunk.css",
-    "main.js": "/spotless/static/js/main.be2bfa9b.chunk.js",
-    "main.js.map": "/spotless/static/js/main.be2bfa9b.chunk.js.map",
+    "main.css": "/spotless/static/css/main.2bf68291.chunk.css",
+    "main.js": "/spotless/static/js/main.3829026e.chunk.js",
+    "main.js.map": "/spotless/static/js/main.3829026e.chunk.js.map",
     "runtime-main.js": "/spotless/static/js/runtime-main.e434c42d.js",
     "runtime-main.js.map": "/spotless/static/js/runtime-main.e434c42d.js.map",
     "static/js/2.ad6f3b41.chunk.js": "/spotless/static/js/2.ad6f3b41.chunk.js",
     "static/js/2.ad6f3b41.chunk.js.map": "/spotless/static/js/2.ad6f3b41.chunk.js.map",
     "index.html": "/spotless/index.html",
-    "precache-manifest.68eaa111b1b2c7bf8fa0a515b1632996.js": "/spotless/precache-manifest.68eaa111b1b2c7bf8fa0a515b1632996.js",
+    "precache-manifest.9baf286c7ccbe1901b8f3464885bfb7d.js": "/spotless/precache-manifest.9baf286c7ccbe1901b8f3464885bfb7d.js",
     "service-worker.js": "/spotless/service-worker.js",
-    "static/css/main.704c52ab.chunk.css.map": "/spotless/static/css/main.704c52ab.chunk.css.map",
+    "static/css/main.2bf68291.chunk.css.map": "/spotless/static/css/main.2bf68291.chunk.css.map",
     "static/js/2.ad6f3b41.chunk.js.LICENSE.txt": "/spotless/static/js/2.ad6f3b41.chunk.js.LICENSE.txt",
     "static/media/heatmap2.png": "/spotless/static/media/heatmap2.dbb6a747.png",
     "static/media/hospital.png": "/spotless/static/media/hospital.ea9e1e90.png",
@@ -20,7 +20,7 @@
   "entrypoints": [
     "static/js/runtime-main.e434c42d.js",
     "static/js/2.ad6f3b41.chunk.js",
-    "static/css/main.704c52ab.chunk.css",
-    "static/js/main.be2bfa9b.chunk.js"
+    "static/css/main.2bf68291.chunk.css",
+    "static/js/main.3829026e.chunk.js"
   ]
 }
