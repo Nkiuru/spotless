@@ -39,11 +39,12 @@ const DashboardPage = () => {
     const u = getUser();
     setUser(u);
     setLoading(true);
-    Promise.all([getRooms(), getReports()])
+    Promise.all([getRooms(null, null, null, fetchData), getReports()])
       .then((result) => {
         setRooms(result[0]);
         setReports(result[1]);
         setLoading(false);
+        setFetchData(false);
       });
     if (!hospitalSet) {
       getHospitals()

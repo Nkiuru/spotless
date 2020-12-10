@@ -1,4 +1,5 @@
 import {API_KEY, BASE_URL} from "./constants";
+import moment from "moment";
 
 export let GLOBAL_HOSPITAL = localStorage.getItem('hospital') || false;
 export let GLOBAL_HOSPITAL_NAME = localStorage.getItem('hospital_name') || false;
@@ -61,14 +62,33 @@ const addParam = (property, params, parameter) => {
 }
 
 
-export const getRooms = async (hospital, floor, showAssigned) => {
+export const getRooms = async (hospital, floor, showAssigned, overrideCache) => {
   const url = 'rooms';
   hospital = hospital || GLOBAL_HOSPITAL;
   let params = addParam('hospital_id', '', hospital);
   params = addParam('floor', params, floor);
   showAssigned = showAssigned ? 1 : 0;
   params = addParam('assigned_cleaners', params, showAssigned);
-  return doGetRequest(url, params);
+  let storedRooms = localStorage.getItem('rooms');
+  try {
+    storedRooms = JSON.parse(storedRooms);
+    overrideCache = overrideCache || moment().valueOf() - storedRooms.timestamp > 30000;
+  } catch (e) {
+    overrideCache = true;
+  }
+  if (overrideCache) {
+    const res = await doGetRequest(url, params);
+    if (showAssigned) {
+      const storage = {
+        rooms: res,
+        timestamp: moment().valueOf()
+      }
+      localStorage.setItem('rooms', JSON.stringify(storage));
+    }
+    return res;
+  } else {
+    return storedRooms.rooms;
+  }
 }
 
 export const getHospitals = async () => {

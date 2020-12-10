@@ -213,7 +213,7 @@ export default function AssignmentsPage() {
 
   useEffect(() => {
     if (data) {
-      getRooms(null, null, true)
+      getRooms(null, null, true, isLoaded)
         .then((rooms) => {
             rooms = mergeCleaners(rooms);
             setRooms(rooms);
