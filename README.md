@@ -23,6 +23,12 @@ Application for demonstrating sensor assisted cleaning in hospitals.
  
  ## Deployment
  
+ ### `npm install`
+ To install the dependencies required for the application
+ 
+ ### `npm start`
+ To start a local server for development
+ 
  ### `npm run build`
  
  Creates an optimized production build. Currently application expects the url basename to be 'spotless'.
