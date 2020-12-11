@@ -60,11 +60,11 @@ const RoomDetailsPage = () => {
           let scaler = 1n;
           if (room['is_simulated']) {
             if (room['contamination_index'] >= 60) {
-              scaler = 20n;
-            } else if (room['contamination_index'] >= 30) {
-              scaler = 10n;
-            } else {
               scaler = 5n;
+            } else if (room['contamination_index'] >= 30) {
+              scaler = 3n;
+            } else {
+              scaler = 1n;
             }
           }
           // eslint-disable-next-line no-undef
